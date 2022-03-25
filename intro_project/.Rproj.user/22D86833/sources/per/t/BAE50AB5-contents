@@ -1,0 +1,56 @@
+---
+title: "Canopy Reference Document"
+author: "Anwesha Guha"
+date: "3/25/2022"
+output: html_document
+---
+
+The chunk above is called the YAML. It contains basic information about the document.
+
+## File Setup
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The code chunk above should always be kept in the document. You can delete everything else.
+
+Next, you need to set up libraries you need for your analysis. Insert a new code chunk by using the green +c button on the top right. Import the four libraries below. We can add more if we want later, but these should be enough for initial analysis and data cleaning.
+
+```{r import libraries}
+library(here)
+library(rio)
+library(tidyverse)
+library(janitor)
+```
+
+## Data Cleaning
+
+Next, you need to import data into R. I am using the data from the old canopy Github for this. The Github is linked [here](https://github.com/project-evident/canopy/tree/master/data).
+
+```{r data import}
+tags <- read.csv("https://raw.githubusercontent.com/project-evident/canopy/master/data/Canopy%20Tags%20Public%20Access.csv")
+```
+
+Next, we want to make sure the variable names are clean and consistent. This code makes the variable names lowercase and words separated by underscores.
+```{r clean names}
+tags <- tags %>% 
+  clean_names()
+```
+
+
+## Data Analysis
+
+Now, time for the analysis! This section will be very basic, since much of the exploration will vary person to person.
+
+Given this data, we could try to see general approaches vs. specific practices.
+```{r plot 1}
+general_specific_plot <- tags %>% 
+  ggplot(aes(tier)) +
+  geom_bar(fill = "cornflowerblue", alpha = .7) +
+  theme_minimal()
+
+general_specific_plot
+```
+
+Finally, once you make sure everything is running, you can knit the file, which converts your work to an HTML document.
