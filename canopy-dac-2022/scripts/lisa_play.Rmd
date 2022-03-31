@@ -1,0 +1,44 @@
+---
+title: "Canopy DAC Work"
+author: "Lisa Chu"
+date: "3/31/2022"
+output: html_document
+---
+
+## File Setup
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r import libraries}
+library(here)
+library(rio)
+library(tidyverse)
+library(janitor)
+library(dplyr)
+library(RColorBrewer)
+library(scales)
+library(poliscidata)
+library(stringr)
+library(reshape2)
+library(lubridate)
+```
+
+## Data Cleaning
+
+```{r data import}
+tags <- read.csv("https://github.com/lisamchu/canopy-dac-22/blob/master/canopy-dac-2022/data/Final%20Canopy%20Dataset%20for%20DAC%20-%20Data%20dictionary.csv")
+```
+
+Next, we want to make sure the variable names are clean and consistent. This code makes the variable names lowercase and words separated by underscores.
+```{r clean names}
+tags <- tags %>% 
+  clean_names()
+```
+
+
+## Data Analysis
+
+Cycle 1 task: Where are schools innovating? Which states are represented or not? How many schools per state?
+
