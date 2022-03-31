@@ -28,7 +28,7 @@ library(lubridate)
 ## Data Cleaning
 
 ```{r data import}
-tags <- read.csv("https://github.com/lisamchu/canopy-dac-22/blob/master/canopy-dac-2022/data/Final%20Canopy%20Dataset%20for%20DAC%20-%20Data%20dictionary.csv")
+tags <- read.csv(" ")
 ```
 
 Next, we want to make sure the variable names are clean and consistent. This code makes the variable names lowercase and words separated by underscores.
@@ -41,4 +41,5 @@ tags <- tags %>%
 ## Data Analysis
 
 Cycle 1 task: Where are schools innovating? Which states are represented or not? How many schools per state?
-
+```{r state frequency}
+statetable <- table()
