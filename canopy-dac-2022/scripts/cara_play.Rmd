@@ -1,10 +1,19 @@
 ---
 title: "Personal Analysis"
+author: "Cara Pangelinan"
+date: "4/1/22"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r import libraries}
+library(here)
+library(rio)
+library(tidyverse)
+library(janitor)
 ```
 
 ## R Markdown
@@ -13,16 +22,25 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
+```{r data import}
+data <- read.csv("https://raw.githubusercontent.com/lisamchu/canopy-dac-22/master/canopy-dac-2022/data/Final%20Canopy%20Dataset%20for%20DAC%20-%20Final%20Data%203_22.csv")
+
+leader_diversity <- data$confidential_leadership_team_diversity
+teacher_diversity <- data$confidential_teaching_staff_diversity
 ```
 
 ## Including Plots
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r bar charts}
+leader_table <- table(leader_diversity)
+teacher_table <- table(teacher_diversity)
+
+barplot(leader_table, main="Racial/ethnic Breakdown of Canopy School Leadership Teams",
+        xlab="Percentage Breakdown", ylab="Number of Schools")
+barplot(teacher_table, main="Racial/ethnic breakdown of Canopy school teaching teams",
+        xlab="Percentage Breakdown", ylab="Number of Schools")
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
