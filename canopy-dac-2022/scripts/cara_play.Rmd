@@ -14,6 +14,7 @@ library(here)
 library(rio)
 library(tidyverse)
 library(janitor)
+library(dplyr)
 ```
 
 ## R Markdown
@@ -27,6 +28,10 @@ data <- read.csv("https://raw.githubusercontent.com/lisamchu/canopy-dac-22/maste
 
 leader_diversity <- data$confidential_leadership_team_diversity
 teacher_diversity <- data$confidential_teaching_staff_diversity
+
+# creates table with counts of diversity breakdowns
+leader_counts <- data %>% count(confidential_leadership_team_diversity)
+teacher_counts <- data %>% count(confidential_teaching_staff_diversity)
 ```
 
 ## Including Plots
@@ -37,10 +42,19 @@ You can also embed plots, for example:
 leader_table <- table(leader_diversity)
 teacher_table <- table(teacher_diversity)
 
-barplot(leader_table, main="Racial/ethnic Breakdown of Canopy School Leadership Teams",
-        xlab="Percentage Breakdown", ylab="Number of Schools")
-barplot(teacher_table, main="Racial/ethnic breakdown of Canopy school teaching teams",
-        xlab="Percentage Breakdown", ylab="Number of Schools")
+# creates bar chart of leadership diversity distribution
+leader_barplot <- barplot(leader_table, main="Racial/ethnic Breakdown of Canopy School Leadership Teams",
+        xlab="Percentage Breakdown", ylab="Number of Schools",
+        names.arg=c("0%", "0-24%", "25-49%", "50-74%", "75-100%", "Not sure", "Prefer not to say"))
+# adds frequency for each distribution
+text(leader_barplot, labels=leader_counts$n, pos=3, cex=1)
+
+# creates bar chart of teacher diversity distribution
+teacher_barplot <- barplot(teacher_table, main="Racial/ethnic breakdown of Canopy school teaching teams",
+        xlab="Percentage Breakdown", ylab="Number of Schools",
+        names.arg=c("0%", "0-24%", "25-49%", "50-74%", "75-100%", "Prefer not to say"))
+# adds frequency for each distribution
+text(teacher_barplot, labels=teacher_counts$n, pos=3)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
