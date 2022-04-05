@@ -41,78 +41,8 @@ counts_state <- data %>% count(school_state)
 **Cycle 1 task: What are the frequencies of all practices?**
 
 ```{r practice frequencies}
-practices <- c(practices_assessments_sel
-practices_students_leaders
-practices_teachers_leaders
-practices_assessments_deeper
-practices_flexible_staffing
-practices_interdisciplinary
-practices_makerspace
-practices_peer_to_peer
-practices_place_based
-practices_portfolios_exhibitions
-practices_real_world
-practices_student_projects
-practices_a_la_carte
-practices_blended_learning
-practices_flex
-practices_flipped_classroom
-practices_student_data
-practices_accommodations
-practices_advancement_mastery
-practices_competency_framework
-practices_grading_mastery
-practices_learning_paths
-practices_opportunities_mastery
-practices_mtss_academics
-practices_performance_assessment
-practices_mentoring
-practices_community_partnerships
-practices_early_college
-practices_elimination_tracking
-practices_multi_age
-practices_advisories
-practices_industry_credentials
-practices_tutoring
-practices_design_thinking
-practices_flexible_facilities
-practices_pbl
-practices_competency_education
-practices_student_pace
-practices_anti_racist
-practices_culturally_responsive
-practices_design_marginalized
-practices_hiring_equity
-practices_reallocation_resources
-practices_restorative
-practices_social_justice
-practices_trauma_informed
-practices_mental_health
-practices_sel_curriculum
-practices_service learning
-practices_student_goals
-practices_udl
-practices_disaggregated_participation_data
-practices_individual_rotation
-practices_community_supports
-practices_student_conferences
-practices_assessments_career
-practices_career_prep
-practices_dual_credit
-practices_extended_learning
-practices_sel_integrated
-practices_expanded_success
-practices_expanded_open_hours
-practices_families_leaders
-practices_adaptive_content
-practices_station_rotation
-practices_physical_well_being
-practices_learner_profiles
-practices_interoperability
-practices_hybrid
-practices_dual_language
-practices_virtual_pathway
-practices_enriched_virtual
+table_practices <- apply((data[c('practices_assessments_sel','practices_students_leaders','practices_teachers_leaders','practices_assessments_deeper', 'practices_flexible_staffing','practices_interdisciplinary','practices_makerspace','practices_peer_to_peer','practices_place_based','practices_portfolios_exhibitions',
+'practices_real_world','practices_student_projects','practices_a_la_carte','practices_blended_learning','practices_flex','practices_flipped_classroom','practices_student_data','practices_accommodations','practices_advancement_mastery','practices_competency_framework','practices_grading_mastery','practices_learning_paths','practices_opportunities_mastery','practices_mtss_academics','practices_performance_assessment','practices_mentoring','practices_community_partnerships','practices_early_college','practices_elimination_tracking','practices_multi_age','practices_advisories','practices_industry_credentials','practices_tutoring','practices_design_thinking','practices_flexible_facilities','practices_pbl','practices_competency_education','practices_student_pace','practices_anti_racist','practices_culturally_responsive','practices_design_marginalized','practices_hiring_equity','practices_reallocation_resources','practices_restorative','practices_social_justice','practices_trauma_informed','practices_mental_health','practices_sel_curriculum','practices_service_learning','practices_student_goals','practices_udl','practices_disaggregated_participation_data','practices_individual_rotation','practices_community_supports','practices_student_conferences','practices_assessments_career','practices_career_prep','practices_dual_credit','practices_extended_learning','practices_sel_integrated','practices_expanded_success','practices_expanded_open_hours','practices_families_leaders','practices_adaptive_content','practices_station_rotation','practices_physical_well_being','practices_learner_profiles','practices_interoperability','practices_hybrid','practices_dual_language','practices_virtual_pathway','practices_enriched_virtual')]), 2, table)
+table_practices
 ```
-
 
