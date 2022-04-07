@@ -71,3 +71,71 @@ race_grouped %>%
        y = "Count")
 ```
 
+TYPE: How do tagging patterns differ among charter, district, and independent schools?
+```{r}
+dac_22$practices_physical_well_being <- as.character(dac_22$practices_physical_well_being) 
+#kind of fascinating that this was the only factor that no schools ever chose in their top 5
+
+dac_22_practices <- dac_22 %>% 
+  pivot_longer(
+    cols = starts_with("practices"),
+    names_to = "practices",
+    names_prefix = "practices_",
+    values_to = "practice_count"
+  )
+```
+
+Separating practice variables. Creating priority variable.
+```{r}
+
+dac_22_practices <- dac_22_practices %>% 
+  mutate(practice_priority = practice_count) 
+
+dac_22_practices$practice_priority[dac_22_practices$practice_priority == "0"] <- NA
+dac_22_practices$practice_priority[dac_22_practices$practice_priority == "1"] <- NA
+```
+
+Converting other to numeric.
+```{r}
+
+dac_22_practices <- dac_22_practices %>% 
+  mutate(practice_num = practice_count)
+
+unique(dac_22_practices$practice_num)
+dac_22_practices$practice_num[dac_22_practices$practice_num == "3-4 years"] <- 1
+dac_22_practices$practice_num[dac_22_practices$practice_num == "5+ years"] <- 1
+dac_22_practices$practice_num[dac_22_practices$practice_num == "1-2 years"] <- 1
+dac_22_practices$practice_num[dac_22_practices$practice_num == "Less than a year"] <- 1
+
+dac_22_practices$practice_num <- as.numeric(dac_22_practices$practice_num)
+```
+
+Group by practice & locale.
+```{r}
+str(dac_22_practices$practices)
+practices_grouped_locale <- dac_22_practices %>% 
+  group_by(practices, nces_locale) %>% 
+  summarise(practice_tot = sum(practice_num, na.rm = TRUE))
+
+practices_grouped_locale
+
+practices_grouped <- dac_22_practices %>% 
+  group_by(practices) %>% 
+  summarise(practice_tot = sum(practice_num, na.rm = TRUE))
+
+practices_grouped
+
+
+```
+```{r}
+practices_grouped %>% 
+  ggplot(aes(x = reorder(practices, practice_tot), practice_tot)) +
+  geom_col() +
+  coord_flip() +
+  theme_classic()
+  
+```
+
+
+How do tagging patterns differ among schools designed for particular marginalized student groups?
+
