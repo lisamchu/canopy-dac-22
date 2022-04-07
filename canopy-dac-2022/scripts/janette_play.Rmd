@@ -113,26 +113,25 @@ names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef
 ### What are the frequencies of core practices?
 
 ```{r all frequency table}
-kable(core_prac_freq)
+rmarkdown::paged_table(core_prac_freq)
 ```
 
 ### What are the frequencies of top 10 core practices
 
 *Note to self to clean that table up--it's ugly!*
 
-### How long have schools been implementing each core practice?
-
 ```{r top 10 core}
 top_10_core <- core_prac_freq %>% 
   arrange(Total) %>%
   slice_tail(n = 10)
 
-kable(top_10_core)
+rmarkdown::paged_table(top_10_core)
 # double check accuracy
 max(core_prac_freq$Total)
 # output is 50 -- bottom tail = 50
 ```
 
+### How long have schools been implementing each core practice?
 
 ```{r stack chart for implementation times}
 core_imp_time <- top_10_core %>% 
@@ -146,6 +145,8 @@ core_imp_time <- top_10_core %>%
         axis.text.y = element_text(angle = 90)) +
   scale_x_discrete(name = "") +
   scale_y_discrete(name = "Number of schools \n (2021 and 2022)")
+
+core_imp_time
 ```
 
 ### What are the frequencies of all practices?
@@ -160,10 +161,10 @@ all_prac_freq <- core_prac %>%
 ```
 
 ```{r all practices table}
-kable(all_prac_freq)
+rmarkdown::paged_table(all_prac_freq)
 ```
 
-Top 10 of all practices?
+### What are the frequencies for the top 10 of all practices?
 
 ```{r top 10 all practices}
 #rename labels again to match for joining
@@ -176,7 +177,7 @@ top_10_prac <- all_prac_freq %>%
   ungroup() %>% 
   select(3, 2) %>% 
   rename("all_practices" = original_field_name_from_youssef_transcend) %>% #rename column again
-  arrange(top_10_prac$freq) %>% #arrange in order
+  # arrange(top_10_prac$freq) %>% #arrange in order
   slice_max(order_by = freq, n = 10) #take top 10
 
 ## double check
@@ -184,6 +185,6 @@ max(all_prac_freq$freq) #130 matches top in table of 130
 ```
 
 ```{r top 10 of all practices freq}
-kable(top_10_prac)
+rmarkdown::paged_table(top_10_prac)
 ```
 
