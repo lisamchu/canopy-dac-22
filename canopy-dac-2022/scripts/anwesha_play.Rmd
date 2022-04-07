@@ -1,0 +1,73 @@
+---
+title: "CRPE Canopy Play"
+author: "Anwesha Guha"
+date: "4/6/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(rio)
+library(tidyverse)
+library(janitor)
+library(pracma)
+library(kableExtra)
+```
+
+```{r data cleaning}
+# read in data
+data_dictionary <- import(here("data", "Final Canopy Dataset for DAC - Data dictionary.csv"), 
+                          setclass = "tbl_df") %>% 
+                  clean_names()
+dac_22 <- import(here("data", "Final Canopy Dataset for DAC - Final Data 3_22.csv"),
+                 setclass = "tbl_df") %>% 
+            clean_names()
+```
+
+What are the racial/ethnic and gender identities of Canopy school leaders?
+
+First, gender.
+```{r}
+table(dac_22$confidential_leader_gender)
+```
+
+```{r}
+dac_22$confidential_leader_gender[dac_22$confidential_leader_gender == "0"] <- "Not reported"
+dac_22$confidential_leader_gender[dac_22$confidential_leader_gender == "Prefer not to say"] <- "Not reported"
+
+dac_22 %>%
+  ggplot(aes(confidential_leader_gender)) +
+  geom_bar(aes(x = forcats::fct_infreq(confidential_leader_gender)), fill = "maroon4", alpha = .8) +
+  theme_classic() +
+  labs(title = "What are the gender identities of Canopy school leaders?",
+       x = "Gender Identity",
+       y = "Count")
+```
+
+```{r}
+dac_22_race <- dac_22 %>% 
+  pivot_longer(
+    cols = starts_with("self_reported_race"),
+    names_to = "self_reported_race",
+    names_prefix = "self_reported_race_",
+    values_to = "race_count"
+  )
+str(dac_22_race$race_count)
+```
+
+```{r}
+race_grouped <- dac_22_race %>% 
+  group_by(self_reported_race) %>% 
+  summarise(race_count = sum(race_count, na.rm = TRUE))
+
+race_grouped %>%
+  ggplot(aes(self_reported_race, race_count)) +
+  geom_col(aes(y = race_count, x = forcats::fct_infreq(self_reported_race)), fill = "maroon4", alpha = .8) +
+  theme_classic() +
+  labs(title = "What are the racial identities of Canopy school leaders?",
+       subtitle = "*of those reporting race",
+       x = "Racial Identity",
+       y = "Count")
+```
+
