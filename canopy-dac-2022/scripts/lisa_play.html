@@ -404,435 +404,51 @@ data &lt;- data %&gt;%
 <h2>Data Analysis</h2>
 <p><strong>Cycle 1 task: Which states are represented or
 not?</strong></p>
-<pre class="r"><code>counts_state &lt;- data %&gt;% count(school_state)</code></pre>
-<p><strong>Cycle 1 task: What are the frequencies of all
-practices?</strong></p>
-<pre class="r"><code>table_practices &lt;- apply((data[c(&#39;practices_assessments_sel&#39;,&#39;practices_students_leaders&#39;,&#39;practices_teachers_leaders&#39;,&#39;practices_assessments_deeper&#39;, &#39;practices_flexible_staffing&#39;,&#39;practices_interdisciplinary&#39;,&#39;practices_makerspace&#39;,&#39;practices_peer_to_peer&#39;,&#39;practices_place_based&#39;,&#39;practices_portfolios_exhibitions&#39;,
-&#39;practices_real_world&#39;,&#39;practices_student_projects&#39;,&#39;practices_a_la_carte&#39;,&#39;practices_blended_learning&#39;,&#39;practices_flex&#39;,&#39;practices_flipped_classroom&#39;,&#39;practices_student_data&#39;,&#39;practices_accommodations&#39;,&#39;practices_advancement_mastery&#39;,&#39;practices_competency_framework&#39;,&#39;practices_grading_mastery&#39;,&#39;practices_learning_paths&#39;,&#39;practices_opportunities_mastery&#39;,&#39;practices_mtss_academics&#39;,&#39;practices_performance_assessment&#39;,&#39;practices_mentoring&#39;,&#39;practices_community_partnerships&#39;,&#39;practices_early_college&#39;,&#39;practices_elimination_tracking&#39;,&#39;practices_multi_age&#39;,&#39;practices_advisories&#39;,&#39;practices_industry_credentials&#39;,&#39;practices_tutoring&#39;,&#39;practices_design_thinking&#39;,&#39;practices_flexible_facilities&#39;,&#39;practices_pbl&#39;,&#39;practices_competency_education&#39;,&#39;practices_student_pace&#39;,&#39;practices_anti_racist&#39;,&#39;practices_culturally_responsive&#39;,&#39;practices_design_marginalized&#39;,&#39;practices_hiring_equity&#39;,&#39;practices_reallocation_resources&#39;,&#39;practices_restorative&#39;,&#39;practices_social_justice&#39;,&#39;practices_trauma_informed&#39;,&#39;practices_mental_health&#39;,&#39;practices_sel_curriculum&#39;,&#39;practices_service_learning&#39;,&#39;practices_student_goals&#39;,&#39;practices_udl&#39;,&#39;practices_disaggregated_participation_data&#39;,&#39;practices_individual_rotation&#39;,&#39;practices_community_supports&#39;,&#39;practices_student_conferences&#39;,&#39;practices_assessments_career&#39;,&#39;practices_career_prep&#39;,&#39;practices_dual_credit&#39;,&#39;practices_extended_learning&#39;,&#39;practices_sel_integrated&#39;,&#39;practices_expanded_success&#39;,&#39;practices_expanded_open_hours&#39;,&#39;practices_families_leaders&#39;,&#39;practices_adaptive_content&#39;,&#39;practices_station_rotation&#39;,&#39;practices_physical_well_being&#39;,&#39;practices_learner_profiles&#39;,&#39;practices_interoperability&#39;,&#39;practices_hybrid&#39;,&#39;practices_dual_language&#39;,&#39;practices_virtual_pathway&#39;,&#39;practices_enriched_virtual&#39;)]), 2, table)
-table_practices</code></pre>
-<pre><code>## $practices_assessments_sel
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##        48       108         2         1         2 
-## 
-## $practices_students_leaders
-## 
-##                0                1        1-2 years        3-4 years 
-##               83               61                2                6 
-##         5+ years Less than a year 
-##                8                1 
-## 
-## $practices_teachers_leaders
-## 
-##         0         1 3-4 years  5+ years 
-##        41       103         5        12 
-## 
-## $practices_assessments_deeper
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##        37       113         1         3         7 
-## 
-## $practices_flexible_staffing
-## 
-##                0                1        3-4 years         5+ years 
-##               55               97                3                5 
-## Less than a year 
-##                1 
-## 
-## $practices_interdisciplinary
-## 
-##                0                1        1-2 years        3-4 years 
-##               36              100                1                5 
-##         5+ years Less than a year 
-##               18                1 
-## 
-## $practices_makerspace
-## 
-##                0                1        1-2 years        3-4 years 
-##               95               58                2                1 
-##         5+ years Less than a year 
-##                4                1 
-## 
-## $practices_peer_to_peer
-## 
-##                0                1         5+ years Less than a year 
-##               70               89                1                1 
-## 
-## $practices_place_based
-## 
-##                0                1        1-2 years        3-4 years 
-##               81               65                1                6 
-##         5+ years Less than a year 
-##                6                2 
-## 
-## $practices_portfolios_exhibitions
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##        46        93         1         3        18 
-## 
-## $practices_real_world
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##        38        89         4         9        21 
-## 
-## $practices_student_projects
-## 
-##                0                1        1-2 years        3-4 years 
-##               48              107                1                1 
-##         5+ years Less than a year 
-##                3                1 
-## 
-## $practices_a_la_carte
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##       121        36         1         1         2 
-## 
-## $practices_blended_learning
-## 
-##                0                1        3-4 years         5+ years 
-##               56               91                2               11 
-## Less than a year 
-##                1 
-## 
-## $practices_flex
-## 
-##                0                1        1-2 years        3-4 years 
-##              107               47                2                1 
-##         5+ years Less than a year 
-##                3                1 
-## 
-## $practices_flipped_classroom
-## 
-##         0         1 1-2 years 
-##       108        52         1 
-## 
-## $practices_student_data
-## 
-##                0                1        1-2 years        3-4 years 
-##               59               98                2                1 
-## Less than a year 
-##                1 
-## 
-## $practices_accommodations
-## 
-##                0                1        1-2 years        3-4 years 
-##               49              102                1                4 
-##         5+ years Less than a year 
-##                4                1 
-## 
-## $practices_advancement_mastery
-## 
-##         0         1 1-2 years 3-4 years 
-##        91        67         1         2 
-## 
-## $practices_competency_framework
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##        70        82         2         1         6 
-## 
-## $practices_grading_mastery
-## 
-##                0                1        1-2 years        3-4 years 
-##               54               90                4                5 
-##         5+ years Less than a year 
-##                7                1 
-## 
-## $practices_learning_paths
-## 
-##                0                1        3-4 years         5+ years 
-##               69               83                2                6 
-## Less than a year 
-##                1 
-## 
-## $practices_opportunities_mastery
-## 
-##         0         1 3-4 years  5+ years 
-##        32       123         3         3 
-## 
-## $practices_mtss_academics
-## 
-##                0                1        3-4 years         5+ years 
-##               75               75                3                7 
-## Less than a year 
-##                1 
-## 
-## $practices_performance_assessment
-## 
-##         0         1 1-2 years  5+ years 
-##        48       108         1         4 
-## 
-## $practices_mentoring
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##        79        74         1         1         6 
-## 
-## $practices_community_partnerships
-## 
-##                0                1        3-4 years         5+ years 
-##               42              107                2                9 
-## Less than a year 
-##                1 
-## 
-## $practices_early_college
-## 
-##                0                1        1-2 years        3-4 years 
-##              117               36                1                4 
-##         5+ years Less than a year 
-##                2                1 
-## 
-## $practices_elimination_tracking
-## 
-##        0        1 5+ years 
-##       86       73        2 
-## 
-## $practices_multi_age
-## 
-##         0         1 3-4 years  5+ years 
-##        73        79         2         7 
-## 
-## $practices_advisories
-## 
-##         0         1 3-4 years  5+ years 
-##        57        89         2        13 
-## 
-## $practices_industry_credentials
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##       112        43         1         2         3 
-## 
-## $practices_tutoring
-## 
-##         0         1 3-4 years  5+ years 
-##        70        88         1         2 
-## 
-## $practices_design_thinking
-## 
-##                0                1        1-2 years        3-4 years 
-##               79               64                4                5 
-##         5+ years Less than a year 
-##                8                1 
-## 
-## $practices_flexible_facilities
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##        61        87         4         2         7 
-## 
-## $practices_pbl
-## 
-##                0                1        1-2 years        3-4 years 
-##               31               80                4               12 
-##         5+ years Less than a year 
-##               33                1 
-## 
-## $practices_competency_education
-## 
-##                0                1        1-2 years        3-4 years 
-##               48               72                9                9 
-##         5+ years Less than a year 
-##               20                3 
-## 
-## $practices_student_pace
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##        70        82         2         2         5 
-## 
-## $practices_anti_racist
-## 
-##                0                1        1-2 years        3-4 years 
-##               71               76                1                5 
-##         5+ years Less than a year 
-##                7                1 
-## 
-## $practices_culturally_responsive
-## 
-##                0                1        1-2 years        3-4 years 
-##               39              100                5                4 
-##         5+ years Less than a year 
-##               11                2 
-## 
-## $practices_design_marginalized
-## 
-##                0                1        1-2 years        3-4 years 
-##               33               97                5                7 
-##         5+ years Less than a year 
-##               17                2 
-## 
-## $practices_hiring_equity
-## 
-##                0                1        1-2 years        3-4 years 
-##               66               85                1                4 
-##         5+ years Less than a year 
-##                4                1 
-## 
-## $practices_reallocation_resources
-## 
-##        0        1 5+ years 
-##       85       74        2 
-## 
-## $practices_restorative
-## 
-##                0                1        1-2 years        3-4 years 
-##               42               78                7               14 
-##         5+ years Less than a year 
-##               19                1 
-## 
-## $practices_social_justice
-## 
-##                0                1        1-2 years        3-4 years 
-##               79               56                1                7 
-##         5+ years Less than a year 
-##               17                1 
-## 
-## $practices_trauma_informed
-## 
-##                0                1        1-2 years        3-4 years 
-##               52               88                4                8 
-##         5+ years Less than a year 
-##                8                1 
-## 
-## $practices_mental_health
-## 
-##                0                1        1-2 years        3-4 years 
-##               49              102                1                5 
-##         5+ years Less than a year 
-##                3                1 
-## 
-## $practices_sel_curriculum
-## 
-##                0                1        1-2 years        3-4 years 
-##               84               71                1                1 
-##         5+ years Less than a year 
-##                3                1 
-## 
-## $practices_service_learning
-## 
-##         0         1 3-4 years  5+ years 
-##        70        84         2         5 
-## 
-## $practices_student_goals
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##        44       107         2         3         5 
-## 
-## $practices_udl
-## 
-##        0        1 5+ years 
-##       93       65        3 
-## 
-## $practices_disaggregated_participation_data
-## 
-##        0        1 5+ years 
-##      111       48        2 
-## 
-## $practices_individual_rotation
-## 
-##        0        1 5+ years 
-##      132       28        1 
-## 
-## $practices_community_supports
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##        64        85         2         3         7 
-## 
-## $practices_student_conferences
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##        72        79         1         3         6 
-## 
-## $practices_assessments_career
-## 
-##        0        1 5+ years 
-##       85       74        2 
-## 
-## $practices_career_prep
-## 
-##                0                1        1-2 years        3-4 years 
-##               62               83                1                5 
-##         5+ years Less than a year 
-##                9                1 
-## 
-## $practices_dual_credit
-## 
-##         0         1 1-2 years 3-4 years  5+ years 
-##        79        75         1         1         5 
-## 
-## $practices_extended_learning
-## 
-##         0         1 3-4 years  5+ years 
-##        75        80         1         5 
-## 
-## $practices_sel_integrated
-## 
-##                0                1        1-2 years        3-4 years 
-##               39               80                8                6 
-##         5+ years Less than a year 
-##               26                2 
-## 
-## $practices_expanded_success
-## 
-##         0         1 3-4 years  5+ years 
-##        68        88         2         3 
-## 
-## $practices_expanded_open_hours
-## 
-##         0         1 1-2 years  5+ years 
-##       101        57         1         2 
-## 
-## $practices_families_leaders
-## 
-##                0                1        1-2 years        3-4 years 
-##              114               41                2                1 
-##         5+ years Less than a year 
-##                2                1 
-## 
-## $practices_adaptive_content
-## 
-##         0         1 1-2 years  5+ years 
-##        88        71         1         1 
-## 
-## $practices_station_rotation
-## 
-##         0         1 3-4 years 
-##       111        49         1 
-## 
-## $practices_physical_well_being
-## 
-##  0  1 
-## 93 68 
-## 
-## $practices_learner_profiles
-## 
-##                0                1        3-4 years         5+ years 
-##               77               78                2                3 
-## Less than a year 
-##                1 
-## 
-## $practices_interoperability
-## 
-##        0        1 5+ years 
-##      127       33        1 
-## 
-## $practices_hybrid
-## 
-##                0                1        3-4 years         5+ years 
-##               96               62                1                1 
-## Less than a year 
-##                1 
-## 
-## $practices_dual_language
-## 
-##        0        1 5+ years 
-##      145       13        3 
-## 
-## $practices_virtual_pathway
-## 
-##        0        1 5+ years 
-##      136       23        2 
-## 
-## $practices_enriched_virtual
-## 
-##         0         1 3-4 years  5+ years 
-##       126        32         1         2</code></pre>
+<pre class="r"><code>counts_state &lt;- data %&gt;% count(school_state)
+counts_state</code></pre>
+<pre><code>##            school_state  n
+## 1               Arizona  6
+## 2              Arkansas  3
+## 3            California 11
+## 4              Colorado 17
+## 5           Connecticut  3
+## 6  District of Columbia  3
+## 7               Florida  3
+## 8               Georgia  3
+## 9                Hawaii  1
+## 10                Idaho  4
+## 11             Illinois  3
+## 12              Indiana  2
+## 13                 Iowa  1
+## 14               Kansas  3
+## 15             Kentucky  1
+## 16            Louisiana  4
+## 17                Maine  5
+## 18        Massachusetts  4
+## 19             Michigan  9
+## 20            Minnesota  5
+## 21          Mississippi  1
+## 22             Missouri  6
+## 23               Nevada  1
+## 24        New Hampshire  1
+## 25           New Jersey  1
+## 26           New Mexico  3
+## 27             New York  9
+## 28       North Carolina  4
+## 29         North Dakota  1
+## 30             Oklahoma  1
+## 31         Pennsylvania  5
+## 32          Puerto Rico  1
+## 33         Rhode Island  1
+## 34       South Carolina  1
+## 35         South Dakota  1
+## 36            Tennessee  2
+## 37                Texas  8
+## 38                 Utah  5
+## 39              Vermont  4
+## 40             Virginia  4
+## 41           Washington  7
+## 42            Wisconsin  3</code></pre>
 </div>
 
 
