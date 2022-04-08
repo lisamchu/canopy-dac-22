@@ -136,6 +136,46 @@ practices_grouped %>%
   
 ```
 
+```{r}
+practices_grouped_locale %>% 
+  subset(nces_locale == "Rural") %>% 
+  arrange(desc(practice_tot)) %>% 
+  head(15) %>% 
+  ggplot(aes(x = reorder(practices, practice_tot), y = practice_tot)) +
+  geom_col(fill = "maroon4", alpha = .8) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Top Tags for Rural Schools", 
+       x = "tags",
+       y = "tag count")
+```
+```{r}
+practices_grouped_locale %>% 
+  subset(nces_locale == "Urban") %>% 
+  arrange(desc(practice_tot)) %>% 
+  head(15) %>% 
+  ggplot(aes(x = reorder(practices, practice_tot), y = practice_tot)) +
+  geom_col(fill = "maroon4", alpha = .8) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Top Tags for Urban Schools",
+       x = "tags",
+       y = "tag count")
+```
+
+```{r}
+practices_grouped_locale %>% 
+  subset(nces_locale == "Suburban") %>% 
+  arrange(desc(practice_tot)) %>% 
+  head(15) %>% 
+  ggplot(aes(x = reorder(practices, practice_tot), y = practice_tot)) +
+  geom_col(fill = "maroon4", alpha = .8) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Top Tags for Suburban Schools", 
+       x = "tags",
+       y = "tag count")
+```
 
 How do tagging patterns differ among schools designed for particular marginalized student groups?
 
