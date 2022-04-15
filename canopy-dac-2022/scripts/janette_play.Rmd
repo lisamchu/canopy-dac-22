@@ -37,7 +37,7 @@ dac_22 <- import(here("data", "Final Canopy Dataset for DAC - Final Data 3_22.cs
             clean_names()
 ```
    
-# Round 1 (4.8.22)
+# Cycle 1 (4.8.22)
 
 Guiding questions/tasks & format:  
 1. What are the frequencies of core practices?  
@@ -188,5 +188,82 @@ top_10_prac <- all_prac_freq %>%
 
 ```{r top 10 of all practices freq}
 datatable(top_10_prac)
+```
+
+# Cycle 2 (4.22.22)
+
+To Do:  
+* Create new locale variable from NCES and self-reported data  
+* Collapse school type variables  
+* Less important: Pivot practices (double check sums are correct)  
+* Collapse leader race variable (will need if/else for bi/multiracial variable)  
+* Fill meaningful data (yes/no/NA)
+
+## Data Cleaning  
+```{r locale variable}
+# !diagnostics off
+# Note a '1' indicates a yes
+clean_dac_22 <- dac_22 #new set
+
+#relabel empty NCES data as NA
+clean_dac_22$nces_locale[clean_dac_22$nces_locale == ""] <- NA
+
+#merge NCES and self-reported data
+clean_dac_22 <- clean_dac_22 %>% 
+  unite("locale", c(nces_locale, self_reported_locale_rural, self_reported_locale_suburban, self_reported_locale_urban), na.rm = TRUE) %>% 
+  ungroup()
+#relabeling new locale data
+clean_dac_22$locale[clean_dac_22$locale == ""] <- NA #empties/all NA
+clean_dac_22$locale[clean_dac_22$locale == "_1_0_0"] <- "Rural" #self-reported rural
+clean_dac_22$locale[clean_dac_22$locale == "_0_1_0"] <- "Suburban" #self-reported suburban
+clean_dac_22$locale[clean_dac_22$locale == "_0_0_1"] <- "Urban" #self-reported urban
+clean_dac_22$locale[clean_dac_22$locale == "Urban_0_0_1"] <- "Urban" #NCES overriding self-report
+
+unique(clean_dac_22$locale) #double check all labels are accounted for
+#the following are unaccounted for labels that need to be specified and the particular instances where they arose
+#issues coming from self-reporting multiple locale types
+View(clean_dac_22$locale)
+View(dac_22[156:157,]) #_1_1_1 [all 3]
+View(dac_22[123,]) 
+View(dac_22[140,])
+View(dac_22[114,]) #_0_1_1 [suburban and urban]
+View(dac_22[132:133,]) 
+View(dac_22[144,]) #_1_0_1 [rural and urban]
+View(dac_22[131,])
+View(dac_22[147,])
+
+which((clean_dac_22$locale == "_1_1_1") |
+        (clean_dac_22$locale == "_0_1_1") |
+      (clean_dac_22$locale == "_1_0_1"))
+```
+
+```{r collapse school type}
+#district c131
+#charter c132
+#independent c133
+#sws c134
+#virtual c135
+#microschool c136
+#homeschool c137
+#hub c138
+#other c139
+#col 140 is text description
+View(summarize(count(clean_dac_22[,131:139])))
+match("school_descriptor_district", names(clean_dac_22))
+unique(clean_dac_22$school_descriptor_other_text)
+which(clean_dac_22$school_descriptor_other_text == "& Hybrid")
+which(clean_dac_22$school_descriptor_other_text == "RI State Public School")
+which(clean_dac_22$school_descriptor_other_text == "Public School that serves deaf, blind, and deafblind students from 0 - 22")
+View(dac_22[152,])
+View(dac_22[157:158,])
+
+schl_check <- clean_dac_22 %>% 
+  select(school_name, c(131:139)) %>% 
+  group_by(school_name) %>% 
+  mutate(overlap = n()) #output incorrect
+#need to think about dually-ID'd school types.
+
+unique(schl_check$overlap)
+View(schl_check[152,])
 ```
 
