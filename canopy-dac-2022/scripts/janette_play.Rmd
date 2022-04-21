@@ -200,6 +200,13 @@ To Do:
 * Fill meaningful data (yes/no/NA)
 
 ## Data Cleaning  
+
+### Locale
+
+Created a new variable `locale` to indicate whether a school is urban, rural, or suburban. This variable merges NCES and self-reported data, with NCES data taking precedence in instances where we had information from both sources. There is 1 instance of `NA` where neither NCES or self-reported data were recorded.
+
+*Status:* In progress - 10 schools have multi-coded self-reported data (specified below). I need to know how to code these in order to move forward with factoring the variable for easier analysis.
+
 ```{r locale variable}
 # !diagnostics off
 # Note a '1' indicates a yes
@@ -221,7 +228,7 @@ clean_dac_22$locale[clean_dac_22$locale == "Urban_0_0_1"] <- "Urban" #NCES overr
 
 unique(clean_dac_22$locale) #double check all labels are accounted for
 #the following are unaccounted for labels that need to be specified and the particular instances where they arose
-#issues coming from self-reporting multiple locale types
+#issues coming from self-reporting multiple locale types by row
 View(clean_dac_22$locale)
 View(dac_22[156:157,]) #_1_1_1 [all 3]
 View(dac_22[123,]) 
@@ -232,10 +239,32 @@ View(dac_22[144,]) #_1_0_1 [rural and urban]
 View(dac_22[131,])
 View(dac_22[147,])
 
+#rows to clean up specified below:
 which((clean_dac_22$locale == "_1_1_1") |
         (clean_dac_22$locale == "_0_1_1") |
       (clean_dac_22$locale == "_1_0_1"))
+
+#once these final rows are cleaned up we can factor this var
+sum(is.na(clean_dac_22$locale))
 ```
+
+### School Type
+
+School type was previously divided into 10 columns representing the following:  
+* district  
+* charter  
+* independent  
+* sws  
+* virtual  
+* microschool  
+* homeschool  
+* hub  
+* other  
+* text description for `other`
+
+Values representing yes and no have been condensed into a single column named `school_type` specifying one of the values from the list above.
+
+*Status:* In progress - a few instances of `other` and another item from list chosen. I need to know what to do in instances of multi-coding in order to proceed. Also need to know if `other` text should be its own value, or if a value of `other` with an additional column for text is preferable.
 
 ```{r collapse school type}
 #district c131
@@ -257,6 +286,8 @@ which(clean_dac_22$school_descriptor_other_text == "Public School that serves de
 View(dac_22[152,])
 View(dac_22[157:158,])
 
+#work smaller dataset to ensure code works properly
+#will also use this to ensure changes to clean dataset match up
 schl_check <- clean_dac_22 %>% 
   select(school_name, c(131:139)) %>% 
   group_by(school_name) %>% 
@@ -266,4 +297,252 @@ schl_check <- clean_dac_22 %>%
 unique(schl_check$overlap)
 View(schl_check[152,])
 ```
+
+### School Leader Racial Identity
+
+School leaders filling out the survey were asked to report how they identify racially. This variable was previously coded across 9 columns, with the following values:  
+* AIAN  
+* Asian  
+* Black  
+* Hispanic  
+* NHPI  
+* White  
+* Self describe option  
+* Text for `self describe`  
+* No Response (which I assume is prefer not to respond)
+
+Values were coded as either `yes` or `no` which has been collapsed into a single column `confidential_leader_race` with a value filled in according to the list above. An additional value, `Biracial` has been added for leaders who identified as more than one race (there were no instances with more than 2 races reported).  
+
+The new values include:  
+* White  
+* Biracial  
+* Hispanic  
+* Asian  
+* No Response  
+* NA (1 missing observation)  
+* Xicana Indigena (1 observation)  
+* Middle Eastern (1 observation)  
+* AIAN  
+
+Note that NHPI was dropped because there were no coded NHPI cases. Self-reported text was used, but I can change this to "Other" or to any other value desired if needed.
+
+*Status:* Complete -- variable is a factor with previously listed values.
+
+```{r leader race collapsed}
+#cols 141-148
+#self describe text col 10
+
+#look at uniquely identified self-report race data
+unique(clean_dac_22$confidential_leader_race_self_describe_text)
+#which observations?
+which(clean_dac_22$confidential_leader_race_self_describe_text  == "xicana indigena") #row 114
+which(clean_dac_22$confidential_leader_race_self_describe_text  == "Middle Eastern") #row 121
+which(clean_dac_22$confidential_leader_race_self_describe_text  == "-99") #row 161
+
+clean_dac_22$confidential_leader_race_aian[clean_dac_22$confidential_leader_race_aian == "American Indian or Alaska Native"] <- 1
+clean_dac_22$confidential_leader_race_aian <- as.integer(clean_dac_22$confidential_leader_race_aian)
+#how many bi/multiracial participants? do we need a var?
+race_check <- clean_dac_22 %>% 
+  select(school_name, c(141:148, 10)) %>% 
+  mutate(Total = rowSums(.[2:8]))
+#check unique values
+unique(race_check$Total)
+#at most, participants chose 2 racial identities
+#new category will be "biracial"
+
+#collapsing race in clean dataset
+clean_dac_22 <- as.data.frame(clean_dac_22) %>% 
+  unite("confidential_leader_race",
+        c(confidential_leader_race_aian, confidential_leader_race_asian,
+        confidential_leader_race_black, confidential_leader_race_hispanic,
+        confidential_leader_race_nhpi, confidential_leader_race_white,
+        confidential_leader_gender_self_describe, confidential_leader_race_self_describe_text,
+        confidential_leader_race_no_response), na.rm = TRUE)
+#recode column so it makes sense  
+clean_dac_22<- clean_dac_22 %>% 
+  mutate(confidential_leader_race = recode(clean_dac_22$confidential_leader_race,
+         "1_0_0_0_0_0_0_0_0" = "AIAN",
+         "0_1_0_0_0_0_0_0_0" = "Asian",
+         "0_0_1_0_0_0_0_0_0" = "Black",
+         #"American Indian or Alaska Native_0_0_0_0_1_0_0_0" = "Biracial", #AIAN + White (2)
+         #"American Indian or Alaska Native_0_1_0_0_0_0_0_0" = "Biracial", #AIAN + Black (1)
+         #"American Indian or Alaska Native_0_0_1_0_0_0_0_0" = "Biracial", #AIAN + Hispanic (1)
+         "1_0_0_0_0_1_0_0_0" = "Biracial", #AIAN + White (2)
+         "0_0_0_1_0_1_0_0_0" = "Biracial", #Hispanic + White (2)
+         "0_0_1_1_0_0_0_0_0" = "Biracial", #Hispanic + Black (1)
+         "0_0_1_0_0_1_0_0_0" = "Biracial", #Black + White (1)
+         "1_0_0_1_0_0_0_0_0" = "Biracial", #AIAN + Hispanic
+         "1_0_1_0_0_0_0_0_0" = "Biracial", #AIAN + Black (1)
+         "0_0_0_1_0_0_0_0_0" = "Hispanic",
+         #"XXX" = "NHPI", there were 0 coded NHPI
+         "0_0_0_0_0_1_0_0_0" = "White",
+         "0_0_0_0_0_1_-99_-99_0" = "White", #not sure about -99?
+         "0_0_0_0_0_0_0_xicana indigena_0" = "Xicana Indigena", #self describe text (1)
+         "0_0_0_0_0_0_0_Middle Eastern_0" = "Middle Eastern", #self describe text (1)
+         "0_0_0_0_0_0_0_0_1" = "No Response", #(2)
+         "0_0_0_0_0_0_0_0_0" = "NA"), #(1)
+  confidential_leader_race = factor(confidential_leader_race,
+                                           levels = c("AIAN", "Asian", "Black", "Biracial", "Hispanic", "White", "Xicana Indigena", "Middle Eastern", "No Response", "NA")))
+```
+
+### Private School NCES Data
+
+The NCES data merged with our Canopy dataset includes counts for each grade level within private schools. Each variable (listed below) has been recoded so that any values are converted to "Yes", "No", "Not Reported", or "NA" as applicable. (Note NAs were used when cells were completely empty. NA is **not** the same as Not Reported.)  
+
+Variables of interest:  
+* `nces_grades_pre_k`  
+* `nces_grades_kindergarten`  
+* `nces_grades_1st`  
+* `nces_grades_2nd`  
+* `nces_grades_3rd`  
+* `nces_grades_4th`  
+* `nces_grades_5th`  
+* `nces_grades_6th`  
+* `nces_grades_7th`  
+* `nces_grades_8th`  
+* `nces_grades_9th`  
+* `nces_grades_10th`  
+* `nces_grades_11th`  
+* `nces_grades_12th`  
+* `nces_grades_13th`  
+
+I did not create a new variable designating grade levels offered (e.g., elementary, middle, high, mixed elementary/jr high, mixed jr/sr high, etc.) but can do so if needed.
+
+Can also recode so NA is the same as Not Reported if needed.
+
+*Status:* Complete.
+
+```{r private grade recode}
+#manually refactor NAs
+#refactor() not working for empty cells marked as ""
+clean_dac_22$nces_grades_pre_k[clean_dac_22$nces_grades_pre_k == ""] <- NA
+clean_dac_22$nces_grades_kindergarten[clean_dac_22$nces_grades_kindergarten == ""] <- NA
+clean_dac_22$nces_grades_1st[clean_dac_22$nces_grades_1st == ""] <- NA
+clean_dac_22$nces_grades_2nd[clean_dac_22$nces_grades_2nd == ""] <- NA
+clean_dac_22$nces_grades_3rd[clean_dac_22$nces_grades_3rd == ""] <- NA
+clean_dac_22$nces_grades_4th[clean_dac_22$nces_grades_4th == ""] <- NA
+clean_dac_22$nces_grades_5th[clean_dac_22$nces_grades_5th == ""] <- NA
+clean_dac_22$nces_grades_6th[clean_dac_22$nces_grades_6th == ""] <- NA
+clean_dac_22$nces_grades_7th[clean_dac_22$nces_grades_7th == ""] <- NA
+clean_dac_22$nces_grades_8th[clean_dac_22$nces_grades_8th == ""] <- NA
+clean_dac_22$nces_grades_9th[clean_dac_22$nces_grades_9th == ""] <- NA
+clean_dac_22$nces_grades_10th[clean_dac_22$nces_grades_10th == ""] <- NA
+clean_dac_22$nces_grades_11th[clean_dac_22$nces_grades_11th == ""] <- NA
+clean_dac_22$nces_grades_12th[clean_dac_22$nces_grades_12th == ""] <- NA
+clean_dac_22$nces_grades_13th[clean_dac_22$nces_grades_13th == ""] <- NA
+#recode all numeric values to "Yes" and factor
+clean_dac_22 <- clean_dac_22 %>% 
+  mutate(nces_grades_pre_k = recode(temp_clean_dac_22$nces_grades_pre_k,
+                                    "10" = "Yes",
+                                    "33" = "Yes",
+                                    "8" = "Yes",
+                                    "16" = "Yes",
+                                    "13" = "Yes"),
+         nces_grades_kindergarten = recode(temp_clean_dac_22$nces_grades_kindergarten,
+                                           "4" = "Yes",
+                                           "28" = "Yes",
+                                           "15" = "Yes",
+                                           "3" = "Yes",
+                                           "8" = "Yes",
+                                           "17" = "Yes"),
+         nces_grades_1st = recode(temp_clean_dac_22$nces_grades_1st,
+                                  "4" = "Yes",
+                                  "1" = "Yes",
+                                  "33" = "Yes",
+                                  "13" = "Yes",
+                                  "3" = "Yes",
+                                  "11" = "Yes",
+                                  "15" = "Yes",
+                                  "14" = "Yes"),
+         nces_grades_2nd = recode(temp_clean_dac_22$nces_grades_2nd,
+                                  "6" = "Yes",
+                                  "1" = "Yes",
+                                  "41" = "Yes",
+                                  "13" = "Yes",
+                                  "4" = "Yes",
+                                  "8" = "Yes"),
+         nces_grades_3rd = recode(temp_clean_dac_22$nces_grades_3rd,
+                                  "5" = "Yes",
+                                  "47" = "Yes",
+                                  "8" = "Yes",
+                                  "13" = "Yes",
+                                  "21" = "Yes"),
+         nces_grades_4th = recode(temp_clean_dac_22$nces_grades_4th,
+                                  "5" = "Yes",
+                                  "1" = "Yes",
+                                  "38" = "Yes",
+                                  "18" = "Yes",
+                                  "7" = "Yes",
+                                  "12" = "Yes",
+                                  "19" = "Yes",
+                                  "21" = "Yes"),
+         nces_grades_5th = recode(temp_clean_dac_22$nces_grades_5th,
+                                  "7" = "Yes",
+                                  "5" = "Yes",
+                                  "52" = "Yes",
+                                  "16" = "Yes",
+                                  "10" = "Yes",
+                                  "20" = "Yes"),
+         nces_grades_6th = recode(temp_clean_dac_22$nces_grades_6th,
+                                  "3" = "Yes",
+                                  "45" = "Yes",
+                                  "15" = "Yes",
+                                  "8" = "Yes",
+                                  "10" = "Yes",
+                                  "16" = "Yes",
+                                  "22" = "Yes"),
+         nces_grades_7th = recode(temp_clean_dac_22$nces_grades_7th,
+                                  "4" = "Yes",
+                                  "2" = "Yes",
+                                  "46" = "Yes",
+                                  "11" = "Yes",
+                                  "9" = "Yes",
+                                  "6" = "Yes",
+                                  "13" = "Yes",
+                                  "22" = "Yes"),
+         nces_grades_8th = recode(temp_clean_dac_22$nces_grades_8th,
+                                  "6" = "Yes",
+                                  "1" = "Yes",
+                                  "42" = "Yes",
+                                  "10" = "Yes",
+                                  "7" = "Yes",
+                                  "11" = "Yes",
+                                  "16" = "Yes"),
+         nces_grades_9th = recode(temp_clean_dac_22$nces_grades_9th,
+                                  "4" = "Yes",
+                                  "35" = "Yes",
+                                  "2" = "Yes",
+                                  "3" = "Yes",
+                                  "21" = "Yes"),
+         nces_grades_10th = recode(temp_clean_dac_22$nces_grades_10th,
+                                   "9" = "Yes",
+                                   "44" = "Yes",
+                                   "2" = "Yes",
+                                   "8" = "Yes"),
+         nces_grades_11th = recode(temp_clean_dac_22$nces_grades_11th,
+                                   "5" = "Yes",
+                                   "17" = "Yes",
+                                   "7" = "Yes",
+                                   "6" = "Yes"),
+         nces_grades_12th = recode(temp_clean_dac_22$nces_grades_12th,
+                                   "4" = "Yes",
+                                   "1" = "Yes",
+                                   "5" = "Yes"),
+         nces_grades_pre_k = factor(nces_grades_pre_k),
+         nces_grades_kindergarten = factor(nces_grades_kindergarten),
+         nces_grades_1st = factor(nces_grades_1st),
+         nces_grades_2nd = factor(nces_grades_2nd),
+         nces_grades_3rd = factor(nces_grades_3rd),
+         nces_grades_4th = factor(nces_grades_4th),
+         nces_grades_5th = factor(nces_grades_5th),
+         nces_grades_6th = factor(nces_grades_6th),
+         nces_grades_7th = factor(nces_grades_7th),
+         nces_grades_8th = factor(nces_grades_8th),
+         nces_grades_9th = factor(nces_grades_9th),
+         nces_grades_10th = factor(nces_grades_10th),
+         nces_grades_11th = factor(nces_grades_11th),
+         nces_grades_12th = factor(nces_grades_12th),
+         nces_grades_13th = factor(nces_grades_13th))
+```
+
 
