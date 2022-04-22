@@ -277,12 +277,14 @@ Values representing yes and no have been condensed into a single column named `s
 #hub c138
 #other c139
 #col 140 is text description
-View(summarize(count(clean_dac_22[,131:139])))
-match("school_descriptor_district", names(clean_dac_22))
-unique(clean_dac_22$school_descriptor_other_text)
-which(clean_dac_22$school_descriptor_other_text == "& Hybrid")
-which(clean_dac_22$school_descriptor_other_text == "RI State Public School")
-which(clean_dac_22$school_descriptor_other_text == "Public School that serves deaf, blind, and deafblind students from 0 - 22")
+
+
+# View(summarize(count(clean_dac_22[,131:139])))
+# match("school_descriptor_district", names(clean_dac_22))
+# unique(clean_dac_22$school_descriptor_other_text)
+# which(clean_dac_22$school_descriptor_other_text == "& Hybrid")
+# which(clean_dac_22$school_descriptor_other_text == "RI State Public School")
+# which(clean_dac_22$school_descriptor_other_text == "Public School that serves deaf, blind, and deafblind students from 0 - 22")
 View(dac_22[152,])
 View(dac_22[157:158,])
 
@@ -294,7 +296,7 @@ schl_check <- clean_dac_22 %>%
   mutate(overlap = n()) #output incorrect
 #need to think about dually-ID'd school types.
 
-unique(schl_check$overlap)
+# unique(schl_check$overlap)
 View(schl_check[152,])
 ```
 
@@ -328,7 +330,7 @@ Note that NHPI was dropped because there were no coded NHPI cases. Self-reported
 
 *Status:* Complete -- variable is a factor with previously listed values.
 
-```{r leader race collapsed}
+```{r leader race collapsed, eval = FALSE}
 #cols 141-148
 #self describe text col 10
 
@@ -412,7 +414,7 @@ Can also recode so NA is the same as Not Reported if needed.
 
 *Status:* Complete.
 
-```{r private grade recode}
+```{r private grade recode, eval = FALSE}
 #manually refactor NAs
 #refactor() not working for empty cells marked as ""
 clean_dac_22$nces_grades_pre_k[clean_dac_22$nces_grades_pre_k == ""] <- NA
