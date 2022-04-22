@@ -25,6 +25,9 @@ dac_22 <- import(here("data", "Final Canopy Dataset for DAC - Final Data 3_22.cs
             clean_names()
 ```
 
+
+## Cycle 1
+
 What states are represented?
 ```{r}
 state_distribution <- dac_22 %>% 
