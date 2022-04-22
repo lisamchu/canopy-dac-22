@@ -112,7 +112,19 @@ datatable(top_10_core)
 
 ### Task: How do tagging patterns differ among schools designed for particular marginalized student groups?
 
+- of those who selected a 
+
 #### Focus: BIPOC Students
+
+Also look: how many students chose BIPOC as their focus?
+- prop of factors
+- prop of schools
+- Focus: Foster students (add in total n)
+- all practices
+
+-- odds ratio, 
+-- next time: make sense of differences
+-- top practices (for all)
 
 ```{r}
 core_prac <- dac_22 %>% 
@@ -121,7 +133,7 @@ core_prac <- dac_22 %>%
   select(nces_id, starts_with("practices_"))
 ```
 
-```{r}
+```{r echo=FALSE}
 # pesky issues with one vector type
 # convert integer vector to character to allow pivoting
 core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
@@ -171,7 +183,7 @@ names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef
 ```
 
 
-```{r all frequency table}
+```{r}
 core_prac_freq %>% 
   arrange(-Total) %>% 
   datatable()
@@ -186,7 +198,7 @@ core_prac <- dac_22 %>%
   select(nces_id, starts_with("practices_"))
 ```
 
-```{r}
+```{r echo=FALSE}
 # pesky issues with one vector type
 # convert integer vector to character to allow pivoting
 core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
@@ -236,7 +248,7 @@ names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef
 ```
 
 
-```{r all frequency table}
+```{r}
 core_prac_freq %>% 
   arrange(-Total) %>% 
   datatable()
@@ -251,7 +263,7 @@ core_prac <- dac_22 %>%
   select(nces_id, starts_with("practices_"))
 ```
 
-```{r}
+```{r echo=FALSE}
 # pesky issues with one vector type
 # convert integer vector to character to allow pivoting
 core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
@@ -301,7 +313,7 @@ names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef
 ```
 
 
-```{r all frequency table}
+```{r}
 core_prac_freq %>% 
   arrange(-Total) %>% 
   datatable()
@@ -316,7 +328,7 @@ core_prac <- dac_22 %>%
   select(nces_id, starts_with("practices_"))
 ```
 
-```{r}
+```{r echo=FALSE}
 # pesky issues with one vector type
 # convert integer vector to character to allow pivoting
 core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
@@ -366,7 +378,7 @@ names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef
 ```
 
 
-```{r all frequency table}
+```{r}
 core_prac_freq %>% 
   arrange(-Total) %>% 
   datatable()
@@ -381,7 +393,7 @@ core_prac <- dac_22 %>%
   select(nces_id, starts_with("practices_"))
 ```
 
-```{r}
+```{r echo=FALSE}
 # pesky issues with one vector type
 # convert integer vector to character to allow pivoting
 core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
@@ -431,7 +443,7 @@ names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef
 ```
 
 
-```{r all frequency table}
+```{r}
 core_prac_freq %>% 
   arrange(-Total) %>% 
   datatable()
@@ -446,7 +458,7 @@ core_prac <- dac_22 %>%
   select(nces_id, starts_with("practices_"))
 ```
 
-```{r}
+```{r echo=FALSE}
 # pesky issues with one vector type
 # convert integer vector to character to allow pivoting
 core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
@@ -496,7 +508,7 @@ names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef
 ```
 
 
-```{r all frequency table}
+```{r}
 core_prac_freq %>% 
   arrange(-Total) %>% 
   datatable()
@@ -511,7 +523,7 @@ core_prac <- dac_22 %>%
   select(nces_id, starts_with("practices_"))
 ```
 
-```{r}
+```{r echo=FALSE}
 # pesky issues with one vector type
 # convert integer vector to character to allow pivoting
 core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
@@ -561,7 +573,7 @@ names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef
 ```
 
 
-```{r all frequency table}
+```{r}
 core_prac_freq %>% 
   arrange(-Total) %>% 
   datatable()
@@ -576,7 +588,7 @@ core_prac <- dac_22 %>%
   select(nces_id, starts_with("practices_"))
 ```
 
-```{r}
+```{r echo=FALSE}
 # pesky issues with one vector type
 # convert integer vector to character to allow pivoting
 core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
@@ -626,7 +638,7 @@ names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef
 ```
 
 
-```{r all frequency table}
+```{r}
 core_prac_freq %>% 
   arrange(-Total) %>% 
   datatable()
