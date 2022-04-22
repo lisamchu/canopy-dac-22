@@ -25,6 +25,24 @@ dac_22 <- import(here("data", "Final Canopy Dataset for DAC - Final Data 3_22.cs
             clean_names()
 ```
 
+
+## Cycle 1
+
+What states are represented?
+```{r}
+state_distribution <- dac_22 %>% 
+  group_by(school_state, .drop = FALSE) %>% 
+  summarise(N = n()) %>% 
+  mutate(freq = N/sum(N), pct = round(freq*100), 0)
+state_distribution
+```
+
+How many elementary, middle, high?
+```{r}
+
+```
+
+
 What are the racial/ethnic and gender identities of Canopy school leaders?
 
 First, gender.
@@ -129,6 +147,8 @@ practices_grouped
 ```
 ```{r}
 practices_grouped %>% 
+  arrange(desc(practice_tot)) %>% 
+  head(15) %>% 
   ggplot(aes(x = reorder(practices, practice_tot), practice_tot)) +
   geom_col() +
   coord_flip() +
@@ -176,6 +196,8 @@ practices_grouped_locale %>%
        x = "tags",
        y = "tag count")
 ```
+
+# get clarification on school type buckets
 
 How do tagging patterns differ among schools designed for particular marginalized student groups?
 
