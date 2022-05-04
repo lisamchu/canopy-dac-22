@@ -25,6 +25,7 @@ library(janitor)
 library(pracma)
 library(kableExtra)
 library(DT)
+library(psych)
 ```
 
 ```{r data cleaning}
@@ -203,9 +204,9 @@ To Do:
 
 ### Locale
 
-Created a new variable `locale` to indicate whether a school is urban, rural, or suburban. This variable merges NCES and self-reported data, with NCES data taking precedence in instances where we had information from both sources. There is 1 instance of `NA` where neither NCES or self-reported data were recorded.
+Created a new variable `locale` to indicate whether a school is urban, rural, or suburban. This variable merges NCES and self-reported data, with NCES data taking precedence in instances where we had information from both sources. There is 1 instance of `NA` where neither NCES or self-reported data were recorded. An additional 3 instances were coded as `NA` (Iowa Big, The Forest Schools, & Link Learning) indicating multi-coded schools which should be excluded from locale-specific analysis.
 
-*Status:* In progress - 10 schools have multi-coded self-reported data (specified below). I need to know how to code these in order to move forward with factoring the variable for easier analysis.
+*Status:* Complete
 
 ```{r locale variable}
 # !diagnostics off
@@ -222,30 +223,27 @@ clean_dac_22 <- clean_dac_22 %>%
 #relabeling new locale data
 clean_dac_22$locale[clean_dac_22$locale == ""] <- NA #empties/all NA
 clean_dac_22$locale[clean_dac_22$locale == "_1_0_0"] <- "Rural" #self-reported rural
+clean_dac_22$locale[clean_dac_22$locale == "1_0_0"] <- "Rural" #self-reported rural
 clean_dac_22$locale[clean_dac_22$locale == "_0_1_0"] <- "Suburban" #self-reported suburban
+clean_dac_22$locale[clean_dac_22$locale == "0_1_0"] <- "Suburban" #self-reported suburban
 clean_dac_22$locale[clean_dac_22$locale == "_0_0_1"] <- "Urban" #self-reported urban
+clean_dac_22$locale[clean_dac_22$locale == "0_0_1"] <- "Urban" #self-reported urban
 clean_dac_22$locale[clean_dac_22$locale == "Urban_0_0_1"] <- "Urban" #NCES overriding self-report
-
-unique(clean_dac_22$locale) #double check all labels are accounted for
-#the following are unaccounted for labels that need to be specified and the particular instances where they arose
-#issues coming from self-reporting multiple locale types by row
-View(clean_dac_22$locale)
-View(dac_22[156:157,]) #_1_1_1 [all 3]
-View(dac_22[123,]) 
-View(dac_22[140,])
-View(dac_22[114,]) #_0_1_1 [suburban and urban]
-View(dac_22[132:133,]) 
-View(dac_22[144,]) #_1_0_1 [rural and urban]
-View(dac_22[131,])
-View(dac_22[147,])
-
-#rows to clean up specified below:
-which((clean_dac_22$locale == "_1_1_1") |
-        (clean_dac_22$locale == "_0_1_1") |
-      (clean_dac_22$locale == "_1_0_1"))
-
-#once these final rows are cleaned up we can factor this var
-sum(is.na(clean_dac_22$locale))
+#relabel individual multi-coded schools
+clean_dac_22[156,149] <- "Rural" #Community Lab
+clean_dac_22[157,149] <- "Urban" #Utah Schools for the Deaf
+clean_dac_22[123,149] <- NA #Iowa Big
+clean_dac_22[140,149] <- NA #The Forest Schools
+clean_dac_22[114,149] <- "Urban" #Unidos Homeschool Cooperative
+clean_dac_22[132,149] <- "Suburban" #Portal Schools
+clean_dac_22[133,149] <- "Suburban" #Verdi Ecoschool
+clean_dac_22[144,149] <- NA #Link Learning
+clean_dac_22[131,149] <- "Urban" #Lumen High School
+clean_dac_22[147,149] <- "Urban" #One Stone
+#factor variable for future analysis
+clean_dac_22 <- clean_dac_22 %>% 
+  mutate(locale = factor(locale, levels = c("Urban", "Suburban", "Rural"),
+                         exclude = NULL)) #exclude NAs
 ```
 
 ### School Type
@@ -434,20 +432,20 @@ clean_dac_22$nces_grades_12th[clean_dac_22$nces_grades_12th == ""] <- NA
 clean_dac_22$nces_grades_13th[clean_dac_22$nces_grades_13th == ""] <- NA
 #recode all numeric values to "Yes" and factor
 clean_dac_22 <- clean_dac_22 %>% 
-  mutate(nces_grades_pre_k = recode(temp_clean_dac_22$nces_grades_pre_k,
+  mutate(nces_grades_pre_k = recode(clean_dac_22$nces_grades_pre_k,
                                     "10" = "Yes",
                                     "33" = "Yes",
                                     "8" = "Yes",
                                     "16" = "Yes",
                                     "13" = "Yes"),
-         nces_grades_kindergarten = recode(temp_clean_dac_22$nces_grades_kindergarten,
+         nces_grades_kindergarten = recode(clean_dac_22$nces_grades_kindergarten,
                                            "4" = "Yes",
                                            "28" = "Yes",
                                            "15" = "Yes",
                                            "3" = "Yes",
                                            "8" = "Yes",
                                            "17" = "Yes"),
-         nces_grades_1st = recode(temp_clean_dac_22$nces_grades_1st,
+         nces_grades_1st = recode(clean_dac_22$nces_grades_1st,
                                   "4" = "Yes",
                                   "1" = "Yes",
                                   "33" = "Yes",
@@ -456,20 +454,20 @@ clean_dac_22 <- clean_dac_22 %>%
                                   "11" = "Yes",
                                   "15" = "Yes",
                                   "14" = "Yes"),
-         nces_grades_2nd = recode(temp_clean_dac_22$nces_grades_2nd,
+         nces_grades_2nd = recode(clean_dac_22$nces_grades_2nd,
                                   "6" = "Yes",
                                   "1" = "Yes",
                                   "41" = "Yes",
                                   "13" = "Yes",
                                   "4" = "Yes",
                                   "8" = "Yes"),
-         nces_grades_3rd = recode(temp_clean_dac_22$nces_grades_3rd,
+         nces_grades_3rd = recode(clean_dac_22$nces_grades_3rd,
                                   "5" = "Yes",
                                   "47" = "Yes",
                                   "8" = "Yes",
                                   "13" = "Yes",
                                   "21" = "Yes"),
-         nces_grades_4th = recode(temp_clean_dac_22$nces_grades_4th,
+         nces_grades_4th = recode(clean_dac_22$nces_grades_4th,
                                   "5" = "Yes",
                                   "1" = "Yes",
                                   "38" = "Yes",
@@ -478,14 +476,14 @@ clean_dac_22 <- clean_dac_22 %>%
                                   "12" = "Yes",
                                   "19" = "Yes",
                                   "21" = "Yes"),
-         nces_grades_5th = recode(temp_clean_dac_22$nces_grades_5th,
+         nces_grades_5th = recode(clean_dac_22$nces_grades_5th,
                                   "7" = "Yes",
                                   "5" = "Yes",
                                   "52" = "Yes",
                                   "16" = "Yes",
                                   "10" = "Yes",
                                   "20" = "Yes"),
-         nces_grades_6th = recode(temp_clean_dac_22$nces_grades_6th,
+         nces_grades_6th = recode(clean_dac_22$nces_grades_6th,
                                   "3" = "Yes",
                                   "45" = "Yes",
                                   "15" = "Yes",
@@ -493,7 +491,7 @@ clean_dac_22 <- clean_dac_22 %>%
                                   "10" = "Yes",
                                   "16" = "Yes",
                                   "22" = "Yes"),
-         nces_grades_7th = recode(temp_clean_dac_22$nces_grades_7th,
+         nces_grades_7th = recode(clean_dac_22$nces_grades_7th,
                                   "4" = "Yes",
                                   "2" = "Yes",
                                   "46" = "Yes",
@@ -502,7 +500,7 @@ clean_dac_22 <- clean_dac_22 %>%
                                   "6" = "Yes",
                                   "13" = "Yes",
                                   "22" = "Yes"),
-         nces_grades_8th = recode(temp_clean_dac_22$nces_grades_8th,
+         nces_grades_8th = recode(clean_dac_22$nces_grades_8th,
                                   "6" = "Yes",
                                   "1" = "Yes",
                                   "42" = "Yes",
@@ -510,23 +508,23 @@ clean_dac_22 <- clean_dac_22 %>%
                                   "7" = "Yes",
                                   "11" = "Yes",
                                   "16" = "Yes"),
-         nces_grades_9th = recode(temp_clean_dac_22$nces_grades_9th,
+         nces_grades_9th = recode(clean_dac_22$nces_grades_9th,
                                   "4" = "Yes",
                                   "35" = "Yes",
                                   "2" = "Yes",
                                   "3" = "Yes",
                                   "21" = "Yes"),
-         nces_grades_10th = recode(temp_clean_dac_22$nces_grades_10th,
+         nces_grades_10th = recode(clean_dac_22$nces_grades_10th,
                                    "9" = "Yes",
                                    "44" = "Yes",
                                    "2" = "Yes",
                                    "8" = "Yes"),
-         nces_grades_11th = recode(temp_clean_dac_22$nces_grades_11th,
+         nces_grades_11th = recode(clean_dac_22$nces_grades_11th,
                                    "5" = "Yes",
                                    "17" = "Yes",
                                    "7" = "Yes",
                                    "6" = "Yes"),
-         nces_grades_12th = recode(temp_clean_dac_22$nces_grades_12th,
+         nces_grades_12th = recode(clean_dac_22$nces_grades_12th,
                                    "4" = "Yes",
                                    "1" = "Yes",
                                    "5" = "Yes"),
@@ -547,4 +545,43 @@ clean_dac_22 <- clean_dac_22 %>%
          nces_grades_13th = factor(nces_grades_13th))
 ```
 
+
+# Cycle 3 (5.6.22)
+
+To Do:  
+* Wrap up locale variable  
+* Wrap up standardizing grade levels in NCES data  
+* Convert `nces_race_values` to % (denom = `nces_total_enrollment`)  
+* Merge self-reported and NCES data on student demographics (`self_reported_race_` & `nces_race_variables`)  
+* Merge self-reported and NCES data on grade levels  
+* Create new variables for elementary, middle, and high (pull out multiples in list)  
+
+### `Locale` Variable
+
+**Task:** Merge self-reported and NCES data on locale
+**Status:** Complete (see Cycle 2 for details)
+
+
+### Standardize NCES grade levels
+**Task:** Ensure independent schools' NCES grade level data matches other schools.
+**Status:** Complete (see Cycle 2 for details)
+
+### Convert `nces_race_values` to percentages
+
+```{r nces race percentages}
+View(data.frame(colnames(clean_dac_22)))
+#relevant cols (numerator):
+#197 = "nces_race_black"
+#198 = "nces_race_nhpi"
+#199 = "nces_race_asian"
+#200 = "nces_race_hispanic"
+#201 = "nces_race_aian"
+#relevant cols (denom):
+#181 = "nces_totall_enrollment"
+View(clean_dac_22[,181])
+View(clean_dac_22[,197:201])
+View(clean_dac_22$nces_total_enrollment)
+
+sum(is.na(clean_dac_22$self_reported_race_white))
+```
 
