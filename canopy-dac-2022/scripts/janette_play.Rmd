@@ -26,6 +26,7 @@ library(pracma)
 library(kableExtra)
 library(DT)
 library(psych)
+library(stringr)
 ```
 
 ```{r data cleaning}
@@ -566,22 +567,220 @@ To Do:
 **Task:** Ensure independent schools' NCES grade level data matches other schools.
 **Status:** Complete (see Cycle 2 for details)
 
-### Convert `nces_race_values` to percentages
+### Convert `nces_race_*` to percentages  
+
+The following variables now represent percentages (group/`nces_total_enrollment`) rather than counts:  
+* `nces_race_aian`  
+* `nces_race_asian`  
+* `nces_race_black`  
+* `nces_race_hispanic`  
+* `nces_race_nhpi`  
+* `nces_race_white`  
+* `nces_race_multiple`
+
+Rather than calculating, I imported the updated data that had percentages in each of these columns and merged them with the dataset.
+
+**Status:** Complete
 
 ```{r nces race percentages}
-View(data.frame(colnames(clean_dac_22)))
-#relevant cols (numerator):
-#197 = "nces_race_black"
-#198 = "nces_race_nhpi"
-#199 = "nces_race_asian"
-#200 = "nces_race_hispanic"
-#201 = "nces_race_aian"
-#relevant cols (denom):
-#181 = "nces_totall_enrollment"
-View(clean_dac_22[,181])
-View(clean_dac_22[,197:201])
-View(clean_dac_22$nces_total_enrollment)
+#need to merge updated NCES cols with df
+race_pct <- import(here("data", "dac_22_updated.csv"), 
+                      setclass = "tbl_df") %>% 
+  janitor::clean_names() %>% 
+  select("school_id", #key col
+         "nces_race_aian",
+         "nces_race_asian",
+         "nces_race_black",
+         "nces_race_hispanic",
+         "nces_race_nhpi",
+         "nces_race_white", 
+         "nces_race_multiple")
+#merge percentages into clean df
+clean_dac_22 <- clean_dac_22 %>%
+  select(-c(nces_aian,
+            nces_race_asian,
+            nces_race_black,
+            nces_race_hispanic,
+            nces_race_nhpi)) %>%
+  left_join(race_pct, by = "school_id")
+```
 
-sum(is.na(clean_dac_22$self_reported_race_white))
+### Merge `self_reported_*` and `nces_race_*`
+
+Columns with self-reported and NCES data documenting student racial demographics merged into the following single columns:  
+* `aian_percent`  
+* `asian_percent`  
+* `black_percent`  
+* `hispanic_percent`  
+* `nhpi_percent`  
+* `white_percent`  
+* `multiple_percent`  
+
+Note all columns were changed to numeric type for easier future analysis.  
+
+The data includes 35 instances of `NA` for the following 5 schools (5 schools x 7 racial groups = 35), meaning *both* NCES and self-reported data were missing:  
+* Aspen Academy (row 3)  
+* CodeRVA Regional High School (row 9)  
+* Lead Innovation Studio (row 67)  
+* Liberty Academy (row 109)  
+* CLK Engage At CLK Elementary School (row 124)
+
+**Status:** Complete
+
+```{r merge race percentages}
+clean_dac_22 <- clean_dac_22 %>% 
+  unite("aian_percent", c(nces_race_aian, self_reported_race_aian), na.rm = TRUE) %>% #AIAN merge
+  unite("asian_percent", c(nces_race_asian, self_reported_race_asian), na.rm = TRUE) %>% #Asian merge
+  unite("black_percent", c(nces_race_black, self_reported_race_black), na.rm = TRUE) %>% #Black merge
+  unite("hispanic_percent", c(nces_race_hispanic, self_reported_race_hispanic), na.rm = TRUE) %>% #Hispanic merge
+  unite("nhpi_percent", c(nces_race_nhpi, self_reported_race_nhpi), na.rm = TRUE) %>% #NHPI merge
+  unite("white_percent", c(nces_race_white, self_reported_race_white), na.rm = TRUE) %>% #White merge
+  unite("multiple_percent", c(nces_race_multiple, self_reported_race_multiple), na.rm = TRUE)  #multiple merge
+#restructure merged cols
+clean_dac_22 <- clean_dac_22 %>% 
+  mutate_at(vars(ends_with("_percent")), str_remove, "%..") %>% #NCES preferred (drop self-report)
+  mutate_at(vars(ends_with("_percent")), str_remove, "_") %>% #remove underscores
+  mutate_at(vars(ends_with("_percent")), str_remove, "%") %>% #remove %
+  mutate_at(vars(ends_with("_percent")), as.numeric) %>% #convert to numeric type
+  mutate_at(vars(ends_with("_percent")), round, 2) #round to 2 decimal points
+```
+
+### Merge grade level data
+
+Columns with self-reported and NCES grade level data were merged into the following columns:  
+* `grades_pre_k`  
+* `grades_kindergarten`  
+* `grades_1st`  
+* `grades_2nd`  
+* `grades_3rd`  
+* `grades_4th`  
+* `grades_5th`  
+* `grades_6th`  
+* `grades_7th`  
+* `grades_8th`
+* `grades_9th`  
+* `grades_10th`  
+* `grades_11th`  
+* `grades_12th`  
+* `grades_past_12th`  
+* `grades_other`  
+
+The dataset includes 4 schools that indicated `other`. `Yes`/`No` values were modified so that the text starts with "Yes_" to make manipulation easier when using `starts_with()` but I can change this if that does not make sense. Schools include:  
+* Utah Schools For The Deaf (row 157)  
++ `Yes_Birth - 3 years of age`
+* One Stone (row 147)  
++ `Yes_Our high school aged students provide year round educational opportunities to Yesst-7th grade students in the region. These range from STEM camps for 3-4th graders to entrepreneur workshops for middle schoolers.`
+* Link Learning (row 144)  
++ `Yes_adults up to 22 years old`
+* The Forest Schools (row 140)  
++ `Yes_Our Institute contracts with educators and leaders`
+
+*Status:* Complete
+
+```{r merge grades}
+#self-reported 142:157 (prek-12, past 12, + other)
+#nces 182:196 (prek-12, 13th)
+clean_dac_22 <- clean_dac_22 %>% 
+  unite("grades_pre_k", c(nces_grades_pre_k, self_reported_grades_pre_k), na.rm = TRUE) %>% 
+  unite("grades_kindergarten", c(nces_grades_kindergarten, self_reported_grades_kindergarten), na.rm = TRUE) %>% 
+  unite("grades_1st", c(nces_grades_1st, self_reported_grades_1st), na.rm = TRUE) %>% 
+  unite("grades_2nd", c(nces_grades_2nd, self_reported_grades_2nd), na.rm = TRUE) %>% 
+  unite("grades_3rd", c(nces_grades_3rd, self_reported_grades_3rd), na.rm = TRUE) %>% 
+  unite("grades_4th", c(nces_grades_4th, self_reported_grades_4th), na.rm = TRUE) %>% 
+  unite("grades_5th", c(nces_grades_5th, self_reported_grades_5th), na.rm = TRUE) %>% 
+  unite("grades_6th", c(nces_grades_6th, self_reported_grades_6th), na.rm = TRUE) %>% 
+  unite("grades_7th", c(nces_grades_7th, self_reported_grades_7th), na.rm = TRUE) %>% 
+  unite("grades_8th", c(nces_grades_8th, self_reported_grades_8th), na.rm = TRUE) %>% 
+  unite("grades_9th", c(nces_grades_9th, self_reported_grades_9th), na.rm = TRUE) %>% 
+  unite("grades_10th", c(nces_grades_10th, self_reported_grades_10th), na.rm = TRUE) %>% 
+  unite("grades_11th", c(nces_grades_11th, self_reported_grades_11th), na.rm = TRUE) %>% 
+  unite("grades_12th", c(nces_grades_12th, self_reported_grades_12th), na.rm = TRUE) %>% 
+  unite("grades_past_12th", c(nces_grades_13th, self_reported_grades_past_12th), na.rm = TRUE) %>% 
+  unite("grades_other", c(self_reported_grades_other, self_reported_grades_other_text))
+#restructure merged cols
+clean_dac_22 <- clean_dac_22 %>% 
+  mutate_at(vars(starts_with("grades_")), str_replace, "0", "No") %>% 
+  mutate_at(vars(starts_with("grades_")), str_replace, "1", "Yes") %>% 
+  mutate_at(vars(starts_with("grades_")), na_if, "") %>% 
+  mutate_at(vars(c("grades_pre_k", "grades_9th", "grades_10th", "grades_11th", "grades_12th", "grades_past_12th")), str_replace, "No_..", "No") %>% 
+  mutate_at(vars(c("grades_kindergarten", "grades_1st", "grades_2nd", "grades_3rd", "grades_4th", "grades_5th", "grades_6th", "grades_7th", "grades_8th")), str_replace, "Yes....", "Yes") %>% 
+  mutate_at(vars(c("grades_5th", "grades_6th", "grades_7th", "grades_8th")), str_replace, "Yess", "Yes") %>% 
+  mutate(grades_other = str_replace(grades_other, "No_No", "No"),
+         grades_other = str_replace(grades_other, "NA_", "No"))
+```
+
+### Create new `school_grade_type` variable
+
+Create new variables for school type based on grades offered as follows:  
+* `prek` = schools including prek
+* `elementary` = schools with any K-5 grades  
+* `middle` = schools with any 6-8 grades  
+* `high` = schools with any 9-12 grades  
+* `other` = schools with past 12th grades and/or who indicated other
+
+Many schools (N = 90) fell into multiple categories. These schools can be found in the `multi-coded_grades.csv` file in `Data` folder, or on GDrive.
+
+*Status:* In Progress - Variable is created, but multi-coded schools need to be addressed.
+
+```{r new school type variable}
+#create new column
+clean_dac_22 <- clean_dac_22 %>% 
+  mutate(school_grade_type = ifelse(grades_pre_k=="Yes", "prek", 
+                                    ifelse(grades_kindergarten=="Yes" |
+                                             grades_1st=="Yes" |
+                                             grades_2nd=="Yes" |
+                                             grades_3rd=="Yes" |
+                                             grades_4th=="Yes" |
+                                             grades_5th=="Yes", "elementary",
+                                           ifelse(grades_6th=="Yes" |
+                                                    grades_7th=="Yes" |
+                                                    grades_8th=="Yes", "middle",
+                                                  ifelse(grades_9th=="Yes" |
+                                                         grades_10th=="Yes" | 
+                                                         grades_11th=="Yes" |
+                                                         grades_12th=="Yes", "high",
+                                                         "other")))))
+```
+
+```{r pull out multicoded schools}
+#create a table with schools that are multicoded
+multi_code_grades <- clean_dac_22 %>% 
+  select(57, 3, 184, 142:156, 16) %>% 
+  mutate_at(vars(c(4:19)), str_replace, "Yes", "1") %>% 
+  mutate_at(vars(c(4:19)), str_replace, "No", "0") %>% 
+  mutate_at(vars(c(4:19)), na_if, "0t reported") %>% 
+  mutate_at(vars("grades_other"), str_remove, "_.*") %>% 
+  mutate_at(vars(c(4:19)), as.integer) %>% 
+  ungroup() %>% 
+  rowwise() %>% 
+  mutate(n_grade_codes = sum(c_across(4:19), na.rm=TRUE)) %>% 
+  ungroup() %>% 
+  mutate(match = ifelse(school_grade_type=="prek" & n_grade_codes > 1, "no",
+                        ifelse(school_grade_type=="elementary" & n_grade_codes > 6, "no",
+                        ifelse(school_grade_type=="middle" & n_grade_codes > 3, "no",
+                        ifelse(school_grade_type=="high" & n_grade_codes > 4, "no",
+                        "yes")))))
+#create subset for "yes" and for "no" to look more closely
+multi_code_yes <- multi_code_grades %>% 
+  filter(match == "yes")
+
+multi_code_no <- multi_code_grades %>% 
+  filter(match == "no") #%>% file exported [in "data"]
+  #export("multi-coded_grades.csv")
+
+#export cleaned data file
+# export(clean_dac_22, "clean_dac_22.csv")
+```
+
+
+### Look through new variables
+
+*Status:* In progress
+
+My next step is to look through the variables created/data exported and do some restructuring/moving around. Columns were shifted in the cleaning process so they just need to get back where they belong.
+
+```{r}
+# dat_chk <- import(here("data", "clean_dac_22.csv"))
+# dat_chk$school_grade_type
 ```
 
