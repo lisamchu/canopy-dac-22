@@ -1,8 +1,11 @@
 ---
-title: 'CRPE Canopy Play: Cycle 2'
+title: 'CRPE Canopy Play File'
 author: "Anwesha Guha"
 date: "4/21/2022"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
@@ -17,11 +20,10 @@ library(kableExtra)
 library(DT)
 ```
 
-## Cycle 2: How do tagging patterns differ among schools designed for particular marginalized student groups?
-
-### Import data
+# Cycle 2: Distribution of core practices by focus area
 
 ```{r data cleaning}
+# Import data
 # read in data
 data_dictionary <- import(here("data", "Final Canopy Dataset for DAC - Data dictionary.csv"), 
                           setclass = "tbl_df") %>% 
@@ -31,10 +33,10 @@ dac_22 <- import(here("data", "Final Canopy Dataset for DAC - Final Data 3_22.cs
             clean_names()
 ```
 
-### Import relevant code from Janette's play file
 *Core practices identified as "Your Most Important Practices" with up to 5 selected.*
 
 ```{r core practices}
+# Import relevant code from Janette's play file
 # first check that I have all core practices accounted for and create variable name df
 practices_var_names <- data_dictionary %>% 
   filter(row_number() %in% c(39:110))
@@ -91,13 +93,13 @@ core_prac_freq <- core_prac %>%
 names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef_transcend"] <- "Core Practice"
 ```
 
-#### What are the frequencies of core practices?
+## What are the frequencies of core practices?
 
 ```{r all frequency table}
 datatable(core_prac_freq)
 ```
 
-#### What are the frequencies of top 10 core practices?
+## What are the frequencies of top 10 core practices?
 
 ```{r top 10 core}
 top_10_core <- core_prac_freq %>% 
@@ -110,11 +112,9 @@ datatable(top_10_core)
 # output is 50 -- bottom tail = 50
 ```
 
-### Task: How do tagging patterns differ among schools designed for particular marginalized student groups?
+**Task: How do tagging patterns differ among schools designed for particular marginalized student groups?**
 
-- of those who selected a 
-
-#### Focus: BIPOC Students
+### Focus: BIPOC Students
 
 Also look: how many students chose BIPOC as their focus?
 - prop of factors
@@ -180,16 +180,28 @@ core_prac_freq <- core_prac %>%
 # rename var again
 names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef_transcend"] <- "Core Practice"
 
+all_prac_freq <- core_prac %>% 
+  select(c(1, 3:7)) %>% # drop unseen practices due to display logic 
+  group_by(core_practice) %>% 
+  mutate(Total = sum(`1`, `Less than a year`, `1-2 years`, `3-4 years`, `5+ years`)) %>% # core + chosen practice
+  ungroup() %>% 
+  mutate(Frequency = paste0(round((Total/sum(Total))*100, 2), "%")) %>% #calculate freq
+  select(-c(2:6)) %>%  # drop core freqs
+  left_join(practices_var_names, by = "core_practice") %>% #join labels
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% #drop naming convention for clarity in table
+  select(4, 2, 3) %>% #drop redundant row
+  rename("Practice Selected" = original_field_name_from_youssef_transcend) #rename col 1
+
 ```
 
 
 ```{r}
-core_prac_freq %>% 
+all_prac_freq %>% 
   arrange(-Total) %>% 
   datatable()
 ```
 
-#### Focus: Economically Disadvantaged Students
+### Focus: Economically Disadvantaged Students
 
 ```{r}
 core_prac <- dac_22 %>% 
@@ -254,7 +266,7 @@ core_prac_freq %>%
   datatable()
 ```
 
-#### Focus: Emergent Bilinguals
+### Focus: Emergent Bilinguals
 
 ```{r}
 core_prac <- dac_22 %>% 
@@ -319,7 +331,7 @@ core_prac_freq %>%
   datatable()
 ```
 
-#### Focus: Foster Students
+### Focus: Foster Students
 
 ```{r}
 core_prac <- dac_22 %>% 
@@ -384,7 +396,7 @@ core_prac_freq %>%
   datatable()
 ```
 
-#### Focus: Homeless Students
+### Focus: Homeless Students
 
 ```{r}
 core_prac <- dac_22 %>% 
@@ -449,7 +461,7 @@ core_prac_freq %>%
   datatable()
 ```
 
-#### Focus: Juvenile Justice
+### Focus: Juvenile Justice
 
 ```{r}
 core_prac <- dac_22 %>% 
@@ -514,7 +526,7 @@ core_prac_freq %>%
   datatable()
 ```
 
-#### Focus: Newcomer Students (Immigrant and/or Refugees)
+### Focus: Newcomer Students (Immigrant and/or Refugees)
 
 ```{r}
 core_prac <- dac_22 %>% 
@@ -579,7 +591,7 @@ core_prac_freq %>%
   datatable()
 ```
 
-#### Focus: Students with Learning Differences and Disabilities
+### Focus: Students with Learning Differences and Disabilities
 
 ```{r}
 core_prac <- dac_22 %>% 
@@ -640,6 +652,645 @@ names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef
 
 ```{r}
 core_prac_freq %>% 
+  arrange(-Total) %>% 
+  datatable()
+```
+
+# Cycle 3: Distribution of all practices by focus area
+
+## What are the frequencies of all practices?
+
+```{r}
+all_prac_freq <- core_prac %>% 
+  select(c(1, 3:7)) %>% # drop unseen practices due to display logic 
+  group_by(core_practice) %>% 
+  mutate(Total = sum(`1`, `Less than a year`, `1-2 years`, `3-4 years`, `5+ years`)) %>% # core + chosen practice
+  ungroup() %>% 
+  mutate(Frequency = paste0(round((Total/sum(Total))*100, 2), "%")) %>% #calculate freq
+  select(-c(2:6)) %>%  # drop core freqs
+  left_join(practices_var_names, by = "core_practice") %>% #join labels
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% #drop naming convention for clarity in table
+  select(4, 2, 3) %>% #drop redundant row
+  rename("Practice Selected" = original_field_name_from_youssef_transcend) #rename col 1
+```
+
+```{r}
+datatable(all_prac_freq)
+```
+
+
+### Focus: BIPOC Students
+
+```{r}
+core_prac <- dac_22 %>% 
+  as_tibble() %>% 
+  filter(focus_bipoc == 1) %>% 
+  select(nces_id, starts_with("practices_"))
+```
+
+```{r echo=FALSE}
+# pesky issues with one vector type
+# convert integer vector to character to allow pivoting
+core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
+
+# pivot 
+core_prac <- core_prac %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = c("core_practice"),
+               values_to = "practice_time") %>% 
+  group_by(core_practice, practice_time) %>% 
+  mutate(sum = n()) %>% 
+  select(-nces_id) %>% 
+  unique() %>% 
+  pivot_wider(id_cols = "core_practice",
+              names_from = "practice_time",
+              values_from = "sum",
+              names_repair = "minimal") %>% 
+  select(c(1, 3, 2, 7, 6, 4, 5))
+
+# code to double check the values
+work_check <- dac_22 %>% 
+  as_tibble() %>% 
+  select(nces_id, starts_with("practices")) %>% 
+  count(practices_students_leaders)
+
+# values look good
+# clean up NAs so they reflect 0 values
+core_prac[is.na(core_prac)] <- 0
+
+# final clean up for table
+# prepare practices_var_names for joining
+names(practices_var_names)[names(practices_var_names) == "variable_name"] <- "core_practice"
+
+# prepare table df for joining and display
+core_prac_freq <- core_prac %>% 
+  select(-c(2,3)) %>% 
+  left_join(practices_var_names, by = "core_practice") %>% 
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% 
+  ungroup() %>% 
+  select(6, 2, 3, 4, 5) %>%
+  mutate(Total = rowSums(.[2:5]),
+         Frequency = paste0(round((Total/sum(Total))*100, 2), "%"))
+
+# rename var again
+names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef_transcend"] <- "Core Practice"
+
+all_prac_freq <- core_prac %>% 
+  select(c(1, 3:7)) %>% # drop unseen practices due to display logic 
+  group_by(core_practice) %>% 
+  mutate(Total = sum(`1`, `Less than a year`, `1-2 years`, `3-4 years`, `5+ years`)) %>% # core + chosen practice
+  ungroup() %>% 
+  mutate(Frequency = paste0(round((Total/sum(Total))*100, 2), "%")) %>% #calculate freq
+  select(-c(2:6)) %>%  # drop core freqs
+  left_join(practices_var_names, by = "core_practice") %>% #join labels
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% #drop naming convention for clarity in table
+  select(4, 2, 3) %>% #drop redundant row
+  rename("Practice Selected" = original_field_name_from_youssef_transcend) #rename col 1
+
+```
+
+
+```{r}
+all_prac_freq %>% 
+  arrange(-Total) %>% 
+  datatable()
+```
+
+### Focus: Economically Disadvantaged Students
+
+```{r}
+core_prac <- dac_22 %>% 
+  as_tibble() %>% 
+  filter(focus_economic_disadvantage == 1) %>% 
+  select(nces_id, starts_with("practices_"))
+```
+
+```{r echo=FALSE}
+# pesky issues with one vector type
+# convert integer vector to character to allow pivoting
+core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
+
+# pivot 
+core_prac <- core_prac %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = c("core_practice"),
+               values_to = "practice_time") %>% 
+  group_by(core_practice, practice_time) %>% 
+  mutate(sum = n()) %>% 
+  select(-nces_id) %>% 
+  unique() %>% 
+  pivot_wider(id_cols = "core_practice",
+              names_from = "practice_time",
+              values_from = "sum",
+              names_repair = "minimal") %>% 
+  select(c(1, 3, 2, 7, 6, 4, 5))
+
+# code to double check the values
+work_check <- dac_22 %>% 
+  as_tibble() %>% 
+  select(nces_id, starts_with("practices")) %>% 
+  count(practices_students_leaders)
+
+# values look good
+# clean up NAs so they reflect 0 values
+core_prac[is.na(core_prac)] <- 0
+
+# final clean up for table
+# prepare practices_var_names for joining
+names(practices_var_names)[names(practices_var_names) == "variable_name"] <- "core_practice"
+
+# prepare table df for joining and display
+core_prac_freq <- core_prac %>% 
+  select(-c(2,3)) %>% 
+  left_join(practices_var_names, by = "core_practice") %>% 
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% 
+  ungroup() %>% 
+  select(6, 2, 3, 4, 5) %>%
+  mutate(Total = rowSums(.[2:5]),
+         Frequency = paste0(round((Total/sum(Total))*100, 2), "%"))
+
+# rename var again
+names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef_transcend"] <- "Core Practice"
+
+all_prac_freq <- core_prac %>% 
+  select(c(1, 3:7)) %>% # drop unseen practices due to display logic 
+  group_by(core_practice) %>% 
+  mutate(Total = sum(`1`, `Less than a year`, `1-2 years`, `3-4 years`, `5+ years`)) %>% # core + chosen practice
+  ungroup() %>% 
+  mutate(Frequency = paste0(round((Total/sum(Total))*100, 2), "%")) %>% #calculate freq
+  select(-c(2:6)) %>%  # drop core freqs
+  left_join(practices_var_names, by = "core_practice") %>% #join labels
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% #drop naming convention for clarity in table
+  select(4, 2, 3) %>% #drop redundant row
+  rename("Practice Selected" = original_field_name_from_youssef_transcend) #rename col 1
+
+```
+
+
+```{r}
+all_prac_freq %>% 
+  arrange(-Total) %>% 
+  datatable()
+```
+
+### Focus: Emergent Bilinguals
+
+```{r}
+core_prac <- dac_22 %>% 
+  as_tibble() %>% 
+  filter(focus_emergent_bilinguals == 1) %>% 
+  select(nces_id, starts_with("practices_"))
+```
+
+```{r echo=FALSE}
+# pesky issues with one vector type
+# convert integer vector to character to allow pivoting
+core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
+
+# pivot 
+core_prac <- core_prac %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = c("core_practice"),
+               values_to = "practice_time") %>% 
+  group_by(core_practice, practice_time) %>% 
+  mutate(sum = n()) %>% 
+  select(-nces_id) %>% 
+  unique() %>% 
+  pivot_wider(id_cols = "core_practice",
+              names_from = "practice_time",
+              values_from = "sum",
+              names_repair = "minimal") %>% 
+  select(c(1, 3, 2, 7, 6, 4, 5))
+
+# code to double check the values
+work_check <- dac_22 %>% 
+  as_tibble() %>% 
+  select(nces_id, starts_with("practices")) %>% 
+  count(practices_students_leaders)
+
+# values look good
+# clean up NAs so they reflect 0 values
+core_prac[is.na(core_prac)] <- 0
+
+# final clean up for table
+# prepare practices_var_names for joining
+names(practices_var_names)[names(practices_var_names) == "variable_name"] <- "core_practice"
+
+# prepare table df for joining and display
+core_prac_freq <- core_prac %>% 
+  select(-c(2,3)) %>% 
+  left_join(practices_var_names, by = "core_practice") %>% 
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% 
+  ungroup() %>% 
+  select(6, 2, 3, 4, 5) %>%
+  mutate(Total = rowSums(.[2:5]),
+         Frequency = paste0(round((Total/sum(Total))*100, 2), "%"))
+
+# rename var again
+names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef_transcend"] <- "Core Practice"
+
+all_prac_freq <- core_prac %>% 
+  select(c(1, 3:7)) %>% # drop unseen practices due to display logic 
+  group_by(core_practice) %>% 
+  mutate(Total = sum(`1`, `Less than a year`, `1-2 years`, `3-4 years`, `5+ years`)) %>% # core + chosen practice
+  ungroup() %>% 
+  mutate(Frequency = paste0(round((Total/sum(Total))*100, 2), "%")) %>% #calculate freq
+  select(-c(2:6)) %>%  # drop core freqs
+  left_join(practices_var_names, by = "core_practice") %>% #join labels
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% #drop naming convention for clarity in table
+  select(4, 2, 3) %>% #drop redundant row
+  rename("Practice Selected" = original_field_name_from_youssef_transcend) #rename col 1
+
+```
+
+
+```{r}
+all_prac_freq %>% 
+  arrange(-Total) %>% 
+  datatable()
+```
+
+### Focus: Foster Students
+
+```{r}
+core_prac <- dac_22 %>% 
+  as_tibble() %>% 
+  filter(focus_foster == 1) %>% 
+  select(nces_id, starts_with("practices_"))
+```
+
+```{r echo=FALSE}
+# pesky issues with one vector type
+# convert integer vector to character to allow pivoting
+core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
+
+# pivot 
+core_prac <- core_prac %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = c("core_practice"),
+               values_to = "practice_time") %>% 
+  group_by(core_practice, practice_time) %>% 
+  mutate(sum = n()) %>% 
+  select(-nces_id) %>% 
+  unique() %>% 
+  pivot_wider(id_cols = "core_practice",
+              names_from = "practice_time",
+              values_from = "sum",
+              names_repair = "minimal") %>% 
+  select(c(1, 3, 2, 7, 6, 4, 5))
+
+# code to double check the values
+work_check <- dac_22 %>% 
+  as_tibble() %>% 
+  select(nces_id, starts_with("practices")) %>% 
+  count(practices_students_leaders)
+
+# values look good
+# clean up NAs so they reflect 0 values
+core_prac[is.na(core_prac)] <- 0
+
+# final clean up for table
+# prepare practices_var_names for joining
+names(practices_var_names)[names(practices_var_names) == "variable_name"] <- "core_practice"
+
+# prepare table df for joining and display
+core_prac_freq <- core_prac %>% 
+  select(-c(2,3)) %>% 
+  left_join(practices_var_names, by = "core_practice") %>% 
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% 
+  ungroup() %>% 
+  select(6, 2, 3, 4, 5) %>%
+  mutate(Total = rowSums(.[2:5]),
+         Frequency = paste0(round((Total/sum(Total))*100, 2), "%"))
+
+# rename var again
+names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef_transcend"] <- "Core Practice"
+
+all_prac_freq <- core_prac %>% 
+  select(c(1, 3:7)) %>% # drop unseen practices due to display logic 
+  group_by(core_practice) %>% 
+  mutate(Total = sum(`1`, `Less than a year`, `1-2 years`, `3-4 years`, `5+ years`)) %>% # core + chosen practice
+  ungroup() %>% 
+  mutate(Frequency = paste0(round((Total/sum(Total))*100, 2), "%")) %>% #calculate freq
+  select(-c(2:6)) %>%  # drop core freqs
+  left_join(practices_var_names, by = "core_practice") %>% #join labels
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% #drop naming convention for clarity in table
+  select(4, 2, 3) %>% #drop redundant row
+  rename("Practice Selected" = original_field_name_from_youssef_transcend) #rename col 1
+
+```
+
+
+```{r}
+all_prac_freq %>% 
+  arrange(-Total) %>% 
+  datatable()
+```
+
+### Focus: Homeless Students
+
+```{r}
+core_prac <- dac_22 %>% 
+  as_tibble() %>% 
+  filter(focus_homeless == 1) %>% 
+  select(nces_id, starts_with("practices_"))
+```
+
+```{r echo=FALSE}
+# pesky issues with one vector type
+# convert integer vector to character to allow pivoting
+core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
+
+# pivot 
+core_prac <- core_prac %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = c("core_practice"),
+               values_to = "practice_time") %>% 
+  group_by(core_practice, practice_time) %>% 
+  mutate(sum = n()) %>% 
+  select(-nces_id) %>% 
+  unique() %>% 
+  pivot_wider(id_cols = "core_practice",
+              names_from = "practice_time",
+              values_from = "sum",
+              names_repair = "minimal") %>% 
+  select(c(1, 3, 2, 7, 6, 4, 5))
+
+# code to double check the values
+work_check <- dac_22 %>% 
+  as_tibble() %>% 
+  select(nces_id, starts_with("practices")) %>% 
+  count(practices_students_leaders)
+
+# values look good
+# clean up NAs so they reflect 0 values
+core_prac[is.na(core_prac)] <- 0
+
+# final clean up for table
+# prepare practices_var_names for joining
+names(practices_var_names)[names(practices_var_names) == "variable_name"] <- "core_practice"
+
+# prepare table df for joining and display
+core_prac_freq <- core_prac %>% 
+  select(-c(2,3)) %>% 
+  left_join(practices_var_names, by = "core_practice") %>% 
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% 
+  ungroup() %>% 
+  select(6, 2, 3, 4, 5) %>%
+  mutate(Total = rowSums(.[2:5]),
+         Frequency = paste0(round((Total/sum(Total))*100, 2), "%"))
+
+# rename var again
+names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef_transcend"] <- "Core Practice"
+
+all_prac_freq <- core_prac %>% 
+  select(c(1, 3:7)) %>% # drop unseen practices due to display logic 
+  group_by(core_practice) %>% 
+  mutate(Total = sum(`1`, `Less than a year`, `1-2 years`, `3-4 years`, `5+ years`)) %>% # core + chosen practice
+  ungroup() %>% 
+  mutate(Frequency = paste0(round((Total/sum(Total))*100, 2), "%")) %>% #calculate freq
+  select(-c(2:6)) %>%  # drop core freqs
+  left_join(practices_var_names, by = "core_practice") %>% #join labels
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% #drop naming convention for clarity in table
+  select(4, 2, 3) %>% #drop redundant row
+  rename("Practice Selected" = original_field_name_from_youssef_transcend) #rename col 1
+
+```
+
+
+```{r}
+all_prac_freq %>% 
+  arrange(-Total) %>% 
+  datatable()
+```
+
+### Focus: Juvenile Justice
+
+```{r}
+core_prac <- dac_22 %>% 
+  as_tibble() %>% 
+  filter(focus_juvenile_justice == 1) %>% 
+  select(nces_id, starts_with("practices_"))
+```
+
+```{r echo=FALSE}
+# pesky issues with one vector type
+# convert integer vector to character to allow pivoting
+core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
+
+# pivot 
+core_prac <- core_prac %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = c("core_practice"),
+               values_to = "practice_time") %>% 
+  group_by(core_practice, practice_time) %>% 
+  mutate(sum = n()) %>% 
+  select(-nces_id) %>% 
+  unique() %>% 
+  pivot_wider(id_cols = "core_practice",
+              names_from = "practice_time",
+              values_from = "sum",
+              names_repair = "minimal") %>% 
+  select(c(1, 3, 2, 7, 6, 4, 5))
+
+# code to double check the values
+work_check <- dac_22 %>% 
+  as_tibble() %>% 
+  select(nces_id, starts_with("practices")) %>% 
+  count(practices_students_leaders)
+
+# values look good
+# clean up NAs so they reflect 0 values
+core_prac[is.na(core_prac)] <- 0
+
+# final clean up for table
+# prepare practices_var_names for joining
+names(practices_var_names)[names(practices_var_names) == "variable_name"] <- "core_practice"
+
+# prepare table df for joining and display
+core_prac_freq <- core_prac %>% 
+  select(-c(2,3)) %>% 
+  left_join(practices_var_names, by = "core_practice") %>% 
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% 
+  ungroup() %>% 
+  select(6, 2, 3, 4, 5) %>%
+  mutate(Total = rowSums(.[2:5]),
+         Frequency = paste0(round((Total/sum(Total))*100, 2), "%"))
+
+# rename var again
+names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef_transcend"] <- "Core Practice"
+
+all_prac_freq <- core_prac %>% 
+  select(c(1, 3:7)) %>% # drop unseen practices due to display logic 
+  group_by(core_practice) %>% 
+  mutate(Total = sum(`1`, `Less than a year`, `1-2 years`, `3-4 years`, `5+ years`)) %>% # core + chosen practice
+  ungroup() %>% 
+  mutate(Frequency = paste0(round((Total/sum(Total))*100, 2), "%")) %>% #calculate freq
+  select(-c(2:6)) %>%  # drop core freqs
+  left_join(practices_var_names, by = "core_practice") %>% #join labels
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% #drop naming convention for clarity in table
+  select(4, 2, 3) %>% #drop redundant row
+  rename("Practice Selected" = original_field_name_from_youssef_transcend) #rename col 1
+
+```
+
+
+```{r}
+all_prac_freq %>% 
+  arrange(-Total) %>% 
+  datatable()
+```
+
+### Focus: Newcomer Students (Immigrant and/or Refugees)
+
+```{r}
+core_prac <- dac_22 %>% 
+  as_tibble() %>% 
+  filter(focus_newcomer == 1) %>% 
+  select(nces_id, starts_with("practices_"))
+```
+
+```{r echo=FALSE}
+# pesky issues with one vector type
+# convert integer vector to character to allow pivoting
+core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
+
+# pivot 
+core_prac <- core_prac %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = c("core_practice"),
+               values_to = "practice_time") %>% 
+  group_by(core_practice, practice_time) %>% 
+  mutate(sum = n()) %>% 
+  select(-nces_id) %>% 
+  unique() %>% 
+  pivot_wider(id_cols = "core_practice",
+              names_from = "practice_time",
+              values_from = "sum",
+              names_repair = "minimal") %>% 
+  select(c(1, 3, 2, 7, 6, 4, 5))
+
+# code to double check the values
+work_check <- dac_22 %>% 
+  as_tibble() %>% 
+  select(nces_id, starts_with("practices")) %>% 
+  count(practices_students_leaders)
+
+# values look good
+# clean up NAs so they reflect 0 values
+core_prac[is.na(core_prac)] <- 0
+
+# final clean up for table
+# prepare practices_var_names for joining
+names(practices_var_names)[names(practices_var_names) == "variable_name"] <- "core_practice"
+
+# prepare table df for joining and display
+core_prac_freq <- core_prac %>% 
+  select(-c(2,3)) %>% 
+  left_join(practices_var_names, by = "core_practice") %>% 
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% 
+  ungroup() %>% 
+  select(6, 2, 3, 4, 5) %>%
+  mutate(Total = rowSums(.[2:5]),
+         Frequency = paste0(round((Total/sum(Total))*100, 2), "%"))
+
+# rename var again
+names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef_transcend"] <- "Core Practice"
+
+all_prac_freq <- core_prac %>% 
+  select(c(1, 3:7)) %>% # drop unseen practices due to display logic 
+  group_by(core_practice) %>% 
+  mutate(Total = sum(`1`, `Less than a year`, `1-2 years`, `3-4 years`, `5+ years`)) %>% # core + chosen practice
+  ungroup() %>% 
+  mutate(Frequency = paste0(round((Total/sum(Total))*100, 2), "%")) %>% #calculate freq
+  select(-c(2:6)) %>%  # drop core freqs
+  left_join(practices_var_names, by = "core_practice") %>% #join labels
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% #drop naming convention for clarity in table
+  select(4, 2, 3) %>% #drop redundant row
+  rename("Practice Selected" = original_field_name_from_youssef_transcend) #rename col 1
+
+```
+
+
+```{r}
+all_prac_freq %>% 
+  arrange(-Total) %>% 
+  datatable()
+```
+
+### Focus: Students with Learning Differences and Disabilities
+
+```{r}
+core_prac <- dac_22 %>% 
+  as_tibble() %>% 
+  filter(focus_swd == 1) %>% 
+  select(nces_id, starts_with("practices_"))
+```
+
+```{r echo=FALSE}
+# pesky issues with one vector type
+# convert integer vector to character to allow pivoting
+core_prac$practices_physical_well_being <- as.character(core_prac$practices_physical_well_being)
+
+# pivot 
+core_prac <- core_prac %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = c("core_practice"),
+               values_to = "practice_time") %>% 
+  group_by(core_practice, practice_time) %>% 
+  mutate(sum = n()) %>% 
+  select(-nces_id) %>% 
+  unique() %>% 
+  pivot_wider(id_cols = "core_practice",
+              names_from = "practice_time",
+              values_from = "sum",
+              names_repair = "minimal") %>% 
+  select(c(1, 3, 2, 7, 6, 4, 5))
+
+# code to double check the values
+work_check <- dac_22 %>% 
+  as_tibble() %>% 
+  select(nces_id, starts_with("practices")) %>% 
+  count(practices_students_leaders)
+
+# values look good
+# clean up NAs so they reflect 0 values
+core_prac[is.na(core_prac)] <- 0
+
+# final clean up for table
+# prepare practices_var_names for joining
+names(practices_var_names)[names(practices_var_names) == "variable_name"] <- "core_practice"
+
+# prepare table df for joining and display
+core_prac_freq <- core_prac %>% 
+  select(-c(2,3)) %>% 
+  left_join(practices_var_names, by = "core_practice") %>% 
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% 
+  ungroup() %>% 
+  select(6, 2, 3, 4, 5) %>%
+  mutate(Total = rowSums(.[2:5]),
+         Frequency = paste0(round((Total/sum(Total))*100, 2), "%"))
+
+# rename var again
+names(core_prac_freq)[names(core_prac_freq) == "original_field_name_from_youssef_transcend"] <- "Core Practice"
+
+all_prac_freq <- core_prac %>% 
+  select(c(1, 3:7)) %>% # drop unseen practices due to display logic 
+  group_by(core_practice) %>% 
+  mutate(Total = sum(`1`, `Less than a year`, `1-2 years`, `3-4 years`, `5+ years`)) %>% # core + chosen practice
+  ungroup() %>% 
+  mutate(Frequency = paste0(round((Total/sum(Total))*100, 2), "%")) %>% #calculate freq
+  select(-c(2:6)) %>%  # drop core freqs
+  left_join(practices_var_names, by = "core_practice") %>% #join labels
+  mutate(original_field_name_from_youssef_transcend = str_remove(original_field_name_from_youssef_transcend, "^practices_")) %>% #drop naming convention for clarity in table
+  select(4, 2, 3) %>% #drop redundant row
+  rename("Practice Selected" = original_field_name_from_youssef_transcend) #rename col 1
+
+```
+
+
+```{r}
+all_prac_freq %>% 
   arrange(-Total) %>% 
   datatable()
 ```
