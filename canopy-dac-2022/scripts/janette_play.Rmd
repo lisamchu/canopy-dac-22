@@ -414,136 +414,12 @@ Can also recode so NA is the same as Not Reported if needed.
 *Status:* Complete.
 
 ```{r private grade recode, eval = FALSE}
-#manually refactor NAs
-#refactor() not working for empty cells marked as ""
-clean_dac_22$nces_grades_pre_k[clean_dac_22$nces_grades_pre_k == ""] <- NA
-clean_dac_22$nces_grades_kindergarten[clean_dac_22$nces_grades_kindergarten == ""] <- NA
-clean_dac_22$nces_grades_1st[clean_dac_22$nces_grades_1st == ""] <- NA
-clean_dac_22$nces_grades_2nd[clean_dac_22$nces_grades_2nd == ""] <- NA
-clean_dac_22$nces_grades_3rd[clean_dac_22$nces_grades_3rd == ""] <- NA
-clean_dac_22$nces_grades_4th[clean_dac_22$nces_grades_4th == ""] <- NA
-clean_dac_22$nces_grades_5th[clean_dac_22$nces_grades_5th == ""] <- NA
-clean_dac_22$nces_grades_6th[clean_dac_22$nces_grades_6th == ""] <- NA
-clean_dac_22$nces_grades_7th[clean_dac_22$nces_grades_7th == ""] <- NA
-clean_dac_22$nces_grades_8th[clean_dac_22$nces_grades_8th == ""] <- NA
-clean_dac_22$nces_grades_9th[clean_dac_22$nces_grades_9th == ""] <- NA
-clean_dac_22$nces_grades_10th[clean_dac_22$nces_grades_10th == ""] <- NA
-clean_dac_22$nces_grades_11th[clean_dac_22$nces_grades_11th == ""] <- NA
-clean_dac_22$nces_grades_12th[clean_dac_22$nces_grades_12th == ""] <- NA
-clean_dac_22$nces_grades_13th[clean_dac_22$nces_grades_13th == ""] <- NA
 #recode all numeric values to "Yes" and factor
 clean_dac_22 <- clean_dac_22 %>% 
-  mutate(nces_grades_pre_k = recode(clean_dac_22$nces_grades_pre_k,
-                                    "10" = "Yes",
-                                    "33" = "Yes",
-                                    "8" = "Yes",
-                                    "16" = "Yes",
-                                    "13" = "Yes"),
-         nces_grades_kindergarten = recode(clean_dac_22$nces_grades_kindergarten,
-                                           "4" = "Yes",
-                                           "28" = "Yes",
-                                           "15" = "Yes",
-                                           "3" = "Yes",
-                                           "8" = "Yes",
-                                           "17" = "Yes"),
-         nces_grades_1st = recode(clean_dac_22$nces_grades_1st,
-                                  "4" = "Yes",
-                                  "1" = "Yes",
-                                  "33" = "Yes",
-                                  "13" = "Yes",
-                                  "3" = "Yes",
-                                  "11" = "Yes",
-                                  "15" = "Yes",
-                                  "14" = "Yes"),
-         nces_grades_2nd = recode(clean_dac_22$nces_grades_2nd,
-                                  "6" = "Yes",
-                                  "1" = "Yes",
-                                  "41" = "Yes",
-                                  "13" = "Yes",
-                                  "4" = "Yes",
-                                  "8" = "Yes"),
-         nces_grades_3rd = recode(clean_dac_22$nces_grades_3rd,
-                                  "5" = "Yes",
-                                  "47" = "Yes",
-                                  "8" = "Yes",
-                                  "13" = "Yes",
-                                  "21" = "Yes"),
-         nces_grades_4th = recode(clean_dac_22$nces_grades_4th,
-                                  "5" = "Yes",
-                                  "1" = "Yes",
-                                  "38" = "Yes",
-                                  "18" = "Yes",
-                                  "7" = "Yes",
-                                  "12" = "Yes",
-                                  "19" = "Yes",
-                                  "21" = "Yes"),
-         nces_grades_5th = recode(clean_dac_22$nces_grades_5th,
-                                  "7" = "Yes",
-                                  "5" = "Yes",
-                                  "52" = "Yes",
-                                  "16" = "Yes",
-                                  "10" = "Yes",
-                                  "20" = "Yes"),
-         nces_grades_6th = recode(clean_dac_22$nces_grades_6th,
-                                  "3" = "Yes",
-                                  "45" = "Yes",
-                                  "15" = "Yes",
-                                  "8" = "Yes",
-                                  "10" = "Yes",
-                                  "16" = "Yes",
-                                  "22" = "Yes"),
-         nces_grades_7th = recode(clean_dac_22$nces_grades_7th,
-                                  "4" = "Yes",
-                                  "2" = "Yes",
-                                  "46" = "Yes",
-                                  "11" = "Yes",
-                                  "9" = "Yes",
-                                  "6" = "Yes",
-                                  "13" = "Yes",
-                                  "22" = "Yes"),
-         nces_grades_8th = recode(clean_dac_22$nces_grades_8th,
-                                  "6" = "Yes",
-                                  "1" = "Yes",
-                                  "42" = "Yes",
-                                  "10" = "Yes",
-                                  "7" = "Yes",
-                                  "11" = "Yes",
-                                  "16" = "Yes"),
-         nces_grades_9th = recode(clean_dac_22$nces_grades_9th,
-                                  "4" = "Yes",
-                                  "35" = "Yes",
-                                  "2" = "Yes",
-                                  "3" = "Yes",
-                                  "21" = "Yes"),
-         nces_grades_10th = recode(clean_dac_22$nces_grades_10th,
-                                   "9" = "Yes",
-                                   "44" = "Yes",
-                                   "2" = "Yes",
-                                   "8" = "Yes"),
-         nces_grades_11th = recode(clean_dac_22$nces_grades_11th,
-                                   "5" = "Yes",
-                                   "17" = "Yes",
-                                   "7" = "Yes",
-                                   "6" = "Yes"),
-         nces_grades_12th = recode(clean_dac_22$nces_grades_12th,
-                                   "4" = "Yes",
-                                   "1" = "Yes",
-                                   "5" = "Yes"),
-         nces_grades_pre_k = factor(nces_grades_pre_k),
-         nces_grades_kindergarten = factor(nces_grades_kindergarten),
-         nces_grades_1st = factor(nces_grades_1st),
-         nces_grades_2nd = factor(nces_grades_2nd),
-         nces_grades_3rd = factor(nces_grades_3rd),
-         nces_grades_4th = factor(nces_grades_4th),
-         nces_grades_5th = factor(nces_grades_5th),
-         nces_grades_6th = factor(nces_grades_6th),
-         nces_grades_7th = factor(nces_grades_7th),
-         nces_grades_8th = factor(nces_grades_8th),
-         nces_grades_9th = factor(nces_grades_9th),
-         nces_grades_10th = factor(nces_grades_10th),
-         nces_grades_11th = factor(nces_grades_11th),
-         nces_grades_12th = factor(nces_grades_12th),
-         nces_grades_13th = factor(nces_grades_13th))
+  mutate_at(vars(starts_with("nces_grades_")), na_if, "") %>% 
+  mutate_at(vars(starts_with("nces_grades_")), str_replace, "[:digit:][:digit:]", "Yes") %>% 
+  mutate_at(vars(starts_with("nces_grades_")), str_replace, "[:digit:]", "Yes") %>% 
+  mutate_at(vars(starts_with("nces_grades_")), factor)
 ```
 
 
@@ -556,17 +432,17 @@ To Do:
 * Merge self-reported and NCES data on student demographics (`self_reported_race_` & `nces_race_variables`)  
 * Merge self-reported and NCES data on grade levels  
 * Create new variables for elementary, middle, and high (pull out multiples in list)  
+\newpage
+### `Locale` Variable  
 
-### `Locale` Variable
+**Task:** Merge self-reported and NCES data on locale  
+**Status:** Complete (see Cycle 2 for details)  
+\newpage
 
-**Task:** Merge self-reported and NCES data on locale
-**Status:** Complete (see Cycle 2 for details)
-
-
-### Standardize NCES grade levels
-**Task:** Ensure independent schools' NCES grade level data matches other schools.
-**Status:** Complete (see Cycle 2 for details)
-
+### Standardize NCES grade levels  
+**Task:** Ensure independent schools' NCES grade level data matches other schools.  
+**Status:** Complete (see Cycle 2 for details)  
+\newpage
 ### Convert `nces_race_*` to percentages  
 
 The following variables now represent percentages (group/`nces_total_enrollment`) rather than counts:  
@@ -578,7 +454,7 @@ The following variables now represent percentages (group/`nces_total_enrollment`
 * `nces_race_white`  
 * `nces_race_multiple`
 
-Rather than calculating, I imported the updated data that had percentages in each of these columns and merged them with the dataset.
+Rather than calculating, I imported the updated data that had percentages in each of these columns and merged them with the dataset.  
 
 **Status:** Complete
 
@@ -604,8 +480,9 @@ clean_dac_22 <- clean_dac_22 %>%
             nces_race_nhpi)) %>%
   left_join(race_pct, by = "school_id")
 ```
+\newpage
 
-### Merge `self_reported_*` and `nces_race_*`
+### Merge `self_reported_*` and `nces_race_*`  
 
 Columns with self-reported and NCES data documenting student racial demographics merged into the following single columns:  
 * `aian_percent`  
@@ -623,7 +500,7 @@ The data includes 35 instances of `NA` for the following 5 schools (5 schools x 
 * CodeRVA Regional High School (row 9)  
 * Lead Innovation Studio (row 67)  
 * Liberty Academy (row 109)  
-* CLK Engage At CLK Elementary School (row 124)
+* CLK Engage At CLK Elementary School (row 124)  
 
 **Status:** Complete
 
@@ -644,6 +521,7 @@ clean_dac_22 <- clean_dac_22 %>%
   mutate_at(vars(ends_with("_percent")), as.numeric) %>% #convert to numeric type
   mutate_at(vars(ends_with("_percent")), round, 2) #round to 2 decimal points
 ```
+\newpage
 
 ### Merge grade level data
 
@@ -665,7 +543,8 @@ Columns with self-reported and NCES grade level data were merged into the follow
 * `grades_past_12th`  
 * `grades_other`  
 
-The dataset includes 4 schools that indicated `other`. `Yes`/`No` values were modified so that the text starts with "Yes_" to make manipulation easier when using `starts_with()` but I can change this if that does not make sense. Schools include:  
+The dataset includes 4 schools that indicated `other`. `Yes`/`No` values were modified so that the text starts with "Yes_" to make manipulation easier when using `starts_with()` but I can change this if that does not make sense.  
+Schools include:  
 * Utah Schools For The Deaf (row 157)  
 + `Yes_Birth - 3 years of age`
 * One Stone (row 147)  
@@ -673,7 +552,7 @@ The dataset includes 4 schools that indicated `other`. `Yes`/`No` values were mo
 * Link Learning (row 144)  
 + `Yes_adults up to 22 years old`
 * The Forest Schools (row 140)  
-+ `Yes_Our Institute contracts with educators and leaders`
++ `Yes_Our Institute contracts with educators and leaders`  
 
 *Status:* Complete
 
@@ -704,10 +583,12 @@ clean_dac_22 <- clean_dac_22 %>%
   mutate_at(vars(starts_with("grades_")), na_if, "") %>% 
   mutate_at(vars(c("grades_pre_k", "grades_9th", "grades_10th", "grades_11th", "grades_12th", "grades_past_12th")), str_replace, "No_..", "No") %>% 
   mutate_at(vars(c("grades_kindergarten", "grades_1st", "grades_2nd", "grades_3rd", "grades_4th", "grades_5th", "grades_6th", "grades_7th", "grades_8th")), str_replace, "Yes....", "Yes") %>% 
+  mutate_at(vars(starts_with("grades_"), -grades_other), str_replace, "Yes_..", "Yes") %>% 
   mutate_at(vars(c("grades_5th", "grades_6th", "grades_7th", "grades_8th")), str_replace, "Yess", "Yes") %>% 
   mutate(grades_other = str_replace(grades_other, "No_No", "No"),
          grades_other = str_replace(grades_other, "NA_", "No"))
 ```
+\newpage
 
 ### Create new `school_grade_type` variable
 
@@ -718,7 +599,7 @@ Create new variables for school type based on grades offered as follows:
 * `high` = schools with any 9-12 grades  
 * `other` = schools with past 12th grades and/or who indicated other
 
-Many schools (N = 90) fell into multiple categories. These schools can be found in the `multi-coded_grades.csv` file in `Data` folder, or on GDrive.
+Many schools (N = 90) fell into multiple categories. These schools can be found in the `multi-coded_grades.csv` file in `Data` folder, or on GDrive.  
 
 *Status:* In Progress - Variable is created, but multi-coded schools need to be addressed.
 
@@ -745,7 +626,8 @@ clean_dac_22 <- clean_dac_22 %>%
 ```{r pull out multicoded schools}
 #create a table with schools that are multicoded
 multi_code_grades <- clean_dac_22 %>% 
-  select(57, 3, 184, 142:156, 16) %>% 
+  select(school_id, school_name, school_grade_type,
+         grades_pre_k, grades_kindergarten, grades_1st, grades_2nd, grades_3rd, grades_4th, grades_5th, grades_6th, grades_7th, grades_8th, grades_9th, grades_10th, grades_11th, grades_12th, grades_past_12th, grades_other) %>% 
   mutate_at(vars(c(4:19)), str_replace, "Yes", "1") %>% 
   mutate_at(vars(c(4:19)), str_replace, "No", "0") %>% 
   mutate_at(vars(c(4:19)), na_if, "0t reported") %>% 
@@ -771,13 +653,15 @@ multi_code_no <- multi_code_grades %>%
 #export cleaned data file
 # export(clean_dac_22, "clean_dac_22.csv")
 ```
+\newpage
 
-
-### Look through new variables
+### Look through new variables  
 
 *Status:* In progress
 
-My next step is to look through the variables created/data exported and do some restructuring/moving around. Columns were shifted in the cleaning process so they just need to get back where they belong.
+My next step is to look through the variables created/data exported and do some restructuring/moving around. Columns were shifted in the cleaning process so they just need to get back where they belong.  
+
+Also just generally going back through to check everything is looking how it should and will manually recode anything that was overlooked or needs relabeling.
 
 ```{r}
 # dat_chk <- import(here("data", "clean_dac_22.csv"))
