@@ -1,0 +1,90 @@
+---
+title: "CRPE Canopy Play File (Clean)"
+author: "Anwesha Guha"
+date: "5/13/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Clean Play File
+
+## Cycle 3 Overview
+
+This document contains analysis for items from the task tracker. The goal of this document is to consolidate the code that has already been done -- writing functions where necessary to streamline data analysis and cleaning processes.
+
+First, read in data & load necessary libraries.
+
+```{r libraries}
+library(pacman)
+p_load(tidyverse, here, rio, janitor, kableExtra, psych)
+```
+
+```{r read in data}
+data_dictionary <- import(here("data", "Final Canopy Dataset for DAC - Data dictionary.csv"), 
+                          setclass = "tbl_df") %>% 
+                  clean_names()
+dac_22 <- import(here("data", "Final Canopy Dataset for DAC - Final Data 3_22.csv"),
+                 setclass = "tbl_df") %>% 
+            clean_names()
+```
+
+
+## Data in appropriate format
+
+Pivot necessary columns from wide to long (will focus on practices/focus group -- assuming full data will be cleaned later)
+```{r}
+# Prep
+# physical wellbeing was never selected as a core practice, so its data type is different from the others. converting it to the other data types for the sake of pivoting
+dac_22$practices_physical_well_being <- as.character(dac_22$practices_physical_well_being)
+
+#Pivot
+df <- dac_22 %>%
+  #pivot practices
+  pivot_longer(cols = starts_with("practices_"),
+               names_to = "practices",
+               names_prefix = "practices_",
+               values_to = "practice_frequency") %>% 
+  #pivot focus groups
+  #deselected free response question for analysis simplification -- should be revisited prior to any publication
+  select(-focus_other_student_group_text) %>% 
+  pivot_longer(cols = starts_with("focus_"),
+               names_to = "focus",
+               names_prefix = "focus_",
+               values_to = "focus_frequency") %>% 
+  #consolidating core practices to general practice_count column
+  mutate(all_practice_count = case_when(
+    practice_frequency == "0" ~ 0,
+    TRUE ~ 1))
+```
+
+Simplify df to the ones I want to work with, focus area and practice counts.
+```{r}
+df2 <- df %>% 
+  select(nces_id, 134:138, -practice_frequency)
+```
+
+## Practice count by focus group -- this is where I'm struggling!
+
+Focus group descriptives
+```{r}
+df3 <- df2 %>% 
+  filter(focus_frequency >0, all_practice_count>0)
+```
+
+```{r}
+df3 %>% 
+  group_by(focus) %>% 
+  summarise(n = n())
+```
+
+Total practice count by school
+```{r}
+df %>% 
+  group_by(nces_id, focus) %>% 
+  summarise(n = length(focus))
+```
+
+

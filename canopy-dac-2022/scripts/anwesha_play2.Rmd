@@ -44,7 +44,7 @@ practices_var_names <- data_dictionary %>%
 # get sums
 core_prac <- dac_22 %>% 
   as_tibble() %>% 
-  select(nces_id, starts_with("practices_")) # 72 total practices
+  select(nces_id, starts_with("practices_"), starts_with("focus_")) # 72 total practices
 
 # pesky issues with one vector type
 # convert integer vector to character to allow pivoting
