@@ -1,0 +1,409 @@
+Updated Variable name (5.13.22),Description,Variable name in previous data dictionary,Original field name from Youssef/Transcend,Subsetted Data File
+KEY: school_id,Variable `school_id` serves as the key for all subsetted data.,,,All data files will have `school_id`
+survey_recorded_date,Recorded Date,survey_recorded_date,Recorded Date,survey_data
+survey_response_id,Response ID,survey_response_id,Response ID,survey_data
+school_name,This is the information we have on record about your school or learning environment. Please edit these fields if they are inaccurate. - School name:,school_name,This is the information we have on record about your school or learning environment. Please edit these fields if they are inaccurate. - School name:,school_data
+school_city,This is the information we have on record about your school or learning environment. Please edit these fields if they are inaccurate. - School city:,school_city,This is the information we have on record about your school or learning environment. Please edit these fields if they are inaccurate. - School city:,school_data
+school_address,This is the information we have on record about your school or learning environment. Please edit these fields if they are inaccurate. - School address:,school_address,This is the information we have on record about your school or learning environment. Please edit these fields if they are inaccurate. - School address:,school_data
+school_state,This is the information we have on record about your school or learning environment. Please edit these fields if they are inaccurate. - School state:,school_state,This is the information we have on record about your school or learning environment. Please edit these fields if they are inaccurate. - School state:,school_data
+school_district,This is the information we have on record about your school or learning environment. Please edit these fields if they are inaccurate. - School district:,school_district,This is the information we have on record about your school or learning environment. Please edit these fields if they are inaccurate. - School district:,school_data
+website,This is the information we have on record about your school or learning environment. Please edit these fields if they are inaccurate. - School website:,website,This is the information we have on record about your school or learning environment. Please edit these fields if they are inaccurate. - School website:,school_data
+leader_tenure,How long has the current school leader been in their position at the school or learning environment?,leader_tenure,How long has the current school leader been in their position at the school or learning environment?,demographic_data
+confidential_leader_race,"What is the leader's racial/ethnic identity? This variable collapsed from original selected choice: American Indian or Alaska Native, Asian, Black or African American, Hispanic or Latinx, Native Hawaiian or Pacific Islander, White, Prefer to self-identify, Prefer not to say.","confidential_leader_race_aian
+confidential_leader_race_asian
+confidential_leader_race_black
+confidential_leader_race_hispanic
+confidential_leader_race_nhpi
+confidential_leader_race_white
+confidential_leader_race_self_describe
+confidential_leader_race_no_response","What is the leader’s racial/ethnic identity? We request this information to better understand who participates in Canopy. Results will only be reported in aggregate (not personally identifiable). - Selected Choice - 
+American Indian or Alaska Native
+Asian
+Black or African American
+Hispanic or Latinx
+Native Hawaiian or Pacific Islander
+White
+Prefer to self-identify
+Prefer not to say",demographic_data
+confidential_leader_race_self_describe,Did the leader choose to self-identify? Original text preserved in `confidential_leader_race`.,confidential_leader_race_self_describe_text,What is the leader’s racial/ethnic identity? We request this information to better understand who participates in Canopy. Results will only be reported in aggregate (not personally identifiable). - Prefer to self-identify: - Text,demographic_data
+confidential_leader_gender,What is the leader’s gender identity? Note: `confidential_leader_gender_self_describe` column dropped because no respondents chose to self-identify.,"confidential_leader_gender
+confidential_leader_gender_self_describe","What is the leader’s gender identity?We request this information to better understand who participates in Canopy. Results will only be reported in aggregate (not personally identifiable). - Selected Choice
+Prefer to self-identify: - Text",demographic_data
+confidential_multiple_leaders,"If the learning environment has multiple primary leaders, such as co-directors, please describe the racial/ethnic and gender identities of the leader(s) not already described above.",confidential_multiple_leaders,"If the learning environment has multiple primary leaders, such as co-directors, please describe the racial/ethnic and gender identities of the leader(s) not already described above.",demographic_data
+confidential_leadership_team_diversity,How racially and/or ethnically diverse is your leadership team? We request this information to better understand who participates in Canopy. Results will only be reported in aggregate (not personally identifiable).,confidential_leadership_team_diversity,How racially and/or ethnically diverse is your leadership team? We request this information to better understand who participates in Canopy. Results will only be reported in aggregate (not personally identifiable).,demographic_data
+confidential_teaching_staff_diversity,How racially and/or ethnically diverse is your teaching staff?We request this information to better understand who participates in Canopy. Results will only be reported in aggregate (not personally identifiable).,confidential_teaching_staff_diversity,How racially and/or ethnically diverse is your teaching staff?We request this information to better understand who participates in Canopy. Results will only be reported in aggregate (not personally identifiable).,demographic_data
+self_reported_total_enrollment,How many learners attend [Field-School]? Please enter a whole number only,self_reported_total_enrollment,How many learners attend [Field-School]? Please enter a whole number only,demographic_data
+aian_percent,Percentage of students identified as American Indian or Alaska Native. Merged variable from NCES (prioritized) and self-reported data. ,"self_reported_race_aian
+nces_aian","self_reported_race_American Indian or Alaska Native
+NCES_.American Indian_Alaska Native",demographic_data
+asian_percent,Percentage of students identified as Asian. Merged variable from NCES (prioritized) and self-reported data. ,"self_reported_race_asian
+nces_race_asian","self_reported_race_Asian
+NCES_.Asian",demographic_data
+black_percent,Percentage of students identified as Black or African American. Merged variable from NCES (prioritized) and self-reported data. ,"self_reported_race_black
+nces_race_black","self_reported_race_Black or African American
+NCES_.Black",demographic_data
+hispanic_percent,Percentage of students identified as Hispanic or Latinx. Merged variable from NCES (prioritized) and self-reported data. ,"self_reported_race_hispanic
+nces_race_hispanic","self_reported_race_Latinx/e
+NCES_.Hispanic",demographic_data
+nhpi_percent,Percentage of students identified as Native Hawaiian or Pacific Islander. Merged variable from NCES (prioritized) and self-reported data. ,"self_reported_race_nhpi
+nces_race_nhpi","self_reported_race_Native Hawaiian or Other Pacific Islander
+NCES_.Hawaiian Nat_Pacific Isl",demographic_data
+multiple_percent,Percentage of students identified as more than 1 race. Merged variable from NCES (prioritized) and self-reported data. ,self_reported_race_multiple,self_reported_race_Two or more races,demographic_data
+white_percent,Percentage of students identified as White. Merged variable from NCES (prioritized) and self-reported data. ,self_reported_race_white,"self_reported_race_White, non-Latinx/e",demographic_data
+ell_percent,Percentage of students classified as English learners. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_ell
+nces_ell","self_reportedEnglish language learners
+NCES_.pct_ELL",demographic_data
+frpl_percent,Percentage of students who qualify for free and reduced lunch. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_frpl
+nces_frpl","self_reportedFree and reduced lunch program or economically disadvantaged
+NCES_.#FRLP",demographic_data
+swd_percent,Percentage of students with disabilities. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_swd
+nces_swd","self_reportedStudents with disabilities
+NCES_.pct_disability",demographic_data
+self_reported_ela,self_reported_ELA,self_reported_ela,self_reported_ELA,demographic_data
+self_reported_math,self_reported_Math,self_reported_math,self_reported_Math,demographic_data
+learning_model,"Your Learning Model The next questions ask about your learning model, or the coherent body of innovative approaches and practices that determine how students experience the learning environment.  How would you describe this learning environment in a 20-second elevator ride?This text will be displayed in a central place in your Canopy profile. What’s the headline you want people to know?",learning_model,"Your Learning Model The next questions ask about your learning model, or the coherent body of innovative approaches and practices that determine how students experience the learning environment.  How would you describe this learning environment in a 20-second elevator ride?This text will be displayed in a central place in your Canopy profile. What’s the headline you want people to know?",learning_model_data
+focus_other_student_group_text,Is your innovative model designed to meet the needs of any of the following student groups? - Other - Text,focus_other_student_group_text,Is your innovative model designed to meet the needs of any of the following student groups? - Other - Text,learning_model_data
+suggested_tags_s,Would you like to suggest any other keywords to describe the learning environment’s current design?,suggested_tags_s,Would you like to suggest any other keywords to describe the learning environment’s current design?,learning_model_data
+student_experience,"Your “Why”: Student ExperienceIn your own words, how would you describe the student experience that the learning environment is designed to create?",student_experience,"Your “Why”: Student ExperienceIn your own words, how would you describe the student experience that the learning environment is designed to create?",learning_model_data
+leaps_rank_high_expectations,leaps_rank_Unequal Expectations & Opportunities → High Expectations with Unlimited Opportunities - Rank,leaps_rank_high_expectations,leaps_rank_Unequal Expectations & Opportunities → High Expectations with Unlimited Opportunities - Rank,learning_model_data
+leaps_rank_whole_child,leaps_rank_Narrow Focus → Whole-Child Focus - Rank,leaps_rank_whole_child,leaps_rank_Narrow Focus → Whole-Child Focus - Rank,learning_model_data
+leaps_rank_rigorous_learning,leaps_rank_Rote Activities →  Rigorous Learning - Rank,leaps_rank_rigorous_learning,leaps_rank_Rote Activities →  Rigorous Learning - Rank,learning_model_data
+leaps_rank_relevance,leaps_rank_Irrelevance → Relevance - Rank,leaps_rank_relevance,leaps_rank_Irrelevance → Relevance - Rank,learning_model_data
+leaps_rank_affirmation,leaps_rank_Assimilation & Marginalization → Affirmation of Self & Others - Rank,leaps_rank_affirmation,leaps_rank_Assimilation & Marginalization → Affirmation of Self & Others - Rank,learning_model_data
+leaps_rank_social_consciousness,leaps_rank_Reinforcement of the Status Quo → Social Consciousness & Action - Rank,leaps_rank_social_consciousness,leaps_rank_Reinforcement of the Status Quo → Social Consciousness & Action - Rank,learning_model_data
+leaps_rank_connection,leaps_rank_Isolation → Connection & Community - Rank,leaps_rank_connection,leaps_rank_Isolation → Connection & Community - Rank,learning_model_data
+leaps_rank_customization,leaps_rank_Inflexible Systems → Customization - Rank,leaps_rank_customization,leaps_rank_Inflexible Systems → Customization - Rank,learning_model_data
+leaps_rank_self_direction,leaps_rank_Passive Compliance → Active Self-Direction - Rank,leaps_rank_self_direction,leaps_rank_Passive Compliance → Active Self-Direction - Rank,learning_model_data
+leaps_rank_anytime_anywhere,"leaps_rank_Siloed Schooling → Anytime, Anywhere Learning - Rank",leaps_rank_anytime_anywhere,"leaps_rank_Siloed Schooling → Anytime, Anywhere Learning - Rank",learning_model_data
+policy_factors,"Optional: If you could wave a magic wand, what specific policy or regulatory factor(s) would you create or change to support your innovation efforts?",policy_factors,"Optional: If you could wave a magic wand, what specific policy or regulatory factor(s) would you create or change to support your innovation efforts?",learning_model_data
+resource_text_1,"Are there published resources, stories, or evidence of impact about the learning environment that you would like to share in your Canopy profile? If so, please add below.Examples: in-depth profiles or media stories; documentation of your approach, evidence/data about your impact (including beyond traditional academic metrics) - Resource #1 - Description",resource_text_1,"Are there published resources, stories, or evidence of impact about the learning environment that you would like to share in your Canopy profile? If so, please add below.Examples: in-depth profiles or media stories; documentation of your approach, evidence/data about your impact (including beyond traditional academic metrics) - Resource #1 - Description",learning_model_data
+resource_link_1,"Are there published resources, stories, or evidence of impact about the learning environment that you would like to share in your Canopy profile? If so, please add below.Examples: in-depth profiles or media stories; documentation of your approach, evidence/data about your impact (including beyond traditional academic metrics) - Resource #1 - Link",resource_link_1,"Are there published resources, stories, or evidence of impact about the learning environment that you would like to share in your Canopy profile? If so, please add below.Examples: in-depth profiles or media stories; documentation of your approach, evidence/data about your impact (including beyond traditional academic metrics) - Resource #1 - Link",learning_model_data
+resource_text_2,"Are there published resources, stories, or evidence of impact about the learning environment that you would like to share in your Canopy profile? If so, please add below.Examples: in-depth profiles or media stories; documentation of your approach, evidence/data about your impact (including beyond traditional academic metrics) - Resource #2 - Description",resource_text_2,"Are there published resources, stories, or evidence of impact about the learning environment that you would like to share in your Canopy profile? If so, please add below.Examples: in-depth profiles or media stories; documentation of your approach, evidence/data about your impact (including beyond traditional academic metrics) - Resource #2 - Description",learning_model_data
+resource_link_2,"Are there published resources, stories, or evidence of impact about the learning environment that you would like to share in your Canopy profile? If so, please add below.Examples: in-depth profiles or media stories; documentation of your approach, evidence/data about your impact (including beyond traditional academic metrics) - Resource #2 - Link",resource_link_2,"Are there published resources, stories, or evidence of impact about the learning environment that you would like to share in your Canopy profile? If so, please add below.Examples: in-depth profiles or media stories; documentation of your approach, evidence/data about your impact (including beyond traditional academic metrics) - Resource #2 - Link",learning_model_data
+resource_text_3,"Are there published resources, stories, or evidence of impact about the learning environment that you would like to share in your Canopy profile? If so, please add below.Examples: in-depth profiles or media stories; documentation of your approach, evidence/data about your impact (including beyond traditional academic metrics) - Resource #3 - Description",resource_text_3,"Are there published resources, stories, or evidence of impact about the learning environment that you would like to share in your Canopy profile? If so, please add below.Examples: in-depth profiles or media stories; documentation of your approach, evidence/data about your impact (including beyond traditional academic metrics) - Resource #3 - Description",learning_model_data
+resource_link_3,"Are there published resources, stories, or evidence of impact about the learning environment that you would like to share in your Canopy profile? If so, please add below.Examples: in-depth profiles or media stories; documentation of your approach, evidence/data about your impact (including beyond traditional academic metrics) - Resource #3 - Link",resource_link_3,"Are there published resources, stories, or evidence of impact about the learning environment that you would like to share in your Canopy profile? If so, please add below.Examples: in-depth profiles or media stories; documentation of your approach, evidence/data about your impact (including beyond traditional academic metrics) - Resource #3 - Link",learning_model_data
+public_contact,Please share a public contact for your school. (This person's information will be shared publicly in the dataset.  Sharing a public contact makes it easier for Canopy users to learn more from your school.) - Full name:,public_contact,Please share a public contact for your school. (This person's information will be shared publicly in the dataset.  Sharing a public contact makes it easier for Canopy users to learn more from your school.) - Full name:,survey_data
+public_contact_role,Please share a public contact for your school. (This person's information will be shared publicly in the dataset.  Sharing a public contact makes it easier for Canopy users to learn more from your school.) - Role at the school:,public_contact_role,Please share a public contact for your school. (This person's information will be shared publicly in the dataset.  Sharing a public contact makes it easier for Canopy users to learn more from your school.) - Role at the school:,survey_data
+public_contact_email,Please share a public contact for your school. (This person's information will be shared publicly in the dataset.  Sharing a public contact makes it easier for Canopy users to learn more from your school.) - Email address:,public_contact_email,Please share a public contact for your school. (This person's information will be shared publicly in the dataset.  Sharing a public contact makes it easier for Canopy users to learn more from your school.) - Email address:,survey_data
+confidential_survey_participant_name,"Please share who completed this survey.(This person’s name and email address will not be disclosed in the Canopy, unless it is the same as the public contact above.) - Full name:",confidential_survey_participant_name,"Please share who completed this survey.(This person’s name and email address will not be disclosed in the Canopy, unless it is the same as the public contact above.) - Full name:",survey_data
+confidential_survey_participante_role,"Please share who completed this survey.(This person’s name and email address will not be disclosed in the Canopy, unless it is the same as the public contact above.) - Role at the school:",confidential_survey_participante_role,"Please share who completed this survey.(This person’s name and email address will not be disclosed in the Canopy, unless it is the same as the public contact above.) - Role at the school:",survey_data
+confidential_survey_participant_email,"Please share who completed this survey.(This person’s name and email address will not be disclosed in the Canopy, unless it is the same as the public contact above.) - Email address:",confidential_survey_participant_email,"Please share who completed this survey.(This person’s name and email address will not be disclosed in the Canopy, unless it is the same as the public contact above.) - Email address:",survey_data
+nominator,Nominators,nominator,Nominators,survey_data
+school_id,CanopyID,school_id,CanopyID,"survey_data
+school_data
+demographic_data
+learning_model_data
+practices_data"
+practices_assessments_sel,practices_assessments for social-emotional skills,practices_assessments_sel,practices_assessments for social-emotional skills,practices_data
+practices_students_leaders,practices_students as co-leaders,practices_students_leaders,practices_students as co-leaders,practices_data
+practices_teachers_leaders,practices_teachers as co-leaders,practices_teachers_leaders,practices_teachers as co-leaders,practices_data
+practices_assessments_deeper,practices_assessments for deeper learning,practices_assessments_deeper,practices_assessments for deeper learning,practices_data
+practices_flexible_staffing,practices_flexible staffing & alternative teaching roles,practices_flexible_staffing,practices_flexible staffing & alternative teaching roles,practices_data
+practices_interdisciplinary,practices_interdisciplinary,practices_interdisciplinary,practices_interdisciplinary,practices_data
+practices_makerspace,practices_makerspace,practices_makerspace,practices_makerspace,practices_data
+practices_peer_to_peer,practices_peer to peer support,practices_peer_to_peer,practices_peer to peer support,practices_data
+practices_place_based,practices_place-based learning,practices_place_based,practices_place-based learning,practices_data
+practices_portfolios_exhibitions,practices_portfolios and public exhibitions of student work,practices_portfolios_exhibitions,practices_portfolios and public exhibitions of student work,practices_data
+practices_real_world,practices_real-world problem solving,practices_real_world,practices_real-world problem solving,practices_data
+practices_student_projects,practices_students develop projects,practices_student_projects,practices_students develop projects,practices_data
+practices_a_la_carte,practices_à la carte model,practices_a_la_carte,practices_à la carte model,practices_data
+practices_blended_learning,practices_blended learning,practices_blended_learning,practices_blended learning,practices_data
+practices_flex,practices_flex model,practices_flex,practices_flex model,practices_data
+practices_flipped_classroom,practices_flipped classroom,practices_flipped_classroom,practices_flipped classroom,practices_data
+practices_student_data,practices_students access their own data,practices_student_data,practices_students access their own data,practices_data
+practices_accommodations,practices_accommodations provided to all students,practices_accommodations,practices_accommodations provided to all students,practices_data
+practices_advancement_mastery,practices_advancement on mastery,practices_advancement_mastery,practices_advancement on mastery,practices_data
+practices_competency_framework,practices_competency framework,practices_competency_framework,practices_competency framework,practices_data
+practices_grading_mastery,practices_grading policies focus on mastery,practices_grading_mastery,practices_grading policies focus on mastery,practices_data
+practices_learning_paths,practices_individual learning pathways,practices_learning_paths,practices_individual learning pathways,practices_data
+practices_opportunities_mastery,practices_opportunities_mastery,practices_opportunities_mastery,practices_opportunities_mastery,practices_data
+practices_mtss_academics,practices_multi-tiered system of support (MTSS) in academics,practices_mtss_academics,practices_multi-tiered system of support (MTSS) in academics,practices_data
+practices_performance_assessment,practices_performance based assessment,practices_performance_assessment,practices_performance based assessment,practices_data
+practices_mentoring,practices_1:1 mentoring,practices_mentoring,practices_1:1 mentoring,practices_data
+practices_community_partnerships,practices_community and business partnerships,practices_community_partnerships,practices_community and business partnerships,practices_data
+practices_early_college,practices_early college high school,practices_early_college,practices_early college high school,practices_data
+practices_elimination_tracking,practices_elimination of tracked classes,practices_elimination_tracking,practices_elimination of tracked classes,practices_data
+practices_multi_age,practices_multi-age classrooms,practices_multi_age,practices_multi-age classrooms,practices_data
+practices_advisories,practices_student advisories,practices_advisories,practices_student advisories,practices_data
+practices_industry_credentials,practices_students earn industry credentials,practices_industry_credentials,practices_students earn industry credentials,practices_data
+practices_tutoring,practices_tutoring,practices_tutoring,practices_tutoring,practices_data
+practices_design_thinking,practices_design thinking process,practices_design_thinking,practices_design thinking process,practices_data
+practices_flexible_facilities,practices_flexible facilities & classroom design,practices_flexible_facilities,practices_flexible facilities & classroom design,practices_data
+practices_pbl,practices_project-based learning,practices_pbl,practices_project-based learning,practices_data
+practices_competency_education,practices_competency/mastery-based education,practices_competency_education,practices_competency/mastery-based education,practices_data
+practices_student_pace,practices_students progress at own pace,practices_student_pace,practices_students progress at own pace,practices_data
+practices_anti_racist,practices_anti-racist practices,practices_anti_racist,practices_anti-racist practices,practices_data
+practices_culturally_responsive,practices_culturally responsive practices,practices_culturally_responsive,practices_culturally responsive practices,practices_data
+practices_design_marginalized,practices_design to meet needs of students who have been marginalized,practices_design_marginalized,practices_design to meet needs of students who have been marginalized,practices_data
+practices_hiring_equity,practices_hiring for equity and inclusion values,practices_hiring_equity,practices_hiring for equity and inclusion values,practices_data
+practices_reallocation_resources,practices_reallocation of resources for those most in need,practices_reallocation_resources,practices_reallocation of resources for those most in need,practices_data
+practices_restorative,practices_restorative practices,practices_restorative,practices_restorative practices,practices_data
+practices_social_justice,practices_social justice focus,practices_social_justice,practices_social justice focus,practices_data
+practices_trauma_informed,practices_trauma-informed practices,practices_trauma_informed,practices_trauma-informed practices,practices_data
+practices_mental_health,practices_mental health services,practices_mental_health,practices_mental health services,practices_data
+practices_sel_curriculum,practices_SEL curriculum,practices_sel_curriculum,practices_SEL curriculum,practices_data
+practices_service_learning,practices_service_learning,practices_service learning,practices_service_learning,practices_data
+practices_student_goals,practices_student-led goal setting,practices_student_goals,practices_student-led goal setting,practices_data
+practices_udl,practices_universal design for learning,practices_udl,practices_universal design for learning,practices_data
+practices_disaggregated_participation_data,practices_disaggregated data on student participation,practices_disaggregated_participation_data,practices_disaggregated data on student participation,practices_data
+practices_individual_rotation,practices_individual rotation,practices_individual_rotation,practices_individual rotation,practices_data
+practices_community_supports,practices_family and community support services,practices_community_supports,practices_family and community support services,practices_data
+practices_student_conferences,practices_student_conferences,practices_student_conferences,practices_student_conferences,practices_data
+practices_assessments_career,practices_assessments for career readiness,practices_assessments_career,practices_assessments for career readiness,practices_data
+practices_career_prep,practices_career prep and work-based learning,practices_career_prep,practices_career prep and work-based learning,practices_data
+practices_dual_credit,practices_dual credit,practices_dual_credit,practices_dual credit,practices_data
+practices_extended_learning,practices_extended learning opportunities,practices_extended_learning,practices_extended learning opportunities,practices_data
+practices_sel_integrated,practices_SEL integration school-wide,practices_sel_integrated,practices_SEL integration school-wide,practices_data
+practices_expanded_success,practices_expanded measures of success,practices_expanded_success,practices_expanded measures of success,practices_data
+practices_expanded_open_hours,practices_expanded open hours,practices_expanded_open_hours,practices_expanded open hours,practices_data
+practices_families_leaders,practices_families as co-leaders,practices_families_leaders,practices_families as co-leaders,practices_data
+practices_adaptive_content,practices_adaptive content,practices_adaptive_content,practices_adaptive content,practices_data
+practices_station_rotation,practices_station rotation,practices_station_rotation,practices_station rotation,practices_data
+practices_physical_well_being,practices_physical well being services,practices_physical_well_being,practices_physical well being services,practices_data
+practices_learner_profiles,practices_individual learner profiles,practices_learner_profiles,practices_individual learner profiles,practices_data
+practices_interoperability,practices_interoperable data from multiple technologies,practices_interoperability,practices_interoperable data from multiple technologies,practices_data
+practices_hybrid,practices_hybrid,practices_hybrid,practices_hybrid,practices_data
+practices_dual_language,practices_dual language programming,practices_dual_language,practices_dual language programming,practices_data
+practices_virtual_pathway,practices_all virtual pathway,practices_virtual_pathway,practices_all virtual pathway,practices_data
+practices_enriched_virtual,practices_enriched virtual model,practices_enriched_virtual,practices_enriched virtual model,practices_data
+school_descriptor_district,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Public district school,school_descriptor_district,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Public district school,school_data
+school_descriptor_charter,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Public charter school,school_descriptor_charter,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Public charter school,school_data
+school_descriptor_independent,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Independent (private) school,school_descriptor_independent,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Independent (private) school,school_data
+school_descriptor_sws,"How do you describe your school or learning environment? Select all that apply. - Selected Choice - School-within-school (a smaller, largely autonomous school inside of a public district school)",school_descriptor_sws,"How do you describe your school or learning environment? Select all that apply. - Selected Choice - School-within-school (a smaller, largely autonomous school inside of a public district school)",school_data
+school_descriptor_virtual,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Virtual school,school_descriptor_virtual,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Virtual school,school_data
+school_descriptor_microschool,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Microschool,school_descriptor_microschool,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Microschool,school_data
+school_descriptor_homeschool,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Homeschooling cooperative,school_descriptor_homeschool,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Homeschooling cooperative,school_data
+school_descriptor_hub,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Learning hub providing core educational programming,school_descriptor_hub,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Learning hub providing core educational programming,school_data
+school_descriptor_other,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Other:,school_descriptor_other,How do you describe your school or learning environment? Select all that apply. - Selected Choice - Other:,school_data
+school_descriptor_other_text,How do you describe your school or learning environment? Select all that apply. - Other: - Text,school_descriptor_other_text,How do you describe your school or learning environment? Select all that apply. - Other: - Text,school_data
+locale,"Is the school located in a rural, suburban, or urban area? Merged variable from NCES (prioritized) and self-reported locale data (rural, urban, suburban).","self_reported_locale_rural
+self_reported_locale_urban
+self_reported_locale_suburban
+nces_locale","self_reported_locale_Rural
+self_reported_locale_Urban
+self_reported_locale_Suburban
+NCES_.Locale",school_data
+focus_swd,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Students with learning differences and disabilities,focus_swd,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Students with learning differences and disabilities,learning_model_data
+focus_emergent_bilinguals,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Emergent bilinguals (English language learners),focus_emergent_bilinguals,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Emergent bilinguals (English language learners),learning_model_data
+focus_homeless,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Students experiencing housing insecurity or homelessness,focus_homeless,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Students experiencing housing insecurity or homelessness,learning_model_data
+focus_economic_disadvantage,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Economically disadvantaged students,focus_economic_disadvantage,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Economically disadvantaged students,learning_model_data
+focus_bipoc,"Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Students of color (Black, Indigenous, Hispanic/Latinx, Asian, and/or another racial/ethnic group)",focus_bipoc,"Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Students of color (Black, Indigenous, Hispanic/Latinx, Asian, and/or another racial/ethnic group)",learning_model_data
+focus_newcomer,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Newcomer students (immigrants and/or refugees),focus_newcomer,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Newcomer students (immigrants and/or refugees),learning_model_data
+focus_foster,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Students in the foster care system,focus_foster,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Students in the foster care system,learning_model_data
+focus_juvenile_justice,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Students in the juvenile justice system,focus_juvenile_justice,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Students in the juvenile justice system,learning_model_data
+focus_other_student_group,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Other,focus_other_student_group,Is your innovative model designed to meet the needs of any of the following student groups? - Selected Choice - Other,learning_model_data
+leaps_high_expectations,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Unequal Expectations & Opportunities → High Expectations with Unlimited Opportunities",leaps_high_expectations,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Unequal Expectations & Opportunities → High Expectations with Unlimited Opportunities",learning_model_data
+leaps_whole_child,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Narrow Focus → Whole-Child Focus",leaps_whole_child,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Narrow Focus → Whole-Child Focus",learning_model_data
+leaps_rigorous_learning,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Rote Activities →  Rigorous Learning",leaps_rigorous_learning,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Rote Activities →  Rigorous Learning",learning_model_data
+leaps_relevance,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Irrelevance → Relevance",leaps_relevance,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Irrelevance → Relevance",learning_model_data
+leaps_affirmation,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Assimilation & Marginalization → Affirmation of Self & Others",leaps_affirmation,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Assimilation & Marginalization → Affirmation of Self & Others",learning_model_data
+leaps_social_consciousness,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Reinforcement of the Status Quo → Social Consciousness & Action",leaps_social_consciousness,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Reinforcement of the Status Quo → Social Consciousness & Action",learning_model_data
+leaps_connection,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Isolation → Connection & Community",leaps_connection,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Isolation → Connection & Community",learning_model_data
+leaps_customization,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Inflexible Systems → Customization",leaps_customization,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Inflexible Systems → Customization",learning_model_data
+leaps_self_direction,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Passive Compliance → Active Self-Direction",leaps_self_direction,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Passive Compliance → Active Self-Direction",learning_model_data
+leaps_anytime_anywhere,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Siloed Schooling → Anytime, Anywhere Learning",leaps_anytime_anywhere,"Is the learning environment designed to create any of the following shifts in student experience? Drag all that apply, then rank them in order of importance from your perspective.Hint: hover your mouse over any of the response options to see a description of the term or phrase - Groups - Rank in order of importance. - Siloed Schooling → Anytime, Anywhere Learning",learning_model_data
+confidential_tdc_attend_virtual,We are planning a series of virtual tours of innovative Canopy schools. Would you be interested in any of the following? (select all that apply): - Attending a virtual session with live Q&A with other Canopy leaders,confidential_tdc_attend_virtual,We are planning a series of virtual tours of innovative Canopy schools. Would you be interested in any of the following? (select all that apply): - Attending a virtual session with live Q&A with other Canopy leaders,survey_data
+confidential_tdc_watch_recording,We are planning a series of virtual tours of innovative Canopy schools. Would you be interested in any of the following? (select all that apply): - Watching a recording of a series of virtual tours of Canopy schools,confidential_tdc_watch_recording,We are planning a series of virtual tours of innovative Canopy schools. Would you be interested in any of the following? (select all that apply): - Watching a recording of a series of virtual tours of Canopy schools,survey_data
+confidential_tdc_share_tour,We are planning a series of virtual tours of innovative Canopy schools. Would you be interested in any of the following? (select all that apply): - Presenting or sharing about my school in a virtual tour,confidential_tdc_share_tour,We are planning a series of virtual tours of innovative Canopy schools. Would you be interested in any of the following? (select all that apply): - Presenting or sharing about my school in a virtual tour,survey_data
+nces_id,NCES,nces_id,NCES,demographic_data
+nces_total_enrollment,NCES_.Total Students,nces_total_enrollment,NCES_.Total Students,demographic_data
+grades_other_text,Information reported by the school about other services provided beyond PK-12 and past 12th.,self_reported_grades_other_text,"Which grades does your learning environment serve? Please select all that apply. (if your school does not have grades, please instead select the equivalent grades for the ages you serve) - Other (please tell us more) - Text",school_data
+grades_elementary,Defined as schools with grades 1-5. Note: overlap across school types may occur.,,,school_data
+grades_middle,Defined as schools with grades 7 and 8. Note: overlap across school types may occur.,,,school_data
+grades_high,Defined as schools with grades 10-12. Note: overlap across school types may occur.,,,school_data
+grades_pre_k,Prekindergarten offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_pre_k
+nces_grades_pre_k","self_reported_grades_Pre-Kindergarten
+NCES_.G_PK_OFFERED",school_data
+grades_kindergarten,Kindergarten offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_kindergarten
+nces_grades_kindergarten","self_reported_grades_Kindergarten
+NCES_.G_KG_OFFERED",school_data
+grades_1st,1st grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_1st
+nces_grades_1st","self_reported_grades_1st grade
+NCES_.G_1_OFFERED",school_data
+grades_2nd,2nd grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_2nd
+nces_grades_2nd","self_reported_grades_2nd grade
+NCES_.G_2_OFFERED",school_data
+grades_3rd,3rd grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_3rd
+nces_grades_3rd","self_reported_grades_3rd grade
+NCES_.G_3_OFFERED",school_data
+grades_4th,4th grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_4th
+nces_grades_4th","self_reported_grades_4th grade
+NCES_.G_4_OFFERED",school_data
+grades_5th,5th grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_5th
+nces_grades_5th","self_reported_grades_5th grade
+NCES_.G_5_OFFERED",school_data
+grades_6th,6th grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_6th
+nces_grades_6th","self_reported_grades_6th grade
+NCES_.G_6_OFFERED",school_data
+grades_7th,7th grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_7th
+nces_grades_7th","self_reported_grades_7th grade
+NCES_.G_7_OFFERED",school_data
+grades_8th,8th grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_8th
+nces_grades_8th","self_reported_grades_8th grade
+NCES_.G_8_OFFERED",school_data
+grades_9th,9th grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_9th
+nces_grades_9th","self_reported_grades_9th grade
+NCES_.G_9_OFFERED",school_data
+grades_10th,10th grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_10th
+nces_grades_10th","self_reported_grades_10th grade
+NCES_.G_10_OFFERED",school_data
+grades_11th,11th grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_11th
+nces_grades_11th","self_reported_grades_11th grade
+NCES_.G_11_OFFERED",school_data
+grades_12th,12th grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_12th
+nces_grades_12th","self_reported_grades_12th grade
+NCES_.G_12_OFFERED",school_data
+grades_past_12th,Services beyond 12th grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_past_12th
+nces_grades_13th","self_reported_grades_Past 12th grade
+NCES_.G_13_OFFERED",school_data
+grades_other,Other services beyond 12th grade and PK-12 offered. Merged variable from NCES (prioritized) and self-reported data.,self_reported_grades_other,self_reported_grades_Other (please tell us more),school_data
+core_assessments_sel,Is the practice specified a core practice?,practices_assessments_sel,practices_assessments for social-emotional skills,practices_data
+core_students_leaders,Is the practice specified a core practice?,practices_students_leaders,practices_students as co-leaders,practices_data
+core_teachers_leaders,Is the practice specified a core practice?,practices_teachers_leaders,practices_teachers as co-leaders,practices_data
+core_assessments_deeper,Is the practice specified a core practice?,practices_assessments_deeper,practices_assessments for deeper learning,practices_data
+core_flexible_staffing,Is the practice specified a core practice?,practices_flexible_staffing,practices_flexible staffing & alternative teaching roles,practices_data
+core_interdisciplinary,Is the practice specified a core practice?,practices_interdisciplinary,practices_interdisciplinary,practices_data
+core_makerspace,Is the practice specified a core practice?,practices_makerspace,practices_makerspace,practices_data
+core_peer_to_peer,Is the practice specified a core practice?,practices_peer_to_peer,practices_peer to peer support,practices_data
+core_place_based,Is the practice specified a core practice?,practices_place_based,practices_place-based learning,practices_data
+core_portfolios_exhibitions,Is the practice specified a core practice?,practices_portfolios_exhibitions,practices_portfolios and public exhibitions of student work,practices_data
+core_real_world,Is the practice specified a core practice?,practices_real_world,practices_real-world problem solving,practices_data
+core_student_projects,Is the practice specified a core practice?,practices_student_projects,practices_students develop projects,practices_data
+core_a_la_carte,Is the practice specified a core practice?,practices_a_la_carte,practices_à la carte model,practices_data
+core_blended_learning,Is the practice specified a core practice?,practices_blended_learning,practices_blended learning,practices_data
+core_flex,Is the practice specified a core practice?,practices_flex,practices_flex model,practices_data
+core_flipped_classroom,Is the practice specified a core practice?,practices_flipped_classroom,practices_flipped classroom,practices_data
+core_student_data,Is the practice specified a core practice?,practices_student_data,practices_students access their own data,practices_data
+core_accommodations,Is the practice specified a core practice?,practices_accommodations,practices_accommodations provided to all students,practices_data
+core_advancement_mastery,Is the practice specified a core practice?,practices_advancement_mastery,practices_advancement on mastery,practices_data
+core_competency_framework,Is the practice specified a core practice?,practices_competency_framework,practices_competency framework,practices_data
+core_grading_mastery,Is the practice specified a core practice?,practices_grading_mastery,practices_grading policies focus on mastery,practices_data
+core_learning_paths,Is the practice specified a core practice?,practices_learning_paths,practices_individual learning pathways,practices_data
+core_opportunities_mastery,Is the practice specified a core practice?,practices_opportunities_mastery,practices_opportunities_mastery,practices_data
+core_mtss_academics,Is the practice specified a core practice?,practices_mtss_academics,practices_multi-tiered system of support (MTSS) in academics,practices_data
+core_performance_assessment,Is the practice specified a core practice?,practices_performance_assessment,practices_performance based assessment,practices_data
+core_mentoring,Is the practice specified a core practice?,practices_mentoring,practices_1:1 mentoring,practices_data
+core_community_partnerships,Is the practice specified a core practice?,practices_community_partnerships,practices_community and business partnerships,practices_data
+core_early_college,Is the practice specified a core practice?,practices_early_college,practices_early college high school,practices_data
+core_elimination_tracking,Is the practice specified a core practice?,practices_elimination_tracking,practices_elimination of tracked classes,practices_data
+core_multi_age,Is the practice specified a core practice?,practices_multi_age,practices_multi-age classrooms,practices_data
+core_advisories,Is the practice specified a core practice?,practices_advisories,practices_student advisories,practices_data
+core_industry_credentials,Is the practice specified a core practice?,practices_industry_credentials,practices_students earn industry credentials,practices_data
+core_tutoring,Is the practice specified a core practice?,practices_tutoring,practices_tutoring,practices_data
+core_design_thinking,Is the practice specified a core practice?,practices_design_thinking,practices_design thinking process,practices_data
+core_flexible_facilities,Is the practice specified a core practice?,practices_flexible_facilities,practices_flexible facilities & classroom design,practices_data
+core_pbl,Is the practice specified a core practice?,practices_pbl,practices_project-based learning,practices_data
+core_competency_education,Is the practice specified a core practice?,practices_competency_education,practices_competency/mastery-based education,practices_data
+core_student_pace,Is the practice specified a core practice?,practices_student_pace,practices_students progress at own pace,practices_data
+core_anti_racist,Is the practice specified a core practice?,practices_anti_racist,practices_anti-racist practices,practices_data
+core_culturally_responsive,Is the practice specified a core practice?,practices_culturally_responsive,practices_culturally responsive practices,practices_data
+core_design_marginalized,Is the practice specified a core practice?,practices_design_marginalized,practices_design to meet needs of students who have been marginalized,practices_data
+core_hiring_equity,Is the practice specified a core practice?,practices_hiring_equity,practices_hiring for equity and inclusion values,practices_data
+core_reallocation_resources,Is the practice specified a core practice?,practices_reallocation_resources,practices_reallocation of resources for those most in need,practices_data
+core_restorative,Is the practice specified a core practice?,practices_restorative,practices_restorative practices,practices_data
+core_social_justice,Is the practice specified a core practice?,practices_social_justice,practices_social justice focus,practices_data
+core_trauma_informed,Is the practice specified a core practice?,practices_trauma_informed,practices_trauma-informed practices,practices_data
+core_mental_health,Is the practice specified a core practice?,practices_mental_health,practices_mental health services,practices_data
+core_sel_curriculum,Is the practice specified a core practice?,practices_sel_curriculum,practices_SEL curriculum,practices_data
+core_service_learning,Is the practice specified a core practice?,practices_service learning,practices_service_learning,practices_data
+core_student_goals,Is the practice specified a core practice?,practices_student_goals,practices_student-led goal setting,practices_data
+core_udl,Is the practice specified a core practice?,practices_udl,practices_universal design for learning,practices_data
+core_disaggregated_participation_data,Is the practice specified a core practice?,practices_disaggregated_participation_data,practices_disaggregated data on student participation,practices_data
+core_individual_rotation,Is the practice specified a core practice?,practices_individual_rotation,practices_individual rotation,practices_data
+core_community_supports,Is the practice specified a core practice?,practices_community_supports,practices_family and community support services,practices_data
+core_student_conferences,Is the practice specified a core practice?,practices_student_conferences,practices_student_conferences,practices_data
+core_assessments_career,Is the practice specified a core practice?,practices_assessments_career,practices_assessments for career readiness,practices_data
+core_career_prep,Is the practice specified a core practice?,practices_career_prep,practices_career prep and work-based learning,practices_data
+core_dual_credit,Is the practice specified a core practice?,practices_dual_credit,practices_dual credit,practices_data
+core_extended_learning,Is the practice specified a core practice?,practices_extended_learning,practices_extended learning opportunities,practices_data
+core_sel_integrated,Is the practice specified a core practice?,practices_sel_integrated,practices_SEL integration school-wide,practices_data
+core_expanded_success,Is the practice specified a core practice?,practices_expanded_success,practices_expanded measures of success,practices_data
+core_expanded_open_hours,Is the practice specified a core practice?,practices_expanded_open_hours,practices_expanded open hours,practices_data
+core_families_leaders,Is the practice specified a core practice?,practices_families_leaders,practices_families as co-leaders,practices_data
+core_adaptive_content,Is the practice specified a core practice?,practices_adaptive_content,practices_adaptive content,practices_data
+core_station_rotation,Is the practice specified a core practice?,practices_station_rotation,practices_station rotation,practices_data
+core_physical_well_being,Is the practice specified a core practice?,practices_physical_well_being,practices_physical well being services,practices_data
+core_learner_profiles,Is the practice specified a core practice?,practices_learner_profiles,practices_individual learner profiles,practices_data
+core_interoperability,Is the practice specified a core practice?,practices_interoperability,practices_interoperable data from multiple technologies,practices_data
+core_hybrid,Is the practice specified a core practice?,practices_hybrid,practices_hybrid,practices_data
+core_dual_language,Is the practice specified a core practice?,practices_dual_language,practices_dual language programming,practices_data
+core_virtual_pathway,Is the practice specified a core practice?,practices_virtual_pathway,practices_all virtual pathway,practices_data
+core_enriched_virtual,Is the practice specified a core practice?,practices_enriched_virtual,practices_enriched virtual model,practices_data
+time_assessments_sel,How long has the practice been implemented as a core practice?,practices_assessments_sel,practices_assessments for social-emotional skills,practices_data
+time_students_leaders,How long has the practice been implemented as a core practice?,practices_students_leaders,practices_students as co-leaders,practices_data
+time_teachers_leaders,How long has the practice been implemented as a core practice?,practices_teachers_leaders,practices_teachers as co-leaders,practices_data
+time_assessments_deeper,How long has the practice been implemented as a core practice?,practices_assessments_deeper,practices_assessments for deeper learning,practices_data
+time_flexible_staffing,How long has the practice been implemented as a core practice?,practices_flexible_staffing,practices_flexible staffing & alternative teaching roles,practices_data
+time_interdisciplinary,How long has the practice been implemented as a core practice?,practices_interdisciplinary,practices_interdisciplinary,practices_data
+time_makerspace,How long has the practice been implemented as a core practice?,practices_makerspace,practices_makerspace,practices_data
+time_peer_to_peer,How long has the practice been implemented as a core practice?,practices_peer_to_peer,practices_peer to peer support,practices_data
+time_place_based,How long has the practice been implemented as a core practice?,practices_place_based,practices_place-based learning,practices_data
+time_portfolios_exhibitions,How long has the practice been implemented as a core practice?,practices_portfolios_exhibitions,practices_portfolios and public exhibitions of student work,practices_data
+time_real_world,How long has the practice been implemented as a core practice?,practices_real_world,practices_real-world problem solving,practices_data
+time_student_projects,How long has the practice been implemented as a core practice?,practices_student_projects,practices_students develop projects,practices_data
+time_a_la_carte,How long has the practice been implemented as a core practice?,practices_a_la_carte,practices_à la carte model,practices_data
+time_blended_learning,How long has the practice been implemented as a core practice?,practices_blended_learning,practices_blended learning,practices_data
+time_flex,How long has the practice been implemented as a core practice?,practices_flex,practices_flex model,practices_data
+time_flipped_classroom,How long has the practice been implemented as a core practice?,practices_flipped_classroom,practices_flipped classroom,practices_data
+time_student_data,How long has the practice been implemented as a core practice?,practices_student_data,practices_students access their own data,practices_data
+time_accommodations,How long has the practice been implemented as a core practice?,practices_accommodations,practices_accommodations provided to all students,practices_data
+time_advancement_mastery,How long has the practice been implemented as a core practice?,practices_advancement_mastery,practices_advancement on mastery,practices_data
+time_competency_framework,How long has the practice been implemented as a core practice?,practices_competency_framework,practices_competency framework,practices_data
+time_grading_mastery,How long has the practice been implemented as a core practice?,practices_grading_mastery,practices_grading policies focus on mastery,practices_data
+time_learning_paths,How long has the practice been implemented as a core practice?,practices_learning_paths,practices_individual learning pathways,practices_data
+time_opportunities_mastery,How long has the practice been implemented as a core practice?,practices_opportunities_mastery,practices_opportunities_mastery,practices_data
+time_mtss_academics,How long has the practice been implemented as a core practice?,practices_mtss_academics,practices_multi-tiered system of support (MTSS) in academics,practices_data
+time_performance_assessment,How long has the practice been implemented as a core practice?,practices_performance_assessment,practices_performance based assessment,practices_data
+time_mentoring,How long has the practice been implemented as a core practice?,practices_mentoring,practices_1:1 mentoring,practices_data
+time_community_partnerships,How long has the practice been implemented as a core practice?,practices_community_partnerships,practices_community and business partnerships,practices_data
+time_early_college,How long has the practice been implemented as a core practice?,practices_early_college,practices_early college high school,practices_data
+time_elimination_tracking,How long has the practice been implemented as a core practice?,practices_elimination_tracking,practices_elimination of tracked classes,practices_data
+time_multi_age,How long has the practice been implemented as a core practice?,practices_multi_age,practices_multi-age classrooms,practices_data
+time_advisories,How long has the practice been implemented as a core practice?,practices_advisories,practices_student advisories,practices_data
+time_industry_credentials,How long has the practice been implemented as a core practice?,practices_industry_credentials,practices_students earn industry credentials,practices_data
+time_tutoring,How long has the practice been implemented as a core practice?,practices_tutoring,practices_tutoring,practices_data
+time_design_thinking,How long has the practice been implemented as a core practice?,practices_design_thinking,practices_design thinking process,practices_data
+time_flexible_facilities,How long has the practice been implemented as a core practice?,practices_flexible_facilities,practices_flexible facilities & classroom design,practices_data
+time_pbl,How long has the practice been implemented as a core practice?,practices_pbl,practices_project-based learning,practices_data
+time_competency_education,How long has the practice been implemented as a core practice?,practices_competency_education,practices_competency/mastery-based education,practices_data
+time_student_pace,How long has the practice been implemented as a core practice?,practices_student_pace,practices_students progress at own pace,practices_data
+time_anti_racist,How long has the practice been implemented as a core practice?,practices_anti_racist,practices_anti-racist practices,practices_data
+time_culturally_responsive,How long has the practice been implemented as a core practice?,practices_culturally_responsive,practices_culturally responsive practices,practices_data
+time_design_marginalized,How long has the practice been implemented as a core practice?,practices_design_marginalized,practices_design to meet needs of students who have been marginalized,practices_data
+time_hiring_equity,How long has the practice been implemented as a core practice?,practices_hiring_equity,practices_hiring for equity and inclusion values,practices_data
+time_reallocation_resources,How long has the practice been implemented as a core practice?,practices_reallocation_resources,practices_reallocation of resources for those most in need,practices_data
+time_restorative,How long has the practice been implemented as a core practice?,practices_restorative,practices_restorative practices,practices_data
+time_social_justice,How long has the practice been implemented as a core practice?,practices_social_justice,practices_social justice focus,practices_data
+time_trauma_informed,How long has the practice been implemented as a core practice?,practices_trauma_informed,practices_trauma-informed practices,practices_data
+time_mental_health,How long has the practice been implemented as a core practice?,practices_mental_health,practices_mental health services,practices_data
+time_sel_curriculum,How long has the practice been implemented as a core practice?,practices_sel_curriculum,practices_SEL curriculum,practices_data
+time_service_learning,How long has the practice been implemented as a core practice?,practices_service learning,practices_service_learning,practices_data
+time_student_goals,How long has the practice been implemented as a core practice?,practices_student_goals,practices_student-led goal setting,practices_data
+time_udl,How long has the practice been implemented as a core practice?,practices_udl,practices_universal design for learning,practices_data
+time_disaggregated_participation_data,How long has the practice been implemented as a core practice?,practices_disaggregated_participation_data,practices_disaggregated data on student participation,practices_data
+time_individual_rotation,How long has the practice been implemented as a core practice?,practices_individual_rotation,practices_individual rotation,practices_data
+time_community_supports,How long has the practice been implemented as a core practice?,practices_community_supports,practices_family and community support services,practices_data
+time_student_conferences,How long has the practice been implemented as a core practice?,practices_student_conferences,practices_student_conferences,practices_data
+time_assessments_career,How long has the practice been implemented as a core practice?,practices_assessments_career,practices_assessments for career readiness,practices_data
+time_career_prep,How long has the practice been implemented as a core practice?,practices_career_prep,practices_career prep and work-based learning,practices_data
+time_dual_credit,How long has the practice been implemented as a core practice?,practices_dual_credit,practices_dual credit,practices_data
+time_extended_learning,How long has the practice been implemented as a core practice?,practices_extended_learning,practices_extended learning opportunities,practices_data
+time_sel_integrated,How long has the practice been implemented as a core practice?,practices_sel_integrated,practices_SEL integration school-wide,practices_data
+time_expanded_success,How long has the practice been implemented as a core practice?,practices_expanded_success,practices_expanded measures of success,practices_data
+time_expanded_open_hours,How long has the practice been implemented as a core practice?,practices_expanded_open_hours,practices_expanded open hours,practices_data
+time_families_leaders,How long has the practice been implemented as a core practice?,practices_families_leaders,practices_families as co-leaders,practices_data
+time_adaptive_content,How long has the practice been implemented as a core practice?,practices_adaptive_content,practices_adaptive content,practices_data
+time_station_rotation,How long has the practice been implemented as a core practice?,practices_station_rotation,practices_station rotation,practices_data
+time_physical_well_being,How long has the practice been implemented as a core practice?,practices_physical_well_being,practices_physical well being services,practices_data
+time_learner_profiles,How long has the practice been implemented as a core practice?,practices_learner_profiles,practices_individual learner profiles,practices_data
+time_interoperability,How long has the practice been implemented as a core practice?,practices_interoperability,practices_interoperable data from multiple technologies,practices_data
+time_hybrid,How long has the practice been implemented as a core practice?,practices_hybrid,practices_hybrid,practices_data
+time_dual_language,How long has the practice been implemented as a core practice?,practices_dual_language,practices_dual language programming,practices_data
+time_virtual_pathway,How long has the practice been implemented as a core practice?,practices_virtual_pathway,practices_all virtual pathway,practices_data
+time_enriched_virtual,How long has the practice been implemented as a core practice?,practices_enriched_virtual,practices_enriched virtual model,practices_data
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+,time_enriched_virtual,,,

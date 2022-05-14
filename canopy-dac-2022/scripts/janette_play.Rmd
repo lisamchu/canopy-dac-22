@@ -209,7 +209,7 @@ Created a new variable `locale` to indicate whether a school is urban, rural, or
 
 *Status:* Complete
 
-```{r locale variable}
+```{r locale variable, eval = FALSE}
 # !diagnostics off
 # Note a '1' indicates a yes
 clean_dac_22 <- dac_22 #new set
@@ -265,7 +265,7 @@ Values representing yes and no have been condensed into a single column named `s
 
 *Status:* In progress - a few instances of `other` and another item from list chosen. I need to know what to do in instances of multi-coding in order to proceed. Also need to know if `other` text should be its own value, or if a value of `other` with an additional column for text is preferable.
 
-```{r collapse school type}
+```{r collapse school type, eval = FALSE}
 #district c131
 #charter c132
 #independent c133
@@ -458,7 +458,7 @@ Rather than calculating, I imported the updated data that had percentages in eac
 
 **Status:** Complete
 
-```{r nces race percentages}
+```{r nces race percentages, eval = FALSE}
 #need to merge updated NCES cols with df
 race_pct <- import(here("data", "dac_22_updated.csv"), 
                       setclass = "tbl_df") %>% 
@@ -504,7 +504,7 @@ The data includes 35 instances of `NA` for the following 5 schools (5 schools x 
 
 **Status:** Complete
 
-```{r merge race percentages}
+```{r merge race percentages, eval = FALSE}
 clean_dac_22 <- clean_dac_22 %>% 
   unite("aian_percent", c(nces_race_aian, self_reported_race_aian), na.rm = TRUE) %>% #AIAN merge
   unite("asian_percent", c(nces_race_asian, self_reported_race_asian), na.rm = TRUE) %>% #Asian merge
@@ -556,7 +556,7 @@ Schools include:
 
 *Status:* Complete
 
-```{r merge grades}
+```{r merge grades, eval = FALSE}
 #self-reported 142:157 (prek-12, past 12, + other)
 #nces 182:196 (prek-12, 13th)
 clean_dac_22 <- clean_dac_22 %>% 
@@ -603,7 +603,7 @@ Many schools (N = 90) fell into multiple categories. These schools can be found 
 
 *Status:* In Progress - Variable is created, but multi-coded schools need to be addressed.
 
-```{r new school type variable}
+```{r new school type variable, eval = FALSE}
 #create new column
 clean_dac_22 <- clean_dac_22 %>% 
   mutate(school_grade_type = ifelse(grades_pre_k=="Yes", "prek", 
@@ -623,7 +623,7 @@ clean_dac_22 <- clean_dac_22 %>%
                                                          "other")))))
 ```
 
-```{r pull out multicoded schools}
+```{r pull out multicoded schools, eval = FALSE}
 #create a table with schools that are multicoded
 multi_code_grades <- clean_dac_22 %>% 
   select(school_id, school_name, school_grade_type,
@@ -653,9 +653,70 @@ multi_code_no <- multi_code_grades %>%
 #export cleaned data file
 # export(clean_dac_22, "clean_dac_22.csv")
 ```
+
+**Update:** School types have updated scheme:  
+- 3 cols  
+- ANY 1-5 = `elementary`  
+- ANY 7&8 = `middle`  
+- ANY 10-12 = `high`  
+
+```{r, eval = FALSE}
+#import data - 'clean' data united, so create new small set to merge
+grades <- import(here("data", "dac_22_updated.csv"))
+#have to re-merge NCES and self-report data
+grades <- grades %>% 
+  mutate_at(vars(starts_with("nces_grades_")), na_if, "") %>% 
+  mutate_at(vars(starts_with("nces_grades_")), str_replace, "[:digit:][:digit:]", "1") %>% 
+  mutate_at(vars(starts_with("nces_grades_")), str_replace, "[:digit:]", "1") %>% 
+  mutate_at(vars(starts_with("nces_grades_")), str_replace, "Yes", "1") %>% 
+  mutate_at(vars(starts_with("nces_grades_")), na_if, "Not reported") %>% 
+  mutate_at(vars(starts_with("nces_grades_")), str_replace, "No", "0") %>% 
+  unite("grades_pre_k", c(nces_grades_pre_k, self_reported_grades_pre_k), na.rm = TRUE) %>% 
+  unite("grades_kindergarten", c(nces_grades_kindergarten, self_reported_grades_kindergarten), na.rm = TRUE) %>% 
+  unite("grades_1st", c(nces_grades_1st, self_reported_grades_1st), na.rm = TRUE) %>% 
+  unite("grades_2nd", c(nces_grades_2nd, self_reported_grades_2nd), na.rm = TRUE) %>% 
+  unite("grades_3rd", c(nces_grades_3rd, self_reported_grades_3rd), na.rm = TRUE) %>% 
+  unite("grades_4th", c(nces_grades_4th, self_reported_grades_4th), na.rm = TRUE) %>% 
+  unite("grades_5th", c(nces_grades_5th, self_reported_grades_5th), na.rm = TRUE) %>% 
+  unite("grades_6th", c(nces_grades_6th, self_reported_grades_6th), na.rm = TRUE) %>% 
+  unite("grades_7th", c(nces_grades_7th, self_reported_grades_7th), na.rm = TRUE) %>% 
+  unite("grades_8th", c(nces_grades_8th, self_reported_grades_8th), na.rm = TRUE) %>% 
+  unite("grades_9th", c(nces_grades_9th, self_reported_grades_9th), na.rm = TRUE) %>% 
+  unite("grades_10th", c(nces_grades_10th, self_reported_grades_10th), na.rm = TRUE) %>% 
+  unite("grades_11th", c(nces_grades_11th, self_reported_grades_11th), na.rm = TRUE) %>% 
+  unite("grades_12th", c(nces_grades_12th, self_reported_grades_12th), na.rm = TRUE) %>% 
+  unite("grades_past_12th", c(nces_grades_13th, self_reported_grades_past_12th), na.rm = TRUE) %>% 
+  rename(grades_other = self_reported_grades_other,
+         grades_other_text = self_reported_grades_other_text)
+
+grades <- grades %>% 
+  select(school_id, grades_pre_k, grades_kindergarten, grades_1st, grades_2nd, grades_3rd, grades_4th, grades_5th, grades_6th, grades_7th, grades_8th, grades_9th, grades_10th, grades_11th, grades_12th, grades_past_12th, grades_other, grades_other_text) %>% 
+  mutate_at(vars(starts_with("grades")), na_if, "") %>% 
+  mutate_at(vars(starts_with("grades")), str_remove_all, "_.") %>% 
+  group_by(school_id) %>% 
+  mutate(grades_elementary = ifelse(grades_1st == "1" &
+                             grades_2nd == "1" &
+                             grades_3rd == "1" &
+                             grades_4th == "1" &
+                             grades_5th == "1", "1", "0"),
+         grades_middle = ifelse(grades_7th == "1" &
+                         grades_8th == "1", "1", "0"),
+         grades_high = ifelse(grades_10th == "1" &
+                       grades_11th == "1" &
+                       grades_12th == "1", "1", "0"))
+#prepare clean set to merge
+merge_grades <- import(here("data", "clean_dac_22.csv")) %>% 
+  select(-c(grades_pre_k, grades_kindergarten, grades_1st, grades_2nd, grades_3rd, grades_4th, grades_5th, grades_6th, grades_7th, grades_8th, grades_9th, grades_10th, grades_11th, grades_12th, grades_past_12th, grades_other, school_grade_type)) %>% 
+  left_join(grades, by = "school_id")
+
+View(colnames(merge_grades))
+#export(merge_grades, "clean_dac_22.csv")
+```
 \newpage
 
-### Look through new variables  
+#Cycle 4 (5.20.22)
+
+### Update Data Dictionary  
 
 *Status:* In progress
 
@@ -663,8 +724,649 @@ My next step is to look through the variables created/data exported and do some 
 
 Also just generally going back through to check everything is looking how it should and will manually recode anything that was overlooked or needs relabeling.
 
-```{r}
-# dat_chk <- import(here("data", "clean_dac_22.csv"))
-# dat_chk$school_grade_type
+```{r, eval = FALSE}
+dat_chk <- import(here("data", "clean_dac_22.csv"))
+View(dat_chk$confidential_leader_race_self_describe)
+
+# dat_chk <- dat_chk %>%
+#   select(-c(grades_other_text.y, grades_elementary.y, grades_middle.y, grades_high.y))
+# 
+# dat_chk <- dat_chk %>%
+#   rename(grades_other_text = grades_other_text.x,
+#          grades_elementary = grades_elementary.x,
+#          grades_middle = grades_middle.x,
+#          grades_high = grades_high.x)
+# colnames <- data.frame(colnames(dat_chk))
+dic <- import(here("data", "Final Canopy Dataset for DAC - Data dictionary.csv"))
+#export(colnames, "colnames.csv")
+export()
+```
+\newpage
+
+### Clean up Practices
+
+Cleaned up all columns that include practices so a single observation is in each cell. In other words, each practice now consists of 3 columns:  
+* `practices_*` = Did the school select this as a practice?  
+* `core_*` = Did the school select the given practice as a core practice?  
+* `time_*` = How long has the school been implementing the core practice?
+
+*Status:* Complete  
+
+```{r expand practices, eval = FALSE}
+#import data
+practices <- import(here("data", "clean_dac_22.csv"))
+#subset data
+practices <- practices %>% 
+  select(school_id, starts_with("practices_"))
+#create core subset
+core <- practices %>% 
+  rename_all(~gsub("practices", "core", .x)) %>% 
+  mutate_at(vars(starts_with("core_")), str_replace, "1", "0") %>% 
+  mutate_at(vars(starts_with("core_")), str_replace, "Less than a year", "1") %>% 
+  mutate_at(vars(starts_with("core_")), str_replace, "0-2 years", "1") %>% 
+  mutate_at(vars(starts_with("core_")), str_replace, "3-4 years", "1") %>% 
+  mutate_at(vars(starts_with("core_")), str_replace, "5.......", "1")
+#create time subset
+time <- practices %>% 
+  rename_all(~gsub("practices", "time", .x)) %>% 
+  mutate_at(vars(starts_with("time_")), str_replace, "1", "0")
+#remove time observations - transform to "Yes"
+prac_prep <- practices %>% 
+  mutate_at(vars(starts_with("practices_")), str_replace, "Less than a year", "1") %>% 
+  mutate_at(vars(starts_with("practices_")), str_replace, "0-2 years", "1") %>% 
+  mutate_at(vars(starts_with("practices_")), str_replace, "3-4 years", "1") %>% 
+  mutate_at(vars(starts_with("practices_")), str_replace, "5.......", "1")
+#merge all subsets
+merge_pracs <- left_join(prac_prep, core, by = "school_id") %>% 
+  left_join(time, by = "school_id")
+
+#prep clean data by dropping all practices columns
+clean_prac <- import(here("data", "clean_dac_22.csv"))
+#drop all practices columns
+clean_prac <- clean_prac %>% 
+  select(-c(starts_with("practices_")))
+#remerge expanded columns
+clean_merge_prac <- left_join(clean_prac, merge_pracs, by = "school_id")
+#export(clean_merge_prac, "clean_dac_22_full.csv")
+```
+
+
+### Collapse ELL variables
+
+NCES and self-reported data for ELL students was merged, with NCES data taking precedence. Final data reflects percentages rounded to 2 decimal points.
+
+*Status:* Complete
+
+```{r collapse ELL, eval = FALSE}
+ell <- import(here("data", "clean_dac_22_full.csv"))
+
+ell <- ell %>% 
+  select(school_id, self_reported_ell, self_reported_total_enrollment, nces_ell) %>% 
+  mutate(self_reported_ell = round(self_reported_ell/self_reported_total_enrollment, 2),
+         nces_ell = round(nces_ell, 2)) %>%
+  select(-c(self_reported_total_enrollment)) %>% 
+  unite("ell_percent", c(nces_ell, self_reported_ell), na.rm = TRUE) %>% 
+  mutate(ell_percent = str_remove(ell_percent, "_.."),
+         ell_percent = na_if(ell_percent, ""))
+
+ell_merge_prep <- import(here("data", "clean_dac_22_full.csv"))
+
+ell_merge_prep <- ell_merge_prep %>% 
+  select(-c(self_reported_ell, nces_ell))
+
+ell_merge <- ell_merge_prep %>% 
+  left_join(ell, by = "school_id")
+#export data with ell percentage
+#export(ell_merge, "clean_dac_22_full.csv")
+```
+
+
+### Collapse FRPL variables
+
+NCES and self-reported data for ELL students was merged, with NCES data taking precedence. Final data reflects percentages rounded to 2 decimal points.
+
+*Status:* Complete
+
+```{r collapse FRPL}
+frpl <- import(here("data", "clean_dac_22_full.csv"))
+
+frpl <- frpl %>% 
+  select(school_id, self_reported_frpl, self_reported_total_enrollment, nces_frpl, nces_total_enrollment) %>% 
+  mutate(self_reported_frpl = round(self_reported_frpl/self_reported_total_enrollment, 2),
+         nces_frpl = round(nces_frpl/nces_total_enrollment, 2)) %>% 
+  select(-c(self_reported_total_enrollment, nces_total_enrollment)) %>% 
+  unite("frpl_percent", nces_frpl, self_reported_frpl, na.rm = TRUE)
+
+frpl <- frpl %>% 
+  mutate(frpl_percent = na_if(frpl_percent, ""))
+
+frpl_merge_prep <- import(here("data", "clean_dac_22_full.csv"))
+
+frpl_merge_prep <- frpl_merge_prep %>% 
+  select(-c(self_reported_frpl, nces_frpl))
+
+frpl_merge <- frpl_merge_prep %>% 
+  left_join(frpl, by = "school_id")
+#export merged data with new column
+#export(frpl_merge, "clean_dac_22_full.csv")
+```
+
+
+### Collapse SWD variables
+
+NCES and self-reported data for ELL students was merged, with NCES data taking precedence. Final data reflects percentages rounded to 2 decimal points.
+
+*Status:*
+
+```{r collapse SWD}
+swd <- import(here("data", "clean_dac_22_full.csv"))
+
+swd <- swd %>% 
+  select(school_id, self_reported_swd, self_reported_total_enrollment, nces_swd) %>% 
+  mutate(self_reported_swd = round(self_reported_swd/self_reported_total_enrollment, 2),
+         nces_swd = round(nces_swd, 2)) %>% 
+  select(-c(self_reported_total_enrollment))
+#collapse
+swd <- swd %>% 
+  unite("swd_percent", nces_swd, self_reported_swd, na.rm = TRUE)
+#missing values
+swd <- swd %>% 
+  mutate(swd_percent = na_if(swd_percent, ""))
+
+swd_merge_prep <- import(here("data", "clean_dac_22_full.csv")) %>% 
+  select(-c(self_reported_swd, nces_swd))
+
+swd_merge <- swd_merge_prep %>% 
+  left_join(swd, by = "school_id")
+#export new file
+#export(swd_merge, "clean_dac_22_full.csv")
+```
+
+
+### Organize Clean Data
+
+Ensure all related columns are grouped together.
+
+*Status:* Complete.
+
+```{r organize}
+org <- import(here("data", "clean_dac_22_full.csv"))
+#reorder rows --saved as "wide" format
+org <- org %>% 
+  select(survey_recorded_date,
+survey_response_id,
+school_name,
+school_id,
+school_city,
+school_address,
+school_state,
+school_district,
+locale,
+website,
+leader_tenure,
+confidential_leader_race,
+confidential_leader_race_self_describe,
+confidential_leader_gender,
+confidential_multiple_leaders,
+confidential_leadership_team_diversity,
+confidential_teaching_staff_diversity,
+aian_percent,
+asian_percent,
+black_percent,
+hispanic_percent,
+nhpi_percent,
+multiple_percent,
+white_percent,
+ell_percent,
+frpl_percent,
+swd_percent,
+self_reported_ela,
+self_reported_math,
+nces_id,
+nces_total_enrollment,
+self_reported_total_enrollment,
+learning_model,
+focus_swd,
+focus_emergent_bilinguals,
+focus_homeless,
+focus_economic_disadvantage,
+focus_bipoc,
+focus_newcomer,
+focus_foster,
+focus_juvenile_justice,
+focus_other_student_group,
+focus_other_student_group_text,
+suggested_tags_s,
+student_experience,
+policy_factors,
+resource_text_1,
+resource_link_1,
+resource_text_2,
+resource_link_2,
+resource_text_3,
+resource_link_3,
+leaps_high_expectations,
+leaps_whole_child,
+leaps_rigorous_learning,
+leaps_relevance,
+leaps_affirmation,
+leaps_social_consciousness,
+leaps_connection,
+leaps_customization,
+leaps_self_direction,
+leaps_anytime_anywhere,
+leaps_rank_high_expectations,
+leaps_rank_whole_child,
+leaps_rank_rigorous_learning,
+leaps_rank_relevance,
+leaps_rank_affirmation,
+leaps_rank_social_consciousness,
+leaps_rank_connection,
+leaps_rank_customization,
+leaps_rank_self_direction,
+leaps_rank_anytime_anywhere,
+public_contact,
+public_contact_role,
+public_contact_email,
+confidential_survey_participant_name,
+confidential_survey_participante_role,
+confidential_survey_participant_email,
+nominator,
+confidential_tdc_attend_virtual,
+confidential_tdc_watch_recording,
+confidential_tdc_share_tour,
+school_descriptor_district,
+school_descriptor_charter,
+school_descriptor_independent,
+school_descriptor_sws,
+school_descriptor_virtual,
+school_descriptor_microschool,
+school_descriptor_homeschool,
+school_descriptor_hub,
+school_descriptor_other,
+school_descriptor_other_text,
+grades_pre_k,
+grades_kindergarten,
+grades_1st,
+grades_2nd,
+grades_3rd,
+grades_4th,
+grades_5th,
+grades_6th,
+grades_7th,
+grades_8th,
+grades_9th,
+grades_10th,
+grades_11th,
+grades_12th,
+grades_past_12th,
+grades_other,
+grades_other_text,
+grades_elementary,
+grades_middle,
+grades_high,
+practices_assessments_sel,
+practices_students_leaders,
+practices_teachers_leaders,
+practices_assessments_deeper,
+practices_flexible_staffing,
+practices_interdisciplinary,
+practices_makerspace,
+practices_peer_to_peer,
+practices_place_based,
+practices_portfolios_exhibitions,
+practices_real_world,
+practices_student_projects,
+practices_a_la_carte,
+practices_blended_learning,
+practices_flex,
+practices_flipped_classroom,
+practices_student_data,
+practices_accommodations,
+practices_advancement_mastery,
+practices_competency_framework,
+practices_grading_mastery,
+practices_learning_paths,
+practices_opportunities_mastery,
+practices_mtss_academics,
+practices_performance_assessment,
+practices_mentoring,
+practices_community_partnerships,
+practices_early_college,
+practices_elimination_tracking,
+practices_multi_age,
+practices_advisories,
+practices_industry_credentials,
+practices_tutoring,
+practices_design_thinking,
+practices_flexible_facilities,
+practices_pbl,
+practices_competency_education,
+practices_student_pace,
+practices_anti_racist,
+practices_culturally_responsive,
+practices_design_marginalized,
+practices_hiring_equity,
+practices_reallocation_resources,
+practices_restorative,
+practices_social_justice,
+practices_trauma_informed,
+practices_mental_health,
+practices_sel_curriculum,
+practices_service_learning,
+practices_student_goals,
+practices_udl,
+practices_disaggregated_participation_data,
+practices_individual_rotation,
+practices_community_supports,
+practices_student_conferences,
+practices_assessments_career,
+practices_career_prep,
+practices_dual_credit,
+practices_extended_learning,
+practices_sel_integrated,
+practices_expanded_success,
+practices_expanded_open_hours,
+practices_families_leaders,
+practices_adaptive_content,
+practices_station_rotation,
+practices_physical_well_being,
+practices_learner_profiles,
+practices_interoperability,
+practices_hybrid,
+practices_dual_language,
+practices_virtual_pathway,
+practices_enriched_virtual,
+core_assessments_sel,
+core_students_leaders,
+core_teachers_leaders,
+core_assessments_deeper,
+core_flexible_staffing,
+core_interdisciplinary,
+core_makerspace,
+core_peer_to_peer,
+core_place_based,
+core_portfolios_exhibitions,
+core_real_world,
+core_student_projects,
+core_a_la_carte,
+core_blended_learning,
+core_flex,
+core_flipped_classroom,
+core_student_data,
+core_accommodations,
+core_advancement_mastery,
+core_competency_framework,
+core_grading_mastery,
+core_learning_paths,
+core_opportunities_mastery,
+core_mtss_academics,
+core_performance_assessment,
+core_mentoring,
+core_community_partnerships,
+core_early_college,
+core_elimination_tracking,
+core_multi_age,
+core_advisories,
+core_industry_credentials,
+core_tutoring,
+core_design_thinking,
+core_flexible_facilities,
+core_pbl,
+core_competency_education,
+core_student_pace,
+core_anti_racist,
+core_culturally_responsive,
+core_design_marginalized,
+core_hiring_equity,
+core_reallocation_resources,
+core_restorative,
+core_social_justice,
+core_trauma_informed,
+core_mental_health,
+core_sel_curriculum,
+core_service_learning,
+core_student_goals,
+core_udl,
+core_disaggregated_participation_data,
+core_individual_rotation,
+core_community_supports,
+core_student_conferences,
+core_assessments_career,
+core_career_prep,
+core_dual_credit,
+core_extended_learning,
+core_sel_integrated,
+core_expanded_success,
+core_expanded_open_hours,
+core_families_leaders,
+core_adaptive_content,
+core_station_rotation,
+core_physical_well_being,
+core_learner_profiles,
+core_interoperability,
+core_hybrid,
+core_dual_language,
+core_virtual_pathway,
+core_enriched_virtual,
+time_assessments_sel,
+time_students_leaders,
+time_teachers_leaders,
+time_assessments_deeper,
+time_flexible_staffing,
+time_interdisciplinary,
+time_makerspace,
+time_peer_to_peer,
+time_place_based,
+time_portfolios_exhibitions,
+time_real_world,
+time_student_projects,
+time_a_la_carte,
+time_blended_learning,
+time_flex,
+time_flipped_classroom,
+time_student_data,
+time_accommodations,
+time_advancement_mastery,
+time_competency_framework,
+time_grading_mastery,
+time_learning_paths,
+time_opportunities_mastery,
+time_mtss_academics,
+time_performance_assessment,
+time_mentoring,
+time_community_partnerships,
+time_early_college,
+time_elimination_tracking,
+time_multi_age,
+time_advisories,
+time_industry_credentials,
+time_tutoring,
+time_design_thinking,
+time_flexible_facilities,
+time_pbl,
+time_competency_education,
+time_student_pace,
+time_anti_racist,
+time_culturally_responsive,
+time_design_marginalized,
+time_hiring_equity,
+time_reallocation_resources,
+time_restorative,
+time_social_justice,
+time_trauma_informed,
+time_mental_health,
+time_sel_curriculum,
+time_service_learning,
+time_student_goals,
+time_udl,
+time_disaggregated_participation_data,
+time_individual_rotation,
+time_community_supports,
+time_student_conferences,
+time_assessments_career,
+time_career_prep,
+time_dual_credit,
+time_extended_learning,
+time_sel_integrated,
+time_expanded_success,
+time_expanded_open_hours,
+time_families_leaders,
+time_adaptive_content,
+time_station_rotation,
+time_physical_well_being,
+time_learner_profiles,
+time_interoperability,
+time_hybrid,
+time_dual_language,
+time_virtual_pathway,
+time_enriched_virtual)
+
+#export(org, "clean_dac_22_wide.csv")
+#export(org_cols, "colnames.csv")
+
+```
+
+Large data file was subset into the following smaller datasets:  
+* Demographics  
+* School information  
+* Survey-specific information  
+* Practices
+
+```{r subsets}
+core_dat <- import(here("data", "clean_dac_22_wide.csv"))
+
+demographic_data <- core_dat %>% 
+  select(school_id,
+         leader_tenure,
+         confidential_leader_race,
+         confidential_leader_race_self_describe,
+         confidential_leader_gender,
+         confidential_multiple_leaders,
+         confidential_leadership_team_diversity,
+         confidential_teaching_staff_diversity,
+         aian_percent,
+         asian_percent,
+         black_percent,
+         hispanic_percent,
+         nhpi_percent,
+         multiple_percent,
+         white_percent,
+         ell_percent,
+         frpl_percent,
+         swd_percent,
+         self_reported_ela,
+         self_reported_math,
+         nces_id,
+         nces_total_enrollment,
+         self_reported_total_enrollment)
+
+survey_data <- core_dat %>% 
+  select(school_id,
+         survey_recorded_date,
+         survey_response_id,
+         public_contact,
+         public_contact_role,
+         public_contact_email,
+         confidential_survey_participant_name,
+         confidential_survey_participante_role,
+         confidential_survey_participant_email,
+         nominator,
+         confidential_tdc_attend_virtual,
+         confidential_tdc_watch_recording,
+         confidential_tdc_share_tour)
+
+school_data <- core_dat %>% 
+  select(school_id,
+         school_name,
+         school_city,
+         school_address,
+         school_state,
+         school_district,
+         locale,
+         website,
+         school_descriptor_district,
+         school_descriptor_charter,
+         school_descriptor_independent,
+         school_descriptor_sws,
+         school_descriptor_virtual,
+         school_descriptor_microschool,
+         school_descriptor_homeschool,
+         school_descriptor_hub,
+         school_descriptor_other,
+         school_descriptor_other_text,
+         grades_pre_k,
+         grades_kindergarten,
+         grades_1st,
+         grades_2nd,
+         grades_3rd,
+         grades_4th,
+         grades_5th,
+         grades_6th,
+         grades_7th,
+         grades_8th,
+         grades_9th,
+         grades_10th,
+         grades_11th,
+         grades_12th,
+         grades_past_12th,
+         grades_other,
+         grades_other_text,
+         grades_elementary,
+         grades_middle,
+         grades_high)
+
+practices_data <- core_dat %>% 
+  select(school_id, starts_with("practices"), starts_with("core"), starts_with("time"))
+
+learning_model_data <- core_dat %>% 
+  select(school_id,
+         learning_model,
+         focus_swd,
+         focus_emergent_bilinguals,
+         focus_homeless,
+         focus_economic_disadvantage,
+         focus_bipoc,
+         focus_newcomer,
+         focus_foster,
+         focus_juvenile_justice,
+         focus_other_student_group,
+         focus_other_student_group_text,
+         suggested_tags_s,
+         student_experience,
+         policy_factors,
+         resource_text_1,
+         resource_link_1,
+         resource_text_2,
+         resource_link_2,
+         resource_text_3,
+         resource_link_3,
+         leaps_high_expectations,
+         leaps_whole_child,
+         leaps_rigorous_learning,
+         leaps_relevance,
+         leaps_affirmation,
+         leaps_social_consciousness,
+         leaps_connection,
+         leaps_customization,
+         leaps_self_direction,
+         leaps_anytime_anywhere,
+         leaps_rank_high_expectations,
+         leaps_rank_whole_child,
+         leaps_rank_rigorous_learning,
+         leaps_rank_relevance,
+         leaps_rank_affirmation,
+         leaps_rank_social_consciousness,
+         leaps_rank_connection,
+         leaps_rank_customization,
+         leaps_rank_self_direction,
+         leaps_rank_anytime_anywhere)
+
+clean_data_dictionary <- import(here("data", "clean_data_dictionary.csv"))
+
+clean_data_full <- import(here("data", "clean_dac_22_wide.csv"))
+
+save(clean_data_dictionary, survey_data, school_data, demographic_data, learning_model_data, practices_data, clean_data_full,
+     file = "complete_canopy_2022.RData")
 ```
 
