@@ -7,7 +7,7 @@ library(glue)
 library(systemfonts)
 ## FONTS
 
-if(!all(c("Open Sans", "Bebas Neue") %in% system_fonts$family)) {
+if(!all(c("Open Sans", "Bebas Neue") %in% system_fonts()$family)) {
   ## Please download and install two fonts:
   ## Open Sans: https://fonts.google.com/specimen/Open+Sans
   ## Bebas Neue: https://fonts.google.com/specimen/Bebas+Neue
