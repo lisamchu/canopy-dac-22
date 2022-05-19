@@ -27,6 +27,16 @@ library(DT)
 library(scales)
 ```
 
+```{r modify practices data}
+load(here("data", "complete_canopy_2022.RData"))
+tags <- import(here("data", "Tags-SY2021-22 Tags.csv"))
+practices_data <- practices_data %>%
+  select(school_id, starts_with("practices_")) %>%
+  mutate_at(vars(starts_with("practices_")), str_replace, "1-2 years", "1")
+save(practices_data, file = "complete_canopy_2022.RData")
+```
+
+
 # Cycle 3 (5.18.22)
 
 Guiding questions/tasks & format:  
@@ -51,8 +61,6 @@ Variables created:
 * `pct_total_tags` - percentage of total tags within each locale (n/total_tags_locale)
 
 ```{r data set up and clean, include = FALSE}
-load(here("data", "complete_canopy_2022.RData"))
-tags <- import(here("data", "Tags-SY2021-22 Tags.csv"))
 #create totals for each practice by locale
 locale_tags <- clean_data_full %>% 
   select(school_id, locale) %>% 
@@ -75,7 +83,17 @@ locale_tags <- clean_data_full %>%
          pct_total_tags = n/total_tags_locale) #schools in each locale per tag / total tags in locale
 ```
 
-## Table - Tagging Differences by Locale
+## Across Locale Table and Plots
+
+The following table and plots present the data within locales as a function of the full dataset.  
+
+In other words, the denominator is 157 (161 total schools - 4 schools excluded from analysis either because of either missing or multi-coded data).  
+
+As a result, the bar charts are perhaps not easily compared and/or what we were aiming for, something I realized after creating them, but I left them in for us to look at in case there's any other information they help give us, such as overall distribution of tags.  
+
+*Note:* I haven't incorporated theming into the plots yet--I need to figure out how to download fonts and work with theming, which I am not super familiar with and ran out of time.
+
+### Table - Tagging Differences by Locale (across all schools)
 
 ```{r diff tbl}
 #create difference columns
@@ -116,11 +134,7 @@ locale_diffs_tbl <- tags %>%
 datatable(locale_diffs_tbl)
 ```
 
-## Urban vs. Rural Barchart  
-
-I still need to incorporate theming throughout the plots.  
-
-Also encountering a weird thing in my code where I'm using `slice_max()` to pull the top 10, but it's pulling 13 instead of 10. This is happening in the rural v. suburban plot too, but not suburban v. urban plot. It's also not letting me rearrange by descending order of percent difference. Any idea why?
+### Urban vs. Rural Barchart (Across)  
 
 ```{r urb v rur viz, fig.dim = c(9, 9)}
 #source("scripts/branding.R")
@@ -132,7 +146,7 @@ urb_rur_diff <- tags %>%
   left_join(locale_diffs, by = "tag") %>% 
   select(short_name, urb_rur_diff, pct_school_urban, pct_school_rural) %>% 
   ungroup() %>% 
-  slice_max(urb_rur_diff, n = 10) %>% #I don't know why it's pulling 13
+  slice_max(urb_rur_diff, n = 10, with_ties = FALSE) %>% 
   mutate(urb_rur_diff = paste(round(1*urb_rur_diff, 0), "%"),
          pct_school_urban = 100*pct_school_urban,
          pct_school_rural = 100*pct_school_rural) %>% 
@@ -142,23 +156,27 @@ urb_rur_diff <- tags %>%
                values_to = "pct")
 #pct labels
 urb_rur_labs <- data.frame(x = c(urb_rur_diff$short_name),
-                           y = c(10 + urb_rur_diff$pct),
-                           lab = c("42%", "", "37%", "", "37%", "", "36%", "", "36%", "", "34%", "", "34%", "", "34%", "", "34%", "", "33%", "", "33%", "", "33%", "", "33%", ""))
+                           y = c(5 + urb_rur_diff$pct),
+                           lab = c("45%", "", "38%", "", "38%", "", "38%", "", "37%", "", "36%", "", "35%", "", "34%", "", "34%", "", "34%", ""))
+#reorder tags
+urb_rur_diff$short_name <- factor(urb_rur_diff$short_name,
+                                    levels = c("culturally responsive practices", "anti-racist practices", "hiring for equity and inclusion values", "real-world problem solving", "student-led goal setting", "schoolwide social-emotional learning integration", "design to meet needs of students who have been marginalized", "deeper learning assessments", "restorative practices", "tutoring"))
 #side-side bar chart
 urb_rur_viz <- urb_rur_diff %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
-  geom_text(aes(x = short_name, y = 55, label = urb_rur_labs$lab)) +
+  geom_text(aes(x = short_name, y = urb_rur_labs$y, label = urb_rur_labs$lab)) +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
   scale_y_continuous(limits = c(0, 70)) +
   labs(x = "Tag",
        y = "Percent of Rural vs. Urban Schools Selecting Tag",
-       title = "Top 10 Tags with Largest Differences between Urban and Rural Schools")
+       title = "Top 10 Tags with Largest Differences between Urban and Rural Schools",
+       subtitle = "Comparison across locale types - denominator = total schools")
 
 urb_rur_viz
 ```
 
-## Urban vs. Suburban Barchart
+### Urban vs. Suburban Barchart (Across)
 
 ```{r urb v sub viz, fig.dim = c(9, 9)}
 urb_sub_diff <- tags %>% 
@@ -167,7 +185,7 @@ urb_sub_diff <- tags %>%
   rename(tag = variable_name) %>% 
   left_join(locale_diffs, by = "tag") %>% 
   select(short_name, urb_sub_diff, pct_school_urban, pct_school_suburban) %>% 
-  slice_max(urb_sub_diff, n = 10) %>% 
+  slice_max(urb_sub_diff, n = 10, with_ties = FALSE) %>% 
   mutate(urb_sub_diff = paste(round(1*urb_sub_diff, 0), "%"),
          pct_school_urban = 100*pct_school_urban,
          pct_school_suburban = 100*pct_school_suburban) %>% 
@@ -177,24 +195,28 @@ urb_sub_diff <- tags %>%
                values_to = "pct")
 #pct labels
 urb_sub_labs <- data.frame(x = c(urb_sub_diff$short_name),
-                           y = c(10 + urb_sub_diff$pct),
-                           lab = c("36%", "", "34%", "", "33%", "", "33%", "", "32%", "", "32%", "", "31%", "", "31%", "", "31%", "", "31%", ""))
+                           y = c(5 + urb_sub_diff$pct),
+                           lab = c("38%", "", "34%", "", "34%", "", "34%", "", "33%", "", "33%", "", "33%", "", "32%", "", "32%", "", "31%", ""))
+#reorder tags
+urb_sub_diff$short_name <- factor(urb_sub_diff$short_name,
+                                    levels = c("culturally responsive practices", "deeper learning assessments", "student-led goal setting", "schoolwide social-emotional learning integration", "mental health services", "project-based learning", "real-world problem solving",  "design to meet needs of students who have been marginalized",  "multiple opportunities to demonstrate mastery", "anti-racist practices"))
 #side-side bar chart
 urb_sub_viz <- urb_sub_diff %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
   ylim(0, 70) +
   #scale_fill_manual(values = transcend_cols) +
-  geom_text(aes(x = short_name, y = 55, label = urb_sub_labs$lab)) +
+  geom_text(aes(x = short_name, y = urb_sub_labs$y, label = urb_sub_labs$lab)) +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
   labs(x = "Tag",
        y = "Percent of Urban vs. Suburban Schools Selecting Tag",
-       title = "Top 10 Tags with Largest Differences between Urban and Suburban Schools")
+       title = "Top 10 Tags with Largest Differences between Urban and Suburban Schools",
+       subtitle = "Comparison across locale types - denominator = total schools")
 
 urb_sub_viz
 ```
 
-## Suburban vs. Rural Barchart
+### Suburban vs. Rural Barchart (Across)
 
 ```{r sub v rur viz, fig.dim = c(9, 9)}
 sub_rur_diff <- tags %>% 
@@ -203,7 +225,7 @@ sub_rur_diff <- tags %>%
   rename(tag = variable_name) %>% 
   left_join(locale_diffs, by = "tag") %>% 
   select(short_name, sub_rur_diff, pct_school_rural, pct_school_suburban) %>% 
-  slice_max(sub_rur_diff, n = 10) %>% 
+  slice_max(sub_rur_diff, n = 10, with_ties = FALSE) %>% 
   mutate(sub_rur_diff = paste(round(1*sub_rur_diff, 0), "%"),
          pct_school_rural = 100*pct_school_rural,
          pct_school_suburban = 100*pct_school_suburban) %>% 
@@ -213,20 +235,220 @@ sub_rur_diff <- tags %>%
                values_to = "pct")
 #pct labels
 sub_rur_labs <- data.frame(x = c(sub_rur_diff$short_name),
-                           y = c(10 + sub_rur_diff$pct),
-                           lab = c("9%", "", "7%", "", "7%", "", "7%", "", "6%", "", "6%", "", "6%", "", "5%", "", "5%", "", "5%", "", "5%", "", "5%", "", "5%", ""))
+                           y = c(1 + sub_rur_diff$pct),
+                           lab = c("", "9%", "", "7%", "", "7%", "", "7%", "", "6%", "", "6%", "", "5%", "", "5%", "", "5%", "", "5%"))
+#reorder tags
+sub_rur_diff$short_name <- factor(sub_rur_diff$short_name,
+                                    levels = c("adaptive content", "anti-racist practices", "career readiness assessments", "hiring for equity and inclusion values", "culturally responsive practices", "1:1 mentoring", "flexible facilities & classroom design",  "interdisciplinary",  "individual learner profiles
+", "individual learning paths"))
 #side-side bar chart
 sub_rur_viz <- sub_rur_diff %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
   ylim(0, 30) +
   #scale_fill_manual(values = transcend_cols) +
-  geom_text(aes(x = short_name, y = 20, label = sub_rur_labs$lab)) +
+  geom_text(aes(x = short_name, y = sub_rur_labs$y, label = sub_rur_labs$lab)) +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
   labs(x = "Tag",
        y = "Percent of Suburban vs. Rural Schools Selecting Tag",
-       title = "Top 10 Tags with Largest Differences between Rural and Suburban Schools")
+       title = "Top 10 Tags with Largest Differences between Rural and Suburban Schools",
+       subtitle = "Comparison across locale types - denominator = total schools")
 
 sub_rur_viz
 ```
 
+## Within Locale Table and Plots
+
+In my second shot at plots, I've used tagging within locale as the basis for comparison. In other words, the denominator is equal to the number of schools within the specified locale type (95 urban schools, 32 suburban schools, and 30 rural schools = 157 total schools in analysis). This gives us an idea of the differences in tagging patterns within urban, suburban, and rural areas respectively, but I was hesitant to compare due to differences in sample size which is why I plan to also plot odds ratios in the third iteration of plotting below. Still useful to consider questions like, how much more often did suburban areas implement `x` practice than rural areas? 
+
+```{r data set up and clean 2, include = FALSE}
+#create totals for each practice by locale
+locale_tags_2 <- clean_data_full %>% 
+  select(school_id, school_name, locale) %>% 
+  left_join(practices_data, by = "school_id") %>% 
+  select(school_id, school_name, locale, starts_with("practices_")) %>% 
+  filter(!c(locale == "")) %>%  #Horizons Alternative; Iowa Big; The Forest Schools; Link Learning
+  group_by(locale) %>% 
+  mutate(n_school = length(school_name)) %>% 
+  mutate_at(vars(starts_with("practices_")), as.integer, na.rm = TRUE) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "n_tag") %>% 
+  select(-c(school_id, school_name)) %>% 
+  ungroup() %>% 
+  group_by(locale, tag) %>% 
+  mutate(n_tag = sum(n_tag, na.rm = TRUE)) %>% 
+  unique() %>% 
+#percents for each practice by locale
+  ungroup() %>% 
+  group_by(locale) %>% 
+  mutate(pct_locale_tag = n_tag / n_school) #total tags for given practice within locale / total school n within locale
+```
+
+### Within Locale Table
+
+Table mainly to show the differences the within locale analysis makes to help conceptualize. (i.e., I needed this table to think through it. Notice Pct. Tags sum in this table = 100% meaning we're accounting for all tags within each practice and analyzing the distribution across locale within it, as compared to earlier table where Pct. Tags *does not* equal 100, and reflects percentage of total schools that selected said tag as distributed across locale.)
+
+```{r within diff tbl}
+#create difference columns
+locale_diffs_2 <- locale_tags_2 %>% 
+  select(locale, tag, n_tag, pct_locale_tag) %>% 
+  pivot_wider(names_from = "locale",
+              values_from = c("n_tag", "pct_locale_tag")) %>% 
+  janitor::clean_names() %>% 
+  mutate(urb_rur_diff = abs(round(100*(pct_locale_tag_urban - pct_locale_tag_rural), 2)), #diff b/w urban & rural
+         urb_sub_diff = abs(round(100*(pct_locale_tag_urban - pct_locale_tag_suburban), 2)), #diff b/w urban & suburban
+         sub_rur_diff = abs(round(100*(pct_locale_tag_suburban - pct_locale_tag_rural), 2))) #diff b/w suburban & rural
+#prepare data for table with nice labels
+locale_diffs_tbl_2 <- tags %>% 
+  janitor::clean_names() %>% 
+  select(variable_name, short_name) %>%
+  rename(tag = variable_name) %>% 
+  left_join(locale_diffs_2, by = "tag") %>% 
+  select(short_name, urb_rur_diff, urb_sub_diff, sub_rur_diff,
+         pct_locale_tag_urban, pct_locale_tag_suburban, pct_locale_tag_rural,
+         n_tag_urban, n_tag_suburban, n_tag_rural) %>% 
+  mutate(urb_rur_diff = paste(round(1*urb_rur_diff, 0), "%"),
+         urb_sub_diff = paste(round(1*urb_sub_diff, 0), "%"),
+         sub_rur_diff = paste(round(1*sub_rur_diff, 0), "%"),
+         pct_locale_tag_urban = paste(round(100*pct_locale_tag_urban, 0), "%"),
+         pct_locale_tag_suburban = paste(round(100*pct_locale_tag_suburban, 0), "%"),
+         pct_locale_tag_rural = paste(round(100*pct_locale_tag_rural, 0), "%")) %>% 
+  rename(`Tag` = short_name,
+         `Urban vs. Rural Difference` =  urb_rur_diff,
+         `Urban vs. Suburban Difference` = urb_sub_diff,
+         `Suburban vs. Rural Difference` = sub_rur_diff,
+         `Pct. Tags (Urban)` = pct_locale_tag_urban,
+         `Pct. Tags (Suburban)` = pct_locale_tag_suburban,
+         `Pct. Tags (Rural)` = pct_locale_tag_rural,
+         `N Tags (Urban)` = n_tag_urban,
+         `N Tags (Suburban)` = n_tag_suburban,
+         `N Tags (Rural)` = n_tag_rural)
+#table
+datatable(locale_diffs_tbl_2)
+```
+
+### Urban vs. Rural (Within)  
+
+The biggest difference was shocking to me--68% of urban schools tagged anti-racist practices, compared to only 20% of rural schools (!!). Really curious to see how these top 3 (anti-racist practices, culturally-responsive practices, and hiring for equity and inclusion values) have or have not shifted from previous years.
+
+```{r urb v rur viz 2, fig.dim = c(9, 9)}
+#prep data
+urb_rur_diff_2 <- tags %>% 
+  janitor::clean_names() %>% 
+  select(variable_name, short_name) %>% 
+  rename(tag = variable_name) %>% 
+  left_join(locale_diffs_2, by = "tag") %>% 
+  select(short_name, urb_rur_diff, pct_locale_tag_urban, pct_locale_tag_rural) %>% 
+  ungroup() %>% 
+  slice_max(urb_rur_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(urb_rur_diff = paste(round(1*urb_rur_diff, 0), "%"),
+         pct_locale_tag_urban = 100*pct_locale_tag_urban,
+         pct_locale_tag_rural = 100*pct_locale_tag_rural) %>% 
+  pivot_longer(cols = c("pct_locale_tag_urban", "pct_locale_tag_rural"),
+               names_to = "locale",
+               names_prefix = "pct_locale_tag_",
+               values_to = "pct")
+#pct labels
+urb_rur_labs_2 <- data.frame(x = c(urb_rur_diff_2$short_name),
+                             y = c(5 + urb_rur_diff_2$pct),
+                             lab = c("48%", "", "44%", "", "44%", "", "40%", "", "34%", "", "", "24%", "22%", "", "21%", "", "21%", "", "", "19%"))
+#reorder 
+urb_rur_diff_2$short_name <- factor(urb_rur_diff_2$short_name,
+                                    levels = c("anti-racist practices", "culturally responsive practices", "hiring for equity and inclusion values", "social justice focus", "tutoring", "à la carte model", "student-led goal setting", "real-world problem solving", "family & community support services", "makerspace"))
+#side-side bar chart
+urb_rur_viz_2 <- urb_rur_diff_2 %>% 
+  ggplot(aes(reorder(short_name, urb_rur_diff), pct, fill = locale)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(x = short_name, y = urb_rur_labs_2$y, label = urb_rur_labs_2$lab)) +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "Tag",
+       y = "Percent of Rural vs. Urban Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences between Urban and Rural Schools",
+       subtitle = "Comparison within locale types - denominator = schools within locale")
+
+urb_rur_viz_2
+```
+
+### Urban vs. Suburban (Within)
+
+```{r urb v sub viz 2, fig.dim = c(9, 9)}
+urb_sub_diff_2 <- tags %>% 
+  janitor::clean_names() %>% 
+  select(variable_name, short_name) %>% 
+  rename(tag = variable_name) %>% 
+  left_join(locale_diffs_2, by = "tag") %>% 
+  select(short_name, urb_sub_diff, pct_locale_tag_urban, pct_locale_tag_suburban) %>% 
+  slice_max(urb_sub_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(urb_sub_diff = paste(round(1*urb_sub_diff, 0), "%"),
+         pct_locale_tag_urban = 100*pct_locale_tag_urban,
+         pct_locale_tag_suburban = 100*pct_locale_tag_suburban) %>% 
+  pivot_longer(cols = c("pct_locale_tag_urban", "pct_locale_tag_suburban"),
+               names_to = "locale",
+               names_prefix = "pct_locale_tag_",
+               values_to = "pct")
+#pct labels
+urb_sub_labs_2 <- data.frame(x = c(urb_sub_diff_2$short_name),
+                             y = c(5 + urb_sub_diff_2$pct),
+                             lab = c("", "27%", "", "25%", "", "24%", "", "21%", "", "21%", "", "20%", "20%", "", "19%", "", "", "19%", "18%", ""))
+#reorder tags
+urb_sub_diff_2$short_name <- factor(urb_sub_diff_2$short_name,
+                                    levels = c("adaptive content", "career readiness assessments", "individual learning paths", "1:1 mentoring", "flexible facilities & classroom design", "industry credentials", "mental health services",  "social justice focus",  "à la carte model", "physical well being services"))
+#side-side bar chart
+urb_sub_viz_2 <- urb_sub_diff_2 %>% 
+  ggplot(aes(short_name, pct, fill = locale)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  ylim(0, 100) +
+  geom_text(aes(x = short_name, y = urb_sub_labs_2$y, label = urb_sub_labs_2$lab)) +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  labs(x = "Tag",
+       y = "Percent of Urban vs. Suburban Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences between Urban and Suburban Schools",
+       subtitle = "Comparison within locale types - denominator = schools within locale")
+
+urb_sub_viz_2
+```
+
+### Suburban vs. Rural (Within)  
+
+```{r sub v rur viz 2, fig.dim = c(9, 9)}
+sub_rur_diff_2 <- tags %>% 
+  janitor::clean_names() %>% 
+  select(variable_name, short_name) %>% 
+  rename(tag = variable_name) %>% 
+  left_join(locale_diffs_2, by = "tag") %>% 
+  select(short_name, sub_rur_diff, pct_locale_tag_rural, pct_locale_tag_suburban) %>% 
+  slice_max(sub_rur_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(sub_rur_diff = paste(round(1*sub_rur_diff, 0), "%"),
+         pct_locale_tag_rural = 100*pct_locale_tag_rural,
+         pct_locale_tag_suburban = 100*pct_locale_tag_suburban) %>% 
+  pivot_longer(cols = c("pct_locale_tag_rural", "pct_locale_tag_suburban"),
+               names_to = "locale",
+               names_prefix = "pct_locale_tag_",
+               values_to = "pct")
+#pct labels
+sub_rur_labs_2 <- data.frame(x = c(sub_rur_diff_2$short_name),
+                           y = c(5 + sub_rur_diff_2$pct),
+                           lab = c("", "42%", "", "33%", "", "32%", "", "32%", "", "29%", "", "29%", "27%", "", "", "22%", "", "22%", "", "22%"))
+#reorder tags
+sub_rur_diff_2$short_name <- factor(sub_rur_diff_2$short_name,
+                                    levels = c("adaptive content", "anti-racist practices", "hiring for equity and inclusion values", "career readiness assessments", "1:1 mentoring", "culturally responsive practices", "mental health services",  "individual learner profiles",  "students access their own data", "individual learning paths"))
+#side-side bar chart
+sub_rur_viz_2 <- sub_rur_diff_2 %>% 
+  ggplot(aes(short_name, pct, fill = locale)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  ylim(0, 100) +
+  geom_text(aes(x = short_name, y = sub_rur_labs_2$y, label = sub_rur_labs_2$lab)) +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  labs(x = "Tag",
+       y = "Percent of Suburban vs. Rural Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences between Rural and Suburban Schools",
+       subtitle = "Comparison within locale types - denominator = schools within locale")
+
+sub_rur_viz_2
+```
+
+## Probability and Odds Ratios
+
+In this final analysis, I calculated probability for each practice and converted to odds ratio in order to plot how much more or less likely a given locale was to select each tag.
