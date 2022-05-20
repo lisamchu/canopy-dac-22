@@ -4,6 +4,7 @@ library(dplyr)
 library(ggplot2)
 library(ggthemes)
 library(glue)
+library(here)
 library(systemfonts)
 ## FONTS
 
@@ -28,7 +29,7 @@ if(!all(c("Open Sans", "Bebas Neue") %in% system_fonts()$family)) {
 #   x
 # }
 
-tag_labels = read_csv("data/Tags-SY2021-22 Tags.csv") %>%
+tag_labels = read_csv(here("data/Tags-SY2021-22 Tags.csv")) %>%
   select(tag = `Variable name`, label = `short name`) #%>%
   #mutate(across(everything(), fix_accent_a))
 
@@ -54,18 +55,20 @@ scale_y_tag = function(...) scale_y_discrete(labels = label_tags)
 dem_labs = c(
   "Number of students" = "nces_total_enrollment",
   "% students of color" = "non_white_percent",
-  "% Native American and Alaskan Native students" = "aian_percent",
+  "% Native American and\nAlaskan Native students" = "aian_percent",
   "% Asian students" = "asian_percent",
   "# Black students" = "black_count",
   "% Black students" = "black_percent",
   "# Hispanic students" = "hispanic_count",
   "% Hispanic students" = "hispanic_percent",
-  "% Native Hawaiian and Pacific Islander students" = "nhpi_percent",
+  "% Native Hawaiian and\nPacific Islander students" = "nhpi_percent",
   "% Multiracial students" = "multiple_percent",
   "% White students" = "white_percent",
   "# FRPL eligible" = "FRPL_count",
   "% FRPL eligible" = "FRPL_percent",
-  "% English Language Learner" = "LEP_percent",
+  "% FRPL eligible" = "frpl_percent",
+  "% English Language Learner" = "ell_percent",
+  "% Limited English Proficiency" = "LEP_percent",
   "% Special Education" = "IDEA_percent",
   "% Students with Disabilities" = "swd_percent",
   "Charter schools" = "school_descriptor_charter",
