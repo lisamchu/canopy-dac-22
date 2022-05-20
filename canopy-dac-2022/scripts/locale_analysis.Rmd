@@ -33,7 +33,7 @@ tags <- import(here("data", "Tags-SY2021-22 Tags.csv"))
 practices_data <- practices_data %>%
   select(school_id, starts_with("practices_")) %>%
   mutate_at(vars(starts_with("practices_")), str_replace, "1-2 years", "1")
-save(practices_data, file = "complete_canopy_2022.RData")
+#save(practices_data, file = "complete_canopy_2022.RData")
 ```
 
 
@@ -452,3 +452,111 @@ sub_rur_viz_2
 ## Probability and Odds Ratios
 
 In this final analysis, I calculated probability for each practice and converted to odds ratio in order to plot how much more or less likely a given locale was to select each tag.
+
+```{r locale odds}
+locale_odds <- locale_tags %>% 
+  select(locale, tag, pct_school) %>% 
+  pivot_wider(names_from = "locale",
+              values_from = "pct_school",
+              names_glue = "{.value}_{locale}") %>% 
+  janitor::clean_names() %>% 
+  mutate(odds_urban = pct_school_urban / (1 - pct_school_urban),
+         odds_suburban = pct_school_suburban / (1 - pct_school_suburban),
+         odds_rural = pct_school_rural / (1 - pct_school_rural),
+         urb_rur_ratio = odds_urban / odds_rural,
+         urb_sub_ratio = odds_urban / odds_suburban,
+         sub_rur_ratio = odds_suburban / odds_rural)
+```
+
+### Urban vs. Rural (Odd Ratio)
+
+```{r urb v rur viz 3, fig.dim = c(9, 9)}
+urb_rur_odds <- tags %>% 
+  janitor::clean_names() %>% 
+  select(variable_name, short_name) %>% 
+  rename(tag = variable_name) %>% 
+  left_join(locale_odds, by = "tag") %>% 
+  select(short_name, urb_rur_ratio) %>% 
+  slice_max(urb_rur_ratio, n = 15, with_ties = FALSE)
+#odd ratio labels labels
+urb_rur_odds_lab <- data.frame(x = c(urb_rur_odds$short_name),
+                           y = c(1 + urb_rur_odds$urb_rur_ratio),
+                           lab = c("17.7x", "13.8x", "13.2x", "12.4x", "10.1x", "7.5x", "7.5x", "7.4x", "7x", "6.4x", "6.3x", "6.3x", "6.2x", "6x", "6x"))
+#viz
+urb_rur_odds_viz <- urb_rur_odds %>% 
+  ggplot(aes(reorder(short_name, -urb_rur_ratio), urb_rur_ratio)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  coord_flip() +
+  geom_text(aes(x = short_name, y = urb_rur_odds_lab$y, label = urb_rur_odds_lab$lab)) +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  labs(x = "Tag",
+       y = "",
+       title = "How Much More Likely Urban Schools were to \n Select a Tag",
+       subtitle = "as compared to rural schools using raw odds ratios")
+  
+urb_rur_odds_viz
+```
+
+### Urban vs. Suburban (Odd Ratio)
+
+```{r urb v sub viz 3, fig.dim = c(9, 9)}
+urb_sub_odds <- tags %>% 
+  janitor::clean_names() %>% 
+  select(variable_name, short_name) %>% 
+  rename(tag = variable_name) %>% 
+  left_join(locale_odds, by = "tag") %>% 
+  select(short_name, urb_sub_ratio) %>% 
+  slice_max(urb_sub_ratio, n = 16, with_ties = FALSE) %>% 
+  filter(!c(short_name == "dual language programming"))
+#odd ratio labels labels
+urb_sub_odds_lab <- data.frame(x = c(urb_sub_odds$short_name),
+                           y = c(1 + urb_sub_odds$urb_sub_ratio),
+                           lab = c("6.5x", "6.5x", "6.3x", "6.3x", "6x", "6x", "5.8x", "5.75x", "5.5x", "5.4x", "5x", "5x", "5x", "4.8x", "4.7x"))
+#viz
+urb_sub_odds_viz <- urb_sub_odds %>% 
+  ggplot(aes(reorder(short_name, -urb_sub_ratio), urb_sub_ratio)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  coord_flip() +
+  geom_text(aes(x = short_name, y = urb_sub_odds_lab$y, label = urb_sub_odds_lab$lab)) +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  labs(x = "",
+       y = "",
+       title = "How Much More Likely Urban Schools were to \n Select a Tag",
+       subtitle = "as compared to suburban schools using raw odds ratios \n
+                  Note: dual language programming left out because no suburban schools selected it)")
+  
+urb_sub_odds_viz
+```
+
+### Suburban vs. Rural (Odd Ratio)
+
+```{r sub v rur viz 3, fig.dim = c(9, 9)}
+sub_rur_odds <- tags %>% 
+  janitor::clean_names() %>% 
+  select(variable_name, short_name) %>% 
+  rename(tag = variable_name) %>% 
+  left_join(locale_odds, by = "tag") %>% 
+  select(short_name, sub_rur_ratio) %>% 
+  slice_max(sub_rur_ratio, n = 15, with_ties = FALSE)
+#odd ratio labels labels
+sub_rur_odds_lab <- data.frame(x = c(sub_rur_odds$short_name),
+                           y = c(.25 + sub_rur_odds$sub_rur_ratio),
+                           lab = c("3x", "3x", "2.5x", "2.3x", "2.3x", "2x", "2x", "2x", "2x", "1.9x", "1.8x", "1.6x", "1.6x", "1.6x", "1.5x"))
+#viz
+sub_rur_odds_viz <- sub_rur_odds %>% 
+  ggplot(aes(reorder(short_name, -sub_rur_ratio), sub_rur_ratio)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  coord_flip() +
+  geom_text(aes(x = short_name, y = sub_rur_odds_lab$y, label = sub_rur_odds_lab$lab)) +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  labs(x = "",
+       y = "",
+       title = "How Much More Likely Suburban Schools were to \n Select a Tag",
+       subtitle = "as compared to rural schools using raw odds ratios")
+  
+sub_rur_odds_viz
+```
+
