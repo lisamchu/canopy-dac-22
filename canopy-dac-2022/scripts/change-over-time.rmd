@@ -19,6 +19,10 @@ xwalk = read_csv(here("data/Tags-SY2021-22 Tags.csv"), show_col_types = FALSE) %
 ```
 
 ```{r}
+
+## TODO: make sure 2020 schools are not duplicated
+## TODO: re-run with only schools that participated in all 4 years
+## TODO: within schools that participated multiple years, look at tag additions and subtractions
 all_tags = unique(na.omit(unlist(xwalk)))
 
 canopy_old = canopy_old %>%
@@ -57,7 +61,7 @@ over_time %>%
 ```
 
 
-```{r}
+```{r, echo = TRUE}
 ggplot(long, aes(x = year, y = pct_practicing, group = tag)) +
   geom_line(alpha = 0.7, color = transcend_cols["teal"]) +
   geom_point(alpha = 0.9, color = transcend_cols["teal"]) +
@@ -69,7 +73,7 @@ ggplot(long, aes(x = year, y = pct_practicing, group = tag)) +
   )
 ```
 
-```{r, fig.height=10}
+```{r, fig.height=10, echo = TRUE}
 long %>% 
   mutate(year_i = as.integer(year) - 2019) %>%
   group_by(tag) %>%

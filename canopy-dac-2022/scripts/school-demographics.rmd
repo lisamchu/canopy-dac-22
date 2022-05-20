@@ -12,7 +12,7 @@ source(here("scripts/branding.R"))
 load(here("data/complete_canopy_2022.RData"))
 ```
 
-```{r}
+```{r, echo = TRUE}
 demographic_data %>%
   count(lead = confidential_leadership_team_diversity, staff = confidential_teaching_staff_diversity) %>%
   ggplot(aes(x = staff, y = lead)) +
@@ -38,7 +38,7 @@ demo_long = demo %>%
   mutate(labels = label_dems(dem))
 ```
 
-```{r, fig.height=10}
+```{r, fig.height=10, echo = TRUE}
 ggplot(demo_long, aes(y = value, x = dem)) +
   geom_violin(fill = transcend_cols["teal"]) +
   geom_point(
