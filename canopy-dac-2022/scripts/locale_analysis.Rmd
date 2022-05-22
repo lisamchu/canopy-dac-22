@@ -30,10 +30,6 @@ library(scales)
 ```{r modify practices data}
 load(here("data", "complete_canopy_2022.RData"))
 tags <- import(here("data", "Tags-SY2021-22 Tags.csv"))
-practices_data <- practices_data %>%
-  select(school_id, starts_with("practices_")) %>%
-  mutate_at(vars(starts_with("practices_")), str_replace, "1-2 years", "1")
-#save(practices_data, file = "complete_canopy_2022.RData")
 ```
 
 
@@ -67,7 +63,7 @@ locale_tags <- clean_data_full %>%
   left_join(practices_data, by = "school_id") %>% 
   select(school_id, locale, starts_with("practices_")) %>% 
   filter(!c(locale == "")) %>%  #Horizons Alternative; Iowa Big; The Forest Schools; Link Learning
-  mutate_at(vars(starts_with("practices_")), as.integer, na.rm = TRUE) %>% 
+  # mutate_at(vars(starts_with("practices_")), as.integer, na.rm = TRUE) %>% 
   pivot_longer(cols = starts_with("practices"),
                names_to = "tag",
                values_to = "n") %>% 
@@ -157,10 +153,10 @@ urb_rur_diff <- tags %>%
 #pct labels
 urb_rur_labs <- data.frame(x = c(urb_rur_diff$short_name),
                            y = c(5 + urb_rur_diff$pct),
-                           lab = c("45%", "", "38%", "", "38%", "", "38%", "", "37%", "", "36%", "", "35%", "", "34%", "", "34%", "", "34%", ""))
+                           lab = c("40%", "", "36%", "", "35%", "", "34%", "", "34%", "", "33%", "", "32%", "", "32%", "", "31%", "", "31%", ""))
 #reorder tags
 urb_rur_diff$short_name <- factor(urb_rur_diff$short_name,
-                                    levels = c("culturally responsive practices", "anti-racist practices", "hiring for equity and inclusion values", "real-world problem solving", "student-led goal setting", "schoolwide social-emotional learning integration", "design to meet needs of students who have been marginalized", "deeper learning assessments", "restorative practices", "tutoring"))
+                                    levels = c(unique(paste0(urb_rur_diff$short_name))))
 #side-side bar chart
 urb_rur_viz <- urb_rur_diff %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
@@ -196,10 +192,10 @@ urb_sub_diff <- tags %>%
 #pct labels
 urb_sub_labs <- data.frame(x = c(urb_sub_diff$short_name),
                            y = c(5 + urb_sub_diff$pct),
-                           lab = c("38%", "", "34%", "", "34%", "", "34%", "", "33%", "", "33%", "", "33%", "", "32%", "", "32%", "", "31%", ""))
+                           lab = c("34%", "", "32%", "", "32%", "", "32%", "", "31%", "", "31%", "", "31%", "", "31%", "", "29%", "", "29%", ""))
 #reorder tags
 urb_sub_diff$short_name <- factor(urb_sub_diff$short_name,
-                                    levels = c("culturally responsive practices", "deeper learning assessments", "student-led goal setting", "schoolwide social-emotional learning integration", "mental health services", "project-based learning", "real-world problem solving",  "design to meet needs of students who have been marginalized",  "multiple opportunities to demonstrate mastery", "anti-racist practices"))
+                                    levels = c(unique(paste0(urb_sub_diff$short_name))))
 #side-side bar chart
 urb_sub_viz <- urb_sub_diff %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
@@ -236,11 +232,10 @@ sub_rur_diff <- tags %>%
 #pct labels
 sub_rur_labs <- data.frame(x = c(sub_rur_diff$short_name),
                            y = c(1 + sub_rur_diff$pct),
-                           lab = c("", "9%", "", "7%", "", "7%", "", "7%", "", "6%", "", "6%", "", "5%", "", "5%", "", "5%", "", "5%"))
+                           lab = c("", "8%", "", "6%", "", "6%", "", "6%", "", "6%", "", "6%", "", "6%", "", "5%", "", "5%", "", "5%"))
 #reorder tags
 sub_rur_diff$short_name <- factor(sub_rur_diff$short_name,
-                                    levels = c("adaptive content", "anti-racist practices", "career readiness assessments", "hiring for equity and inclusion values", "culturally responsive practices", "1:1 mentoring", "flexible facilities & classroom design",  "interdisciplinary",  "individual learner profiles
-", "individual learning paths"))
+                                    levels = c(unique(paste0(sub_rur_diff$short_name))))
 #side-side bar chart
 sub_rur_viz <- sub_rur_diff %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
@@ -352,10 +347,11 @@ urb_rur_diff_2 <- tags %>%
 #pct labels
 urb_rur_labs_2 <- data.frame(x = c(urb_rur_diff_2$short_name),
                              y = c(5 + urb_rur_diff_2$pct),
-                             lab = c("48%", "", "44%", "", "44%", "", "40%", "", "34%", "", "", "24%", "22%", "", "21%", "", "21%", "", "", "19%"))
+                             lab = c("49%", "", "47%", "", "42%", "", "38%", "", "29%", "", "", "25%", "21%", "", "21%", "", "", "20%", "20%", ""))
 #reorder 
 urb_rur_diff_2$short_name <- factor(urb_rur_diff_2$short_name,
-                                    levels = c("anti-racist practices", "culturally responsive practices", "hiring for equity and inclusion values", "social justice focus", "tutoring", "à la carte model", "student-led goal setting", "real-world problem solving", "family & community support services", "makerspace"))
+                                    levels = c(unique(paste0(urb_rur_diff_2$short_name))))
+levels(urb_rur_diff_2$short_name)
 #side-side bar chart
 urb_rur_viz_2 <- urb_rur_diff_2 %>% 
   ggplot(aes(reorder(short_name, urb_rur_diff), pct, fill = locale)) +
@@ -391,10 +387,10 @@ urb_sub_diff_2 <- tags %>%
 #pct labels
 urb_sub_labs_2 <- data.frame(x = c(urb_sub_diff_2$short_name),
                              y = c(5 + urb_sub_diff_2$pct),
-                             lab = c("", "27%", "", "25%", "", "24%", "", "21%", "", "21%", "", "20%", "20%", "", "19%", "", "", "19%", "18%", ""))
+                             lab = c("", "31%", "", "28%", "", "26%", "", "25%", "23%", "", "", "20%", "", "20%", "19%", "", "19%", "", "", "18%"))
 #reorder tags
 urb_sub_diff_2$short_name <- factor(urb_sub_diff_2$short_name,
-                                    levels = c("adaptive content", "career readiness assessments", "individual learning paths", "1:1 mentoring", "flexible facilities & classroom design", "industry credentials", "mental health services",  "social justice focus",  "à la carte model", "physical well being services"))
+                                    levels = c(unique(paste0(urb_sub_diff_2$short_name))))
 #side-side bar chart
 urb_sub_viz_2 <- urb_sub_diff_2 %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
@@ -430,10 +426,10 @@ sub_rur_diff_2 <- tags %>%
 #pct labels
 sub_rur_labs_2 <- data.frame(x = c(sub_rur_diff_2$short_name),
                            y = c(5 + sub_rur_diff_2$pct),
-                           lab = c("", "42%", "", "33%", "", "32%", "", "32%", "", "29%", "", "29%", "27%", "", "", "22%", "", "22%", "", "22%"))
+                           lab = c("", "43%", "", "33%", "", "32%", "", "32%", "", "29%", "", "29%", "", "29%", "", "25%", "", "25%", "", "25%"))
 #reorder tags
 sub_rur_diff_2$short_name <- factor(sub_rur_diff_2$short_name,
-                                    levels = c("adaptive content", "anti-racist practices", "hiring for equity and inclusion values", "career readiness assessments", "1:1 mentoring", "culturally responsive practices", "mental health services",  "individual learner profiles",  "students access their own data", "individual learning paths"))
+                                    levels = c(unique(paste0(sub_rur_diff_2$short_name))))
 #side-side bar chart
 sub_rur_viz_2 <- sub_rur_diff_2 %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
@@ -481,7 +477,7 @@ urb_rur_odds <- tags %>%
 #odd ratio labels labels
 urb_rur_odds_lab <- data.frame(x = c(urb_rur_odds$short_name),
                            y = c(1 + urb_rur_odds$urb_rur_ratio),
-                           lab = c("17.7x", "13.8x", "13.2x", "12.4x", "10.1x", "7.5x", "7.5x", "7.4x", "7x", "6.4x", "6.3x", "6.3x", "6.2x", "6x", "6x"))
+                           lab = c(paste0(round(urb_rur_odds$urb_rur_ratio, 1), "x")))
 #viz
 urb_rur_odds_viz <- urb_rur_odds %>% 
   ggplot(aes(reorder(short_name, -urb_rur_ratio), urb_rur_ratio)) +
@@ -511,8 +507,8 @@ urb_sub_odds <- tags %>%
   filter(!c(short_name == "dual language programming"))
 #odd ratio labels labels
 urb_sub_odds_lab <- data.frame(x = c(urb_sub_odds$short_name),
-                           y = c(1 + urb_sub_odds$urb_sub_ratio),
-                           lab = c("6.5x", "6.5x", "6.3x", "6.3x", "6x", "6x", "5.8x", "5.75x", "5.5x", "5.4x", "5x", "5x", "5x", "4.8x", "4.7x"))
+                           y = c(.5 + urb_sub_odds$urb_sub_ratio),
+                           lab = c(paste0(round(urb_sub_odds$urb_sub_ratio, 1), "x")))
 #viz
 urb_sub_odds_viz <- urb_sub_odds %>% 
   ggplot(aes(reorder(short_name, -urb_sub_ratio), urb_sub_ratio)) +
@@ -543,7 +539,7 @@ sub_rur_odds <- tags %>%
 #odd ratio labels labels
 sub_rur_odds_lab <- data.frame(x = c(sub_rur_odds$short_name),
                            y = c(.25 + sub_rur_odds$sub_rur_ratio),
-                           lab = c("3x", "3x", "2.5x", "2.3x", "2.3x", "2x", "2x", "2x", "2x", "1.9x", "1.8x", "1.6x", "1.6x", "1.6x", "1.5x"))
+                           lab = c(paste0(round(sub_rur_odds$sub_rur_ratio, 1), "x")))
 #viz
 sub_rur_odds_viz <- sub_rur_odds %>% 
   ggplot(aes(reorder(short_name, -sub_rur_ratio), sub_rur_ratio)) +

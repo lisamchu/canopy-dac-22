@@ -207,7 +207,6 @@ confidential_tdc_watch_recording,We are planning a series of virtual tours of in
 confidential_tdc_share_tour,We are planning a series of virtual tours of innovative Canopy schools. Would you be interested in any of the following? (select all that apply): - Presenting or sharing about my school in a virtual tour,confidential_tdc_share_tour,We are planning a series of virtual tours of innovative Canopy schools. Would you be interested in any of the following? (select all that apply): - Presenting or sharing about my school in a virtual tour,survey_data
 nces_id,NCES,nces_id,NCES,demographic_data
 nces_total_enrollment,NCES_.Total Students,nces_total_enrollment,NCES_.Total Students,demographic_data
-grades_other_text,Information reported by the school about other services provided beyond PK-12 and past 12th.,self_reported_grades_other_text,"Which grades does your learning environment serve? Please select all that apply. (if your school does not have grades, please instead select the equivalent grades for the ages you serve) - Other (please tell us more) - Text",school_data
 grades_elementary,Defined as schools with grades 1-5. Note: overlap across school types may occur.,,,school_data
 grades_middle,Defined as schools with grades 7 and 8. Note: overlap across school types may occur.,,,school_data
 grades_high,Defined as schools with grades 10-12. Note: overlap across school types may occur.,,,school_data
@@ -256,7 +255,10 @@ NCES_.G_12_OFFERED",school_data
 grades_past_12th,Services beyond 12th grade offered. Merged variable from NCES (prioritized) and self-reported data.,"self_reported_grades_past_12th
 nces_grades_13th","self_reported_grades_Past 12th grade
 NCES_.G_13_OFFERED",school_data
-grades_other,Other services beyond 12th grade and PK-12 offered. Merged variable from NCES (prioritized) and self-reported data.,self_reported_grades_other,self_reported_grades_Other (please tell us more),school_data
+grades_other,Other services beyond 12th grade and PK-12 offered. Merged variable from NCES (prioritized) and self-reported data. Information reported by the school about other services provided beyond PK-12 and past 12th.,"self_reported_grades_other
+self_reported_grades_other_text","self_reported_grades_Other (please tell us more)
+
+Which grades does your learning environment serve? Please select all that apply. (if your school does not have grades, please instead select the equivalent grades for the ages you serve) - Other (please tell us more) - Text",school_data
 core_assessments_sel,Is the practice specified a core practice?,practices_assessments_sel,practices_assessments for social-emotional skills,practices_data
 core_students_leaders,Is the practice specified a core practice?,practices_students_leaders,practices_students as co-leaders,practices_data
 core_teachers_leaders,Is the practice specified a core practice?,practices_teachers_leaders,practices_teachers as co-leaders,practices_data
