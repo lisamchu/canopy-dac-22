@@ -19,7 +19,7 @@ library(tidyverse)
 library(ggplot2)
 library(DT)
 library(scales)
-#source("scripts/branding.R", local = knitr::knit_global())
+source("scripts/branding.R", local = knitr::knit_global())
 load(here("data", "complete_canopy_2022.RData"))
 ```
 
@@ -31,15 +31,27 @@ Guiding questions/tasks & format:
 * odds ratio  
 * visualization  
 
-Analysis Notes:  
-* elementary schools = 43  
-* middle schools = 59  
-* high schools = 90  
-* elementary AND middle = 31  
-* middle AND high = 29  
-* elementary AND middle AND high = 16  
-* NONE elementary middle or high = 19  
-* total schools = 157
+## Analysis Notes:  
+* elementary schools = 50  
+* middle schools = 67  
+* high schools = 93  
+* elementary AND middle = 38  
+* middle AND high = 32  
+* elementary AND middle AND high = 19  
+* NONE elementary middle or high = 11  
+    * CodeRVA Regional High School   
+    * Empower Community High School  
+    * Future Public School  
+    * Purdue Polytechnic High School  
+    * Rooted School  
+    * Living School  
+    * Achieve Community Charter School  
+    * Southeast Area Technical High School (Sea-Tech)  
+    * Sequoyah School  
+    * Vimenti School  
+    * Foundation School Of Autism - San Antonio  
+* 10 `NA` values
+* total schools = 161 - 10 `NA` = 151
 
 
 *Focus on odds ratio plot for levels by Tuesday--other plots by this weekend*
@@ -47,10 +59,146 @@ Analysis Notes:
 ```{r data set up and clean, include = FALSE}
 level_tags <- clean_data_full %>% 
   select(school_id, grades_elementary, grades_middle, grades_high, starts_with("practices")) %>% 
+  filter(!c(is.na(grades_elementary) & is.na(grades_middle) & is.na(grades_high))) %>% 
+  mutate(grades_elementary = ifelse(grades_elementary==1, "elementary", "none"),
+         grades_middle = ifelse(grades_middle==1, "middle", "none"),
+         grades_high = ifelse(grades_high==1, "high", "none")) %>% 
+  pivot_longer(cols = starts_with("grades"),
+               names_to = "og_level",
+               values_to = "level") %>% 
+  select(-og_level) %>% 
+  filter(!level=="none") %>% 
   pivot_longer(cols = starts_with("practices"),
                names_to = "tag",
-               values_to = "n")
-which(level_tags$grades_high==0 & level_tags$grades_middle==0 & level_tags$grades_elementary==0)
-View(data.frame(colnames(levels)))
+               values_to = "n") %>% 
+  select(-school_id) %>% 
+  group_by(level, tag) %>% 
+  mutate(n = sum(n, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  unique() %>% 
+#percents for each practice by level
+  group_by(level) %>% 
+  mutate(total_tags_level = sum(n),
+         pct_school = n/151, #only 151 schools in the analysis
+         pct_total_tags = n/total_tags_level) #schools in each locale per tag / total tags in locale - ignore for odds
 ```
 
+## Probability and Odds Ratios
+
+In this final analysis, I calculated probability for each practice and converted to odds ratio in order to plot how much more or less likely a given locale was to select each tag.
+
+```{r level odds}
+level_odds <- level_tags %>% 
+  select(level, tag, pct_school) %>% 
+  pivot_wider(names_from = "level",
+              values_from = "pct_school",
+              names_glue = "{.value}_{level}") %>% 
+  janitor::clean_names() %>% 
+  mutate(odds_elem = pct_school_elementary / (1 - pct_school_elementary),
+         odds_mid = pct_school_middle / (1 - pct_school_middle),
+         odds_high = pct_school_high / (1 - pct_school_high),
+         elem_mid_ratio = odds_elem / odds_mid,
+         mid_high_ratio = odds_mid / odds_high,
+         high_elem_ratio = odds_high / odds_elem)
+```
+
+### Elementary vs. Middle (odds ratio)
+
+```{r elem v mid odd viz, fig.dim = c(9, 9)}
+elem_mid_odds <- level_odds %>% 
+  select(tag, elem_mid_ratio) %>% 
+  slice_max(elem_mid_ratio, n = 15, with_ties = FALSE)
+#odd ratio labels
+elem_mid_odds_lab <- data.frame(x = c(elem_mid_odds$tag),
+                           y = c(elem_mid_odds$elem_mid_ratio + .05),
+                           lab = c(paste0(round(elem_mid_odds$elem_mid_ratio, 1), "x")))
+#viz
+elem_mid_odds_viz <- elem_mid_odds %>% 
+  ggplot(aes(reorder(tag, -elem_mid_ratio), elem_mid_ratio)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1A4C81") +
+  coord_flip() +
+  geom_text(aes(x = elem_mid_odds_lab$x, y = elem_mid_odds_lab$y, label = elem_mid_odds_lab$lab), 
+            color = "#EF464B", size = 7, family = "Bebas Neue") +
+  scale_color_manual(values = paste(transcend_cols)) +
+  scale_x_tag() +
+  theme_transcend +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  labs(x = "",
+       y = "",
+       title = "How Much More Likely Elementary Schools were to \nSelect a Tag",
+       subtitle = "compared to middle schools using raw odds ratio")
+  
+elem_mid_odds_viz
+```
+
+### Middle vs. High (odds ratio)
+
+```{r elem v mid odd viz, fig.dim = c(9, 9)}
+mid_high_odds <- level_odds %>% 
+  select(tag, mid_high_ratio) %>% 
+  slice_max(mid_high_ratio, n = 15, with_ties = FALSE)
+#odd ratio labels
+mid_high_odds_lab <- data.frame(x = c(mid_high_odds$tag),
+                           y = c(mid_high_odds$mid_high_ratio + .05),
+                           lab = c(paste0(round(mid_high_odds$mid_high_ratio, 1), "x")))
+#viz
+mid_high_odds_viz <- mid_high_odds %>% 
+  ggplot(aes(reorder(tag, -mid_high_ratio), mid_high_ratio)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1A4C81") +
+  coord_flip() +
+  geom_text(aes(x = mid_high_odds_lab$x, y = mid_high_odds_lab$y, label = mid_high_odds_lab$lab), 
+            color = "#EF464B", size = 7, family = "Bebas Neue") +
+  scale_color_manual(values = paste(transcend_cols)) +
+  scale_x_tag() +
+  theme_transcend +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  labs(x = "",
+       y = "",
+       title = "How Much More Likely Elementary Schools were to \nSelect a Tag",
+       subtitle = "compared to middle schools using raw odds ratio")
+  
+mid_high_odds_viz
+```
+
+### High vs. Elementary (odds ratio)
+
+```{r elem v mid odd viz, fig.dim = c(9, 9)}
+high_elem_odds <- level_odds %>% 
+  select(tag, high_elem_ratio) %>% 
+  slice_max(high_elem_ratio, n = 15, with_ties = FALSE)
+#odd ratio labels
+high_elem_odds_lab <- data.frame(x = c(high_elem_odds$tag),
+                           y = c(high_elem_odds$high_elem_ratio + .35),
+                           lab = c(paste0(round(high_elem_odds$high_elem_ratio, 1), "x")))
+#viz
+high_elem_odds_viz <- high_elem_odds %>% 
+  ggplot(aes(reorder(tag, -high_elem_ratio), high_elem_ratio)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1A4C81") +
+  coord_flip() +
+  geom_text(aes(x = high_elem_odds_lab$x, y = high_elem_odds_lab$y, label = high_elem_odds_lab$lab), 
+            color = "#EF464B", size = 7, family = "Bebas Neue") +
+  scale_color_manual(values = paste(transcend_cols)) +
+  scale_x_tag() +
+  theme_transcend +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  labs(x = "",
+       y = "",
+       title = "How Much More Likely Elementary Schools were to \nSelect a Tag",
+       subtitle = "compared to middle schools using raw odds ratio")
+  
+high_elem_odds_viz
+```
+
+Save plots:
+```{r, eval = FALSE}
+#odds charts
+ggsave("elem-mid_odds_chart_raw.png", plot = elem_mid_odds_viz, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("mid-high_odds_chart_raw.png", plot = mid_high_odds_viz, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("high-elem_odds_chart_raw.png", plot = high_elem_odds_viz, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+```

@@ -1,0 +1,237 @@
+---
+title: "Level Analysis"
+author: "Janette Avelar"
+date: "5/23/2022"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r library}
+library(here)
+library(rio)
+library(psych)
+library(tidyverse)
+library(ggplot2)
+library(DT)
+library(scales)
+source("scripts/branding.R", local = knitr::knit_global())
+load(here("data", "complete_canopy_2022.RData"))
+```
+
+# Cycle 4 (5.24.22) [in preparation for Brown Bag]
+
+Guiding questions/tasks & format:  
+`SCHOOL TYPE`: How do tagging patterns differ among district, charter, independent, sws, virtual, microschool, homeschool, and hub schools?  
+* table of biggest differences between categories  
+* odds ratio  
+* visualization  
+
+## Analysis Notes:  
+**Independent cases**
+* district = 78  
+* charter = 57  
+* independent = 20  
+* sws = 5  
+* virtual = 9  
+* microschool = 12  
+* homeschool = 5  
+* hub = 3  
+**Multicoded cases**
+* district AND charter = 4  
+* district AND sws = 5  
+* district AND virtual = 7  
+* district AND microschool = 1  
+* district AND homeschool = 1  
+* charter AND sws = 1  
+* charter AND virtual = 2  
+* charter AND hub = 1  
+* independent AND virtual = 1  
+* independent AND microschool = 7  
+* independent AND hub = 1  
+* sws AND virtual = 1  
+* sws AND microschool = 1  
+* virtual AND microschool = 1  
+* virutal AND homeschool = 1  
+* virtual AND hub = 1  
+* microschool AND homeschool = 1  
+* microschool AND hub = 1
+* NONE = 5  
+    * Boston Day And Evening Academy  
+    * CodeRVA Regional High School  
+    * The Metropolitan Regional Career And Technical Center  
+    * Grant Beacon Middle School  
+    * Utah Schools For The Deaf  
+* 0 `NA` values
+* total schools = 161 - 5 `NA` = 156
+
+
+*Focus on odds ratio plot for levels by Tuesday--other plots by this weekend*
+
+```{r data set up and clean, include = FALSE}
+type_tags <- clean_data_full %>% 
+  select(school_id, starts_with("school_descriptor_"), starts_with("practices")) %>% 
+  filter(!c(school_descriptor_district==0 & school_descriptor_charter==0 & school_descriptor_independent==0 & school_descriptor_sws==0 & school_descriptor_virtual==0 & school_descriptor_microschool==0 & school_descriptor_homeschool==0 & school_descriptor_hub==0)) %>% 
+  mutate(school_descriptor_district = ifelse(school_descriptor_district==1, "district", "none"),
+         school_descriptor_charter = ifelse(school_descriptor_charter==1, "charter", "none"),
+         school_descriptor_independent = ifelse(school_descriptor_independent==1, "independent", "none"),
+         school_descriptor_sws = ifelse(school_descriptor_sws==1, "sws", "none"),
+         school_descriptor_virtual = ifelse(school_descriptor_virtual==1, "virtual", "none"),
+         school_descriptor_microschool = ifelse(school_descriptor_microschool==1, "microschool", "none"),
+         school_descriptor_homeschool = ifelse(school_descriptor_homeschool==1, "homeschool", "none"),
+         school_descriptor_hub = ifelse(school_descriptor_hub==1, "hub", "none")) %>% 
+  select(-c(school_descriptor_other, school_descriptor_other_text)) %>% 
+  pivot_longer(cols = starts_with("school_descriptor_"),
+               names_to = "og_type",
+               values_to = "type") %>% 
+  select(-og_type) %>% 
+  filter(!type=="none") %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "n") %>% 
+  select(-school_id) %>% 
+  group_by(type, tag) %>% 
+  mutate(n = sum(n, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  unique() %>% #576 = 189 schools represented x 3
+#percents for each practice by level
+  group_by(type) %>% 
+  mutate(total_tags_type = sum(n),
+         pct_school = n/156, #only 156 schools in the analysis
+         pct_total_tags = n/total_tags_type) #schools in each locale per tag / total tags in locale - ignore for odds
+```
+
+## Probability and Odds Ratios
+
+In this final analysis, I calculated probability for each practice and converted to odds ratio in order to plot how much more or less likely a given locale was to select each tag. School type odds were compared to group of schools not of that type.
+
+
+```{r type odds}
+type_odds <- type_tags %>% 
+  select(type, tag, pct_school) %>% 
+  pivot_wider(names_from = "type",
+              values_from = "pct_school",
+              names_glue = "{.value}_{type}") %>% 
+  janitor::clean_names() %>% 
+  mutate(odds_district = pct_school_district / (1 - pct_school_district),
+         odds_charter = pct_school_charter / (1 - pct_school_charter),
+         odds_independent = pct_school_independent / (1 - pct_school_independent),
+         odds_sws = pct_school_sws / (1 - pct_school_sws),
+         odds_virtual = pct_school_virtual / (1 - pct_school_virtual),
+         odds_microschool = pct_school_microschool / (1 - pct_school_microschool),
+         odds_homeschool = pct_school_homeschool / (1 - pct_school_homeschool),
+         odds_hub = pct_school_hub / (1 - pct_school_hub),
+         district_non_ratio = odds_district / (odds_charter + odds_independent + odds_sws + odds_virtual + odds_microschool + odds_homeschool + odds_hub),
+         charter_non_ratio = odds_charter / (odds_district + odds_independent + odds_sws + odds_virtual + odds_microschool + odds_homeschool + odds_hub),
+         independent_non_ratio = odds_independent / (odds_district + odds_charter + odds_sws + odds_virtual + odds_microschool + odds_homeschool + odds_hub),
+         sws_non_ratio = odds_sws / (odds_district + odds_independent + odds_charter + odds_virtual + odds_microschool + odds_homeschool + odds_hub),
+         virtual_non_ratio = odds_virtual / (odds_district + odds_independent + odds_sws + odds_charter + odds_microschool + odds_homeschool + odds_hub),
+         microschool_non_ratio = odds_microschool / (odds_district + odds_independent + odds_sws + odds_virtual + odds_charter + odds_homeschool + odds_hub),
+         homeschool_non_ratio = odds_homeschool / (odds_district + odds_independent + odds_sws + odds_virtual + odds_microschool + odds_charter + odds_hub),
+         hub_non_ratio = odds_hub / (odds_district + odds_independent + odds_sws + odds_virtual + odds_microschool + odds_homeschool + odds_charter))
+```
+
+### Charter vs. Not (odds ratio)
+
+```{r charter v not odd viz, fig.dim = c(9, 9)}
+charter_odds <- type_odds %>% 
+  select(tag, charter_non_ratio) %>% 
+  slice_max(charter_non_ratio, n = 15, with_ties = FALSE)
+#odd ratio labels
+charter_odds_lab <- data.frame(x = c(charter_odds$tag),
+                           y = c(charter_odds$charter_non_ratio + .05),
+                           lab = c(paste0(round(charter_odds$charter_non_ratio, 1), "x")))
+#viz
+charter_odds_viz <- charter_odds %>% 
+  ggplot(aes(reorder(tag, -charter_non_ratio), charter_non_ratio)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1A4C81") +
+  coord_flip() +
+  geom_text(aes(x = charter_odds_lab$x, y = charter_odds_lab$y, label = charter_odds_lab$lab), 
+            color = "#EF464B", size = 7, family = "Bebas Neue") +
+  scale_color_manual(values = paste(transcend_cols)) +
+  scale_x_tag() +
+  theme_transcend +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  labs(x = "",
+       y = "",
+       title = "How Much More Likely Charter Schools were to \nSelect a Tag",
+       subtitle = "compared to other schools using raw odds ratio")
+  
+charter_odds_viz
+```
+
+### District vs. Not (odds ratio)
+
+```{r district v not odd viz, fig.dim = c(9, 9)}
+district_odds <- type_odds %>% 
+  select(tag, district_non_ratio) %>% 
+  slice_max(district_non_ratio, n = 15, with_ties = FALSE)
+#odd ratio labels
+district_odds_lab <- data.frame(x = c(district_odds$tag),
+                           y = c(district_odds$district_non_ratio + .05),
+                           lab = c(paste0(round(district_odds$district_non_ratio, 1), "x")))
+#viz
+district_odds_viz <- district_odds %>% 
+  ggplot(aes(reorder(tag, -district_non_ratio), district_non_ratio)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1A4C81") +
+  coord_flip() +
+  geom_text(aes(x = district_odds_lab$x, y = district_odds_lab$y, label = district_odds_lab$lab), 
+            color = "#EF464B", size = 7, family = "Bebas Neue") +
+  scale_color_manual(values = paste(transcend_cols)) +
+  scale_x_tag() +
+  theme_transcend +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  labs(x = "",
+       y = "",
+       title = "How Much More Likely District Schools were to \nSelect a Tag",
+       subtitle = "compared to other schools using raw odds ratio")
+  
+district_odds_viz
+```
+
+### High vs. Elementary (odds ratio)
+
+```{r elem v mid odd viz, fig.dim = c(9, 9)}
+high_elem_odds <- level_odds %>% 
+  select(tag, high_elem_ratio) %>% 
+  slice_max(high_elem_ratio, n = 15, with_ties = FALSE)
+#odd ratio labels
+high_elem_odds_lab <- data.frame(x = c(high_elem_odds$tag),
+                           y = c(high_elem_odds$high_elem_ratio + .35),
+                           lab = c(paste0(round(high_elem_odds$high_elem_ratio, 1), "x")))
+#viz
+high_elem_odds_viz <- high_elem_odds %>% 
+  ggplot(aes(reorder(tag, -high_elem_ratio), high_elem_ratio)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1A4C81") +
+  coord_flip() +
+  geom_text(aes(x = high_elem_odds_lab$x, y = high_elem_odds_lab$y, label = high_elem_odds_lab$lab), 
+            color = "#EF464B", size = 7, family = "Bebas Neue") +
+  scale_color_manual(values = paste(transcend_cols)) +
+  scale_x_tag() +
+  theme_transcend +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  labs(x = "",
+       y = "",
+       title = "How Much More Likely Elementary Schools were to \nSelect a Tag",
+       subtitle = "compared to middle schools using raw odds ratio")
+  
+high_elem_odds_viz
+```
+
+Save plots:
+```{r, eval = FALSE}
+#odds charts
+ggsave("elem-mid_odds_chart_raw.png", plot = elem_mid_odds_viz, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("mid-high_odds_chart_raw.png", plot = mid_high_odds_viz, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("high-elem_odds_chart_raw.png", plot = high_elem_odds_viz, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+```
