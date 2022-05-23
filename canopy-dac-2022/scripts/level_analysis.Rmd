@@ -1,0 +1,56 @@
+---
+title: "Level Analysis"
+author: "Janette Avelar"
+date: "5/23/2022"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r library}
+library(here)
+library(rio)
+library(psych)
+library(tidyverse)
+library(ggplot2)
+library(DT)
+library(scales)
+#source("scripts/branding.R", local = knitr::knit_global())
+load(here("data", "complete_canopy_2022.RData"))
+```
+
+# Cycle 4 (5.24.22) [in preparation for Brown Bag]
+
+Guiding questions/tasks & format:  
+`LEVEL`: How do tagging patterns differ among elementary, middle, and high schools?  
+* table of biggest differences between categories (elem vs. middle; middle vs. high; elem vs. high)  
+* odds ratio  
+* visualization  
+
+Analysis Notes:  
+* elementary schools = 43  
+* middle schools = 59  
+* high schools = 90  
+* elementary AND middle = 31  
+* middle AND high = 29  
+* elementary AND middle AND high = 16  
+* NONE elementary middle or high = 19  
+* total schools = 157
+
+
+*Focus on odds ratio plot for levels by Tuesday--other plots by this weekend*
+
+```{r data set up and clean, include = FALSE}
+level_tags <- clean_data_full %>% 
+  select(school_id, grades_elementary, grades_middle, grades_high, starts_with("practices")) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "n")
+which(level_tags$grades_high==0 & level_tags$grades_middle==0 & level_tags$grades_elementary==0)
+View(data.frame(colnames(levels)))
+```
+

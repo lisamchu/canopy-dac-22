@@ -25,6 +25,7 @@ library(tidyverse)
 library(ggplot2)
 library(DT)
 library(scales)
+source("scripts/branding.R", local = knitr::knit_global())
 ```
 
 ```{r modify practices data}
@@ -161,11 +162,13 @@ urb_rur_diff$short_name <- factor(urb_rur_diff$short_name,
 urb_rur_viz <- urb_rur_diff %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
   geom_text(aes(x = short_name, y = urb_rur_labs$y, label = urb_rur_labs$lab)) +
+  theme_transcend_sparse +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
   scale_y_continuous(limits = c(0, 70)) +
-  labs(x = "Tag",
-       y = "Percent of Rural vs. Urban Schools Selecting Tag",
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
        title = "Top 10 Tags with Largest Differences between Urban and Rural Schools",
        subtitle = "Comparison across locale types - denominator = total schools")
 
@@ -201,11 +204,12 @@ urb_sub_viz <- urb_sub_diff %>%
   ggplot(aes(short_name, pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
   ylim(0, 70) +
-  #scale_fill_manual(values = transcend_cols) +
+  scale_fill_manual(values = paste(transcend_cols)) +
   geom_text(aes(x = short_name, y = urb_sub_labs$y, label = urb_sub_labs$lab)) +
+  theme_transcend_sparse +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
-  labs(x = "Tag",
-       y = "Percent of Urban vs. Suburban Schools Selecting Tag",
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
        title = "Top 10 Tags with Largest Differences between Urban and Suburban Schools",
        subtitle = "Comparison across locale types - denominator = total schools")
 
@@ -241,11 +245,12 @@ sub_rur_viz <- sub_rur_diff %>%
   ggplot(aes(short_name, pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
   ylim(0, 30) +
-  #scale_fill_manual(values = transcend_cols) +
+  scale_fill_manual(values = paste(transcend_cols)) +
   geom_text(aes(x = short_name, y = sub_rur_labs$y, label = sub_rur_labs$lab)) +
+  theme_transcend_sparse +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
-  labs(x = "Tag",
-       y = "Percent of Suburban vs. Rural Schools Selecting Tag",
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
        title = "Top 10 Tags with Largest Differences between Rural and Suburban Schools",
        subtitle = "Comparison across locale types - denominator = total schools")
 
@@ -356,11 +361,13 @@ levels(urb_rur_diff_2$short_name)
 urb_rur_viz_2 <- urb_rur_diff_2 %>% 
   ggplot(aes(reorder(short_name, urb_rur_diff), pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
   geom_text(aes(x = short_name, y = urb_rur_labs_2$y, label = urb_rur_labs_2$lab)) +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
   scale_y_continuous(limits = c(0, 100)) +
-  labs(x = "Tag",
-       y = "Percent of Rural vs. Urban Schools Selecting Tag",
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
        title = "Top 10 Tags with Largest Differences between Urban and Rural Schools",
        subtitle = "Comparison within locale types - denominator = schools within locale")
 
@@ -397,9 +404,11 @@ urb_sub_viz_2 <- urb_sub_diff_2 %>%
   geom_bar(stat = "identity", position = "dodge") +
   ylim(0, 100) +
   geom_text(aes(x = short_name, y = urb_sub_labs_2$y, label = urb_sub_labs_2$lab)) +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
-  labs(x = "Tag",
-       y = "Percent of Urban vs. Suburban Schools Selecting Tag",
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
        title = "Top 10 Tags with Largest Differences between Urban and Suburban Schools",
        subtitle = "Comparison within locale types - denominator = schools within locale")
 
@@ -436,9 +445,11 @@ sub_rur_viz_2 <- sub_rur_diff_2 %>%
   geom_bar(stat = "identity", position = "dodge") +
   ylim(0, 100) +
   geom_text(aes(x = short_name, y = sub_rur_labs_2$y, label = sub_rur_labs_2$lab)) +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
-  labs(x = "Tag",
-       y = "Percent of Suburban vs. Rural Schools Selecting Tag",
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
        title = "Top 10 Tags with Largest Differences between Rural and Suburban Schools",
        subtitle = "Comparison within locale types - denominator = schools within locale")
 
@@ -476,17 +487,20 @@ urb_rur_odds <- tags %>%
   slice_max(urb_rur_ratio, n = 15, with_ties = FALSE)
 #odd ratio labels labels
 urb_rur_odds_lab <- data.frame(x = c(urb_rur_odds$short_name),
-                           y = c(1 + urb_rur_odds$urb_rur_ratio),
+                           y = c(urb_rur_odds$urb_rur_ratio + .75),
                            lab = c(paste0(round(urb_rur_odds$urb_rur_ratio, 1), "x")))
 #viz
 urb_rur_odds_viz <- urb_rur_odds %>% 
   ggplot(aes(reorder(short_name, -urb_rur_ratio), urb_rur_ratio)) +
-  geom_bar(stat = "identity", position = "dodge") +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1A4C81") +
   coord_flip() +
-  geom_text(aes(x = short_name, y = urb_rur_odds_lab$y, label = urb_rur_odds_lab$lab)) +
+  geom_text(aes(x = short_name, y = urb_rur_odds_lab$y, label = urb_rur_odds_lab$lab), 
+            color = "#EF464B", size = 7, family = "Bebas Neue") +
+  scale_color_manual(values = paste(transcend_cols)) +
+  theme_transcend +
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
-  labs(x = "Tag",
+  labs(x = "",
        y = "",
        title = "How Much More Likely Urban Schools were to \n Select a Tag",
        subtitle = "as compared to rural schools using raw odds ratios")
@@ -507,21 +521,23 @@ urb_sub_odds <- tags %>%
   filter(!c(short_name == "dual language programming"))
 #odd ratio labels labels
 urb_sub_odds_lab <- data.frame(x = c(urb_sub_odds$short_name),
-                           y = c(.5 + urb_sub_odds$urb_sub_ratio),
+                           y = c(.45 + urb_sub_odds$urb_sub_ratio),
                            lab = c(paste0(round(urb_sub_odds$urb_sub_ratio, 1), "x")))
 #viz
 urb_sub_odds_viz <- urb_sub_odds %>% 
   ggplot(aes(reorder(short_name, -urb_sub_ratio), urb_sub_ratio)) +
-  geom_bar(stat = "identity", position = "dodge") +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1A4C81") +
   coord_flip() +
-  geom_text(aes(x = short_name, y = urb_sub_odds_lab$y, label = urb_sub_odds_lab$lab)) +
+  geom_text(aes(x = short_name, y = urb_sub_odds_lab$y, label = urb_sub_odds_lab$lab),
+            color = "#EF464B", size = 7, family = "Bebas Neue") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend +
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
   labs(x = "",
        y = "",
        title = "How Much More Likely Urban Schools were to \n Select a Tag",
-       subtitle = "as compared to suburban schools using raw odds ratios \n
-                  Note: dual language programming left out because no suburban schools selected it)")
+       subtitle = "as compared to suburban schools using raw odds ratios \n \n Note: dual language programming left out because no \n suburban schools selected it")
   
 urb_sub_odds_viz
 ```
@@ -538,14 +554,17 @@ sub_rur_odds <- tags %>%
   slice_max(sub_rur_ratio, n = 15, with_ties = FALSE)
 #odd ratio labels labels
 sub_rur_odds_lab <- data.frame(x = c(sub_rur_odds$short_name),
-                           y = c(.25 + sub_rur_odds$sub_rur_ratio),
+                           y = c(.15 + sub_rur_odds$sub_rur_ratio),
                            lab = c(paste0(round(sub_rur_odds$sub_rur_ratio, 1), "x")))
 #viz
 sub_rur_odds_viz <- sub_rur_odds %>% 
   ggplot(aes(reorder(short_name, -sub_rur_ratio), sub_rur_ratio)) +
-  geom_bar(stat = "identity", position = "dodge") +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1A4C81") +
   coord_flip() +
-  geom_text(aes(x = short_name, y = sub_rur_odds_lab$y, label = sub_rur_odds_lab$lab)) +
+  geom_text(aes(x = short_name, y = sub_rur_odds_lab$y, label = sub_rur_odds_lab$lab),
+            color = "#EF464B", size = 7, family = "Bebas Neue") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend +
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank()) +
   labs(x = "",
@@ -554,5 +573,30 @@ sub_rur_odds_viz <- sub_rur_odds %>%
        subtitle = "as compared to rural schools using raw odds ratios")
   
 sub_rur_odds_viz
+```
+
+Save plots:
+```{r, eval = FALSE}
+#across plots
+ggsave("urb-rur_across.png", plot = urb_rur_viz, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("urb-sub_across.png", plot = urb_sub_viz, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sub-rur_across.png", plot = urb_sub_viz, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+#within plots
+ggsave("urb-rur_within.png", plot = urb_rur_viz_2, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("urb-sub_within.png", plot = urb_sub_viz_2, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sub-rur_within.png", plot = sub_rur_viz_2, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+#odds charts
+ggsave("urb-rur_odds_chart_raw.png", plot = urb_rur_odds_viz, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("urb-sub_odds_chart_raw.png", plot = urb_sub_odds_viz, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sub-rur_odds_chart_raw.png", plot = sub_rur_odds_viz, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
 ```
 

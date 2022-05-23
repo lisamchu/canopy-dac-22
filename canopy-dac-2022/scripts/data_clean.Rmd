@@ -131,11 +131,12 @@ Can also recode so NA is the same as Not Reported if needed.
 
 ```{r private grade recode, eval = FALSE}
 #recode all numeric values to "Yes" and factor
-old_dat <- old_dat %>% 
+clean_private_grades <- old_dat %>% 
   mutate_at(vars(starts_with("nces_grades_")), na_if, "") %>% 
   mutate_at(vars(starts_with("nces_grades_")), str_replace, "[:digit:][:digit:]", "Yes") %>% 
   mutate_at(vars(starts_with("nces_grades_")), str_replace, "[:digit:]", "Yes") %>% 
   mutate_at(vars(starts_with("nces_grades_")), factor)
+unique(clean_private_grades$nces_grades_3rd)
 ```
 
 ### Convert `nces_race_*` to percentages and merge `self_reported_*` and `nces_race_*`    
@@ -231,7 +232,7 @@ Schools include:
 *Status:* Complete
 
 ```{r merge grades}
-clean_grades <- old_dat %>% 
+clean_grades <- clean_private_grades %>% 
   select(school_id, starts_with("nces_grades_"), starts_with("self_reported_grades_")) %>% 
   mutate_at(vars(starts_with("self_reported_grades_")), na_if, 0) %>% 
   mutate_all(na_if, "") %>% 
