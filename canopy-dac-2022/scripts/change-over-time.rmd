@@ -19,9 +19,9 @@ xwalk = read_csv(here("data/Tags-SY2021-22 Tags.csv"), show_col_types = FALSE) %
 ```
 
 ```{r}
-
-## TODO: make sure 2020 schools are not duplicated
-## TODO: re-run with only schools that participated in all 4 years
+## Notes 5 May 2022:
+## DONE: make sure 2020 schools are not duplicated--they were not duplicated
+## DONE: re-run with only schools that participated in last 2 years--added new section
 ## TODO: within schools that participated multiple years, look at tag additions and subtractions
 all_tags = unique(na.omit(unlist(xwalk)))
 
@@ -73,7 +73,7 @@ ggplot(long, aes(x = year, y = pct_practicing, group = tag)) +
   )
 ```
 
-```{r, fig.height=10, echo = TRUE}
+```{r, fig.height=10, fig.width = 9, echo = TRUE}
 long %>% 
   mutate(year_i = as.integer(year) - 2019) %>%
   group_by(tag) %>%
@@ -113,8 +113,140 @@ coefs %>%
   slice(1:20) %>%
   unnest(data) %>%
   select(-year_i, -term, -statistic) %>%
-  datatable() %>%
+  datatable(
+    caption = "Percentage change in practice representation among all Canopy schools"
+  ) %>%
   formatRound(digits = 3,columns = c("estimate", "std.error", "p.value")) %>%
   formatPercentage(columns = "pct_practicing", digits = 1)
+```
+
+## Repeat Schools
+
+Repeating the analysis above, limited to schools that responded in multiple years.
+
+```{r repeat_schools, fig.height=11, fig.width= 9}
+repeat_schools = over_time %>%
+  group_by(school_id) %>%
+  filter(n_distinct(year) > 1 & "2022" %in% year) %>%
+  pull(school_id)
+
+over_time %>%
+  filter(school_id %in% repeat_schools) %>%
+  pivot_longer(cols = starts_with("practice"), names_to = "tag") %>%
+  mutate(flag = case_when(is.na(value) | value == "0" ~ 0L, TRUE ~ 1L)) %>%
+  group_by(year) %>%
+  mutate(n_sch_year = n_distinct(school_id)) %>%
+  group_by(year, tag) %>%
+  summarize(pct_practicing = mean(flag), n_sch_year = first(n_sch_year), .groups = "drop") %>%
+  filter(pct_practicing > 0) ->
+  long_rpt
+
+long_rpt %>% 
+  mutate(year_i = as.integer(year) - 2021) %>%
+  group_by(tag) %>%
+  nest() %>%
+  mutate(
+    models = lapply(data, \(df) tidy(lm(pct_practicing ~ year_i, data = df)))
+  ) -> mods_rpt
+
+mods_rpt %>%
+  unnest(models) %>%
+  filter(term == "year_i") ->
+  coefs_rpt
+
+coefs_rpt %>%
+  ungroup %>%
+  filter(!is.na(estimate)) %>%
+  mutate(rank = rank(-abs(estimate))) %>%
+  arrange(rank) %>%
+  mutate(tag = reorder(factor(tag), estimate)) -> coefs_rpt
+
+ggplot(coefs_rpt, aes(y = tag, x = estimate)) +
+  geom_point(aes(color = rank), size = 3) +
+  scale_color_continuous(guide = "none", trans = "reverse") +
+  scale_y_discrete(labels = label_tags) +
+  scale_x_continuous(labels = scales::label_percent(accuracy = 1)) +
+  labs(
+    x = "Percentage point change\nin schools selecting practices",
+    y = "",
+    title = "Average change in tagging patterns\nfor schools with repeated measures"
+  ) +
+  theme(axis.text.y = element_text(size = rel(0.5)))
+
+```
+
+```{r}
+coefs_rpt %>% 
+  arrange(rank) %>%
+  #slice(1:20) %>%
+  unnest(data) %>%
+  select(-year_i, -term, -statistic) %>%
+  datatable(
+    caption = "Percentage change in practice representation among repeat measure Canopy schools"
+  ) %>%
+  formatRound(digits = 3,columns = c("estimate", "std.error", "p.value")) %>%
+  formatPercentage(columns = "pct_practicing", digits = 1)
+```
+
+
+## Tags added and subtracted by schools over time
+
+```{r, fig.height= 18, fig.width = 22}
+over_time %>%
+  group_by(school_id) %>%
+  filter(n_distinct(year) > 1 & "2022" %in% year) %>%
+  arrange(desc(year)) %>%
+  slice(1:2) %>% ## last 2 observations for each 2022 repeat school
+  ungroup %>%
+  pivot_longer(cols = starts_with("practice"), names_to = "tag") %>%
+  mutate(flag = case_when(is.na(value) | value == "0" ~ 0L, TRUE ~ 1L)) %>%
+  group_by(school_id, tag) %>%
+  arrange(desc(year)) %>%
+  summarize(
+    change = case_when(
+      all(value == 0) ~ NA_character_,
+      all(value == 1) ~ "Kept",
+      value[1] == 0 & value[2] == 1 ~ "Added",
+      value[2] == 1 & value[1] == 0 ~ "Retired",
+      TRUE ~ NA_character_
+    ), .groups = "drop"
+  ) %>% 
+  filter(tag %in% coefs_rpt$tag) %>%
+  mutate(change_score = case_when(
+    change == "Kept" ~ 1L,
+    change %in% c("Added", "Retired") ~ 3L,
+    TRUE ~ 0L
+  )) %>%
+  mutate(school_id = reorder(school_id, -change_score, FUN = sum)) %>%
+  left_join(coefs_rpt %>% select(tag, rank), by = "tag") %>%
+  mutate(tag = reorder(tag, rank)) ->
+  tag_changes
+
+ggplot(tag_changes, aes(x = school_id, y = tag, fill = change)) +
+  geom_tile() + 
+  labs(
+    x = "School (sorted by number of practices added/identified",
+    y = "Practice (sorted according to the table above)",
+    title = "Practices added, kept, and retired by repeat Canopy schools in their most recent 2 responses",
+    subtitle = 
+"There are no red squares: no 2022 Canopy school indicated they retired a practice
+compared to their previous Canopy response.",
+    fill = "Action"
+  ) +
+  scale_fill_manual(
+    values = c(
+      Kept = transcend_cols_noname("teal"),
+      Added = transcend_cols_noname("blue"),
+      Retired = transcend_cols_noname("red")
+    ),
+    na.value = transcend_grays[3]
+  ) +
+  scale_y_discrete(
+    labels = label_tags
+  ) +
+  coord_equal() +
+  theme_transcend_sparse +
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+  
 ```
 
