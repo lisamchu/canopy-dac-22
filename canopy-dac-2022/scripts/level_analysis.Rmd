@@ -156,8 +156,8 @@ mid_high_odds_viz <- mid_high_odds %>%
         axis.ticks.x = element_blank()) +
   labs(x = "",
        y = "",
-       title = "How Much More Likely Elementary Schools were to \nSelect a Tag",
-       subtitle = "compared to middle schools using raw odds ratio")
+       title = "How Much More Likely Middle Schools were to \nSelect a Tag",
+       subtitle = "compared to high schools using raw odds ratio")
   
 mid_high_odds_viz
 ```
@@ -186,8 +186,8 @@ high_elem_odds_viz <- high_elem_odds %>%
         axis.ticks.x = element_blank()) +
   labs(x = "",
        y = "",
-       title = "How Much More Likely Elementary Schools were to \nSelect a Tag",
-       subtitle = "compared to middle schools using raw odds ratio")
+       title = "How Much More Likely High Schools were to \nSelect a Tag",
+       subtitle = "compared to elementary schools using raw odds ratio")
   
 high_elem_odds_viz
 ```
