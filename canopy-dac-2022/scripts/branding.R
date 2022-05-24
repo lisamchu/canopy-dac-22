@@ -126,6 +126,10 @@ transcend_cols = c(
   `light blue` = "#ADE0EE"
 )
 
+transcend_cols_noname = function(col) {
+  unname(transcend_cols[col])
+}
+
 # secondary Transcend colors when needed
 transcend_cols2 = c(
   "#BC2582",
