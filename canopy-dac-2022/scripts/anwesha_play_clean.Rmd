@@ -107,6 +107,16 @@ practice_count %>%
 head(practice_count$practices, 10)
 ```
 
+schools focused on practices
+unique number of practices 
+practices implemented (mean practices per school)
+
+bottom 5 practices for each focus 
+% of focus area
+reorder within level function -- sort practices within each facet
+color overlap in a different color -- color by how many groups they are in
+
+download transcend fonts
 
 Total practice count by school
 ```{r}
@@ -119,9 +129,18 @@ practice_focus <- df3 %>%
 practice_focus_plot <- practice_focus %>% 
   filter(practices %in% c(head(practice_count$practices, 10)))
 
-practice_focus_plot %>% 
-  ggplot(aes(x = n, y = practices)) + 
-  geom_col(fill = "navy", alpha = .8) +
-  facet_wrap(~as.factor(focus))
+library(colorblindr)
+library(tidytext)
+
+practice_focus %>% 
+  group_by(focus) %>% 
+  top_n(10) %>% 
+  ungroup() %>% 
+  mutate(perc = paste0(sprintf("%4.1f", n / sum(n) * 100), "%")) %>% 
+  ggplot(aes(x = n, y = fct_reorder(practices, n), fill = focus)) + 
+  geom_col(show.legend = FALSE, alpha = .8) +
+#  geom_text(aes(label = perc)) +
+  facet_wrap(~as.factor(focus), ncol = 3, scales = "free") +
+  scale_fill_viridis_d() 
 ```
 
