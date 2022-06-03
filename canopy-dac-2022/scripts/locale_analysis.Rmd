@@ -25,7 +25,7 @@ library(tidyverse)
 library(ggplot2)
 library(DT)
 library(scales)
-source("scripts/branding.R", local = knitr::knit_global())
+source(here("scripts", "branding.R")) #, local = knitr::knit_global()
 ```
 
 ```{r modify practices data}
@@ -610,7 +610,7 @@ Guiding questions/tasks & format:
 
 ## Urban vs. Rural - Smallest Diffs
 
-```{r urb v rur small}
+```{r urb v rur small, fig.dim = c(9, 9)}
 #data prep
 urb_rur_diff_sm <- locale_diffs_2 %>% 
   select(tag, urb_rur_diff, pct_locale_tag_urban, pct_locale_tag_rural) %>% 
@@ -629,7 +629,7 @@ urb_rur_labs_sm <- data.frame(x = c(urb_rur_diff_sm$tag),
 #reorder 
 urb_rur_diff_sm$tag <- factor(urb_rur_diff_sm$tag,
                               levels = c(unique(paste0(urb_rur_diff_sm$tag))))
-levels(urb_rur_diff_sm$tag)
+#levels(urb_rur_diff_sm$tag)
 #side-side bar chart
 urb_rur_viz_sm <- urb_rur_diff_sm %>% 
   ggplot(aes(tag, pct, fill = locale)) +
@@ -650,7 +650,7 @@ urb_rur_viz_sm
 
 ## Urban vs. Suburban - Smallest Diffs
 
-```{r urb v sub small}
+```{r urb v sub small, fig.dim = c(9, 9)}
 #data prep
 urb_sub_diff_sm <- locale_diffs_2 %>% 
   select(tag, urb_sub_diff, pct_locale_tag_urban, pct_locale_tag_suburban) %>% 
@@ -669,7 +669,7 @@ urb_sub_labs_sm <- data.frame(x = c(urb_sub_diff_sm$tag),
 #reorder 
 urb_sub_diff_sm$tag <- factor(urb_sub_diff_sm$tag,
                               levels = c(unique(paste0(urb_sub_diff_sm$tag))))
-levels(urb_sub_diff_sm$tag)
+#levels(urb_sub_diff_sm$tag)
 #side-side bar chart
 urb_sub_viz_sm <- urb_sub_diff_sm %>% 
   ggplot(aes(tag, pct, fill = locale)) +
@@ -690,9 +690,7 @@ urb_sub_viz_sm
 
 ## Suburban vs. Rural - Smallest Diffs
 
-## Urban vs. Suburban
-
-```{r urb v sub small}
+```{r sub v rur small, fig.dim = c(9, 9)}
 #data prep
 sub_rur_diff_sm <- locale_diffs_2 %>% 
   select(tag, sub_rur_diff, pct_locale_tag_suburban, pct_locale_tag_rural) %>% 
@@ -711,7 +709,7 @@ sub_rur_labs_sm <- data.frame(x = c(sub_rur_diff_sm$tag),
 #reorder 
 sub_rur_diff_sm$tag <- factor(sub_rur_diff_sm$tag,
                               levels = c(unique(paste0(sub_rur_diff_sm$tag))))
-levels(sub_rur_diff_sm$tag)
+#levels(sub_rur_diff_sm$tag)
 #side-side bar chart
 sub_rur_viz_sm <- sub_rur_diff_sm %>% 
   ggplot(aes(tag, pct, fill = locale)) +
@@ -741,5 +739,5 @@ ggsave("sub-rur_small.png", plot = sub_rur_viz_sm, path = here("outputs", "local
 ```
 
 
-## Modeled odds ratio
+
 

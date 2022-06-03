@@ -2,7 +2,13 @@
 title: "Level Analysis"
 author: "Janette Avelar"
 date: "5/23/2022"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: tango
+    code_folding: hide
 editor_options: 
   chunk_output_type: console
 ---
@@ -19,7 +25,7 @@ library(tidyverse)
 library(ggplot2)
 library(DT)
 library(scales)
-source("scripts/branding.R", local = knitr::knit_global())
+source(here("scripts", "branding.R")) #, local = knitr::knit_global())
 load(here("data", "complete_canopy_2022.RData"))
 ```
 
@@ -134,7 +140,7 @@ elem_mid_odds_viz
 
 ### Middle vs. High (odds ratio)
 
-```{r elem v mid odd viz, fig.dim = c(9, 9)}
+```{r mid v high odd viz, fig.dim = c(9, 9)}
 mid_high_odds <- level_odds %>% 
   select(tag, mid_high_ratio) %>% 
   slice_max(mid_high_ratio, n = 15, with_ties = FALSE)
@@ -164,7 +170,7 @@ mid_high_odds_viz
 
 ### High vs. Elementary (odds ratio)
 
-```{r elem v mid odd viz, fig.dim = c(9, 9)}
+```{r high v elem odd viz, fig.dim = c(9, 9)}
 high_elem_odds <- level_odds %>% 
   select(tag, high_elem_ratio) %>% 
   slice_max(high_elem_ratio, n = 15, with_ties = FALSE)
@@ -310,7 +316,7 @@ within_diffs <- level_diffs %>%
 
 ## Elementary vs. Middle - Largest Differences
 
-```{r elem v mid lg}
+```{r elem v mid lg, fig.dim = c(9, 9)}
 #pull top 10 lg diff
 elem_mid_diff <- within_diffs %>% 
   select(tag, elem_mid_diff, pct_school_elementary, pct_school_middle) %>% 
@@ -328,7 +334,7 @@ elem_mid_labs <- data.frame(x = c(elem_mid_diff$tag),
                             lab = c("", "14.63%", "", "13.73%", "", "13.16%", "12.69%", "", "12.09%", "", "", "11.61%", "", "11.22%", "", "10.69%", "", "10.63%", "", "9.73%"))
 #reorder factor
 elem_mid_diff$tag <- factor(elem_mid_diff$tag, levels = c(unique(paste0(elem_mid_diff$tag))))
-levels(elem_mid_diff$tag)
+#levels(elem_mid_diff$tag)
 #side-side bar chart
 elem_mid_viz <- elem_mid_diff %>% 
   ggplot(aes(tag, pct, fill = level)) +
@@ -350,7 +356,7 @@ elem_mid_viz
 
 ## Middle vs. High - Largest Differences
 
-```{r mid v high lg}
+```{r mid v high lg, fig.dim = c(9, 9)}
 #pull top 10 lg diff
 mid_high_diff <- within_diffs %>% 
   select(tag, mid_high_diff, pct_school_middle, pct_school_high) %>% 
@@ -368,7 +374,7 @@ mid_high_labs <- data.frame(x = c(mid_high_diff$tag),
                             lab = c("", "34.97%", "", "33.17%", "", "32.29%", "", "25.52%", "", "22.44%", "", "18.2%", "16.88%", "", "", "16.69%", "", "15.09%", "", "14.83%"))
 #reorder factor
 mid_high_diff$tag <- factor(mid_high_diff$tag, levels = c(unique(paste0(mid_high_diff$tag))))
-levels(mid_high_diff$tag)
+#levels(mid_high_diff$tag)
 #side-side bar chart
 mid_high_viz <- mid_high_diff %>% 
   ggplot(aes(tag, pct, fill = level)) +
@@ -390,7 +396,7 @@ mid_high_viz
 
 ## High vs. Elementary - Largest Differences
 
-```{r high v elem lg}
+```{r high v elem lg, fig.dim = c(9, 9)}
 #pull top 10 lg diff
 high_elem_diff <- within_diffs %>% 
   select(tag, high_elem_diff, pct_school_high, pct_school_elementary) %>% 
@@ -408,7 +414,7 @@ high_elem_labs <- data.frame(x = c(high_elem_diff$tag),
                             lab = c("46.02%", "", "43.27%", "", "32.52%", "", "31.94%", "", "", "29.57%", "22.99%", "", "21.87%", "", "20.82%", "", "18.65%", "", "18.49%", ""))
 #reorder factor
 high_elem_diff$tag <- factor(high_elem_diff$tag, levels = c(unique(paste0(high_elem_diff$tag))))
-levels(high_elem_diff$tag)
+#levels(high_elem_diff$tag)
 #side-side bar chart
 high_elem_viz <- high_elem_diff %>% 
   ggplot(aes(tag, pct, fill = level)) +
@@ -430,7 +436,7 @@ high_elem_viz
 
 ## Elementary vs. Middle - Smallest Differences
 
-```{r elem v mid sm}
+```{r elem v mid sm, fig.dim = c(9, 9)}
 #pull top 10 sm diff
 elem_mid_diff_sm <- within_diffs %>% 
   select(tag, elem_mid_diff, pct_school_elementary, pct_school_middle) %>% 
@@ -448,7 +454,7 @@ elem_mid_labs_sm <- data.frame(x = c(elem_mid_diff_sm$tag),
                             lab = c("< 1%", "", "", "< 1%", "", "< 1%", "< 1%", "", "< 1%", "", "", "< 1%", "", "< 1%", "< 1%", "", "", "< 1%", "< 1%", ""))
 #reorder factor
 elem_mid_diff_sm$tag <- factor(elem_mid_diff_sm$tag, levels = c(unique(paste0(elem_mid_diff_sm$tag))))
-levels(elem_mid_diff_sm$tag)
+#levels(elem_mid_diff_sm$tag)
 #side-side bar chart
 elem_mid_viz_sm <- elem_mid_diff_sm %>% 
   ggplot(aes(tag, pct, fill = level)) +
@@ -470,7 +476,7 @@ elem_mid_viz_sm
 
 ## Middle vs. High - Smallest Differences
 
-```{r mid v high sm}
+```{r mid v high sm, fig.dim = c(9, 9)}
 #pull top 10 lg diff
 mid_high_diff_sm <- within_diffs %>% 
   select(tag, mid_high_diff, pct_school_middle, pct_school_high) %>% 
@@ -488,7 +494,7 @@ mid_high_labs_sm <- data.frame(x = c(mid_high_diff_sm$tag),
                             lab = c("", "< 1%", "<1 %", "", "< 1%", "", "< 1%", "", "", "< 1%", "< 1%", "", "", "< 1%", "", "1%", "", "1.06%", "", "1.35%"))
 #reorder factor
 mid_high_diff_sm$tag <- factor(mid_high_diff_sm$tag, levels = c(unique(paste0(mid_high_diff_sm$tag))))
-levels(mid_high_diff_sm$tag)
+#levels(mid_high_diff_sm$tag)
 #side-side bar chart
 mid_high_viz_sm <- mid_high_diff_sm %>% 
   ggplot(aes(tag, pct, fill = level)) +
@@ -510,7 +516,7 @@ mid_high_viz_sm
 
 ## High vs. Elementary - Smallest Differences
 
-```{r high v elem sm}
+```{r high v elem sm, fig.dim = c(9, 9)}
 #pull top 10 lg diff
 high_elem_diff_sm <- within_diffs %>% 
   select(tag, high_elem_diff, pct_school_high, pct_school_elementary) %>% 
@@ -528,7 +534,7 @@ high_elem_labs_sm <- data.frame(x = c(high_elem_diff_sm$tag),
                             lab = c("", "< 1%", "< 1%", "", "< 1%", "", "", "< 1%", "", "< 1%", "< 1%", "", "< 1%", "", "", "< 1%", "", "< 1%", "1.14%", ""))
 #reorder factor
 high_elem_diff_sm$tag <- factor(high_elem_diff_sm$tag, levels = c(unique(paste0(high_elem_diff_sm$tag))))
-levels(high_elem_diff_sm$tag)
+#levels(high_elem_diff_sm$tag)
 #side-side bar chart
 high_elem_viz_sm <- high_elem_diff_sm %>% 
   ggplot(aes(tag, pct, fill = level)) +

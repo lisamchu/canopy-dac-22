@@ -41,6 +41,7 @@ Guiding questions/tasks & format:
 * microschool = 12  
 * homeschool = 5  
 * hub = 3  
+
 **Multicoded cases**
 * district AND charter = 4  
 * district AND sws = 5  
