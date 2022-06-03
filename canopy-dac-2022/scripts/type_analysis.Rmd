@@ -19,7 +19,7 @@ library(tidyverse)
 library(ggplot2)
 library(DT)
 library(scales)
-source("scripts/branding.R", local = knitr::knit_global())
+#source("scripts/branding.R", local = knitr::knit_global())
 load(here("data", "complete_canopy_2022.RData"))
 ```
 
@@ -105,6 +105,41 @@ type_tags <- clean_data_full %>%
          pct_school = n/156, #only 156 schools in the analysis
          pct_total_tags = n/total_tags_type) #schools in each locale per tag / total tags in locale - ignore for odds
 ```
+
+Further cleaning needed. Multi-coded and non-coded data:
+
+```{r further cleaning}
+type_ip <- clean_data_full %>% 
+  select(school_id, school_name, starts_with("school_descriptor_")) %>% 
+  group_by(school_id) %>% 
+  mutate(multicoded = school_descriptor_district + school_descriptor_charter + school_descriptor_independent + school_descriptor_sws + school_descriptor_virtual + school_descriptor_microschool + school_descriptor_homeschool + school_descriptor_hub + school_descriptor_other,
+         multicoded = ifelse(multicoded==1, "no", "yes")) %>% 
+  filter(multicoded == "yes") %>% 
+  mutate(school_descriptor_district = ifelse(school_descriptor_district==1, "district", NA),
+         school_descriptor_charter = ifelse(school_descriptor_charter==1, "charter", NA),
+         school_descriptor_independent = ifelse(school_descriptor_independent==1, "independent", NA),
+         school_descriptor_sws = ifelse(school_descriptor_sws==1, "sws", NA),
+         school_descriptor_virtual = ifelse(school_descriptor_virtual==1, "virtual", NA),
+         school_descriptor_microschool = ifelse(school_descriptor_microschool==1, "microschool", NA),
+         school_descriptor_homeschool = ifelse(school_descriptor_homeschool==1, "homeschool", NA),
+         school_descriptor_hub = ifelse(school_descriptor_hub==1, "hub", NA),
+         school_descriptor_other = ifelse(school_descriptor_other==1, "other", NA),
+         school_descriptor_other_text = na_if(school_descriptor_other_text, 0)) %>% 
+  unite("multicoded_info", c(school_descriptor_district, school_descriptor_charter, school_descriptor_independent, school_descriptor_sws, school_descriptor_virtual, school_descriptor_microschool, school_descriptor_homeschool, school_descriptor_hub, school_descriptor_other, school_descriptor_other_text), na.rm = TRUE) %>% 
+  ungroup() %>% 
+  select(-multicoded, -school_id) %>% 
+  rename(multicoded = multicoded_info) %>% 
+  mutate(multicoded = str_replace_all(multicoded, "_", " and "))
+
+type_na <- data.frame(school_name = c("Boston Day And Evening Academy", "CodeRVA Regional High School", "The Metropolitan Regional Career And Technical Center", "Grant Beacon Middle School", "Utah Schools For The Deaf"),
+                      multicoded = rep("missing", 5))
+
+type_ip <- type_ip %>% 
+  rbind(type_ip, type_na)
+
+#export(type_ip, "multicoded_type.csv")
+```
+
 
 ## Probability and Odds Ratios
 
