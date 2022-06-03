@@ -202,3 +202,365 @@ ggsave("mid-high_odds_chart_raw.png", plot = mid_high_odds_viz, path = here("out
 ggsave("high-elem_odds_chart_raw.png", plot = high_elem_odds_viz, path = here("outputs", "level analysis"),
        width = 12, height = 8, units = "in")
 ```
+
+# Cycle 4 (6.3.22)
+
+Notes:  
+* Elementary Schools = 50  
+* Middle Schools = 67  
+* High Schools = 93  
+* Per previous discussion, categories were not kept mutually exclusive  
+
+All visualizations reflect within-category differences, but a table of across-category differences is also included.
+
+## Level Differences Table (Across)
+
+```{r prep diffs}
+level_diffs <- level_tags %>% 
+  select(level, tag, n, pct_school) %>% 
+  pivot_wider(names_from = "level",
+              values_from = c("n", "pct_school")) %>% 
+  mutate(elem_mid_diff = abs(round(100*(pct_school_elementary - pct_school_middle), 2)),
+         mid_high_diff = abs(round(100*(pct_school_middle - pct_school_high), 2)),
+         high_elem_diff = abs(round(100*(pct_school_high - pct_school_elementary), 2)))
+#tbl
+level_diffs_tbl <- level_diffs %>% 
+  select(tag, elem_mid_diff, mid_high_diff, high_elem_diff, pct_school_elementary, pct_school_middle, pct_school_high, n_elementary, n_middle, n_high) %>% 
+  mutate(pct_school_elementary = paste0(round(100*pct_school_elementary, 2), "%"),
+         pct_school_middle = paste0(round(100*pct_school_middle, 2), "%"),
+         pct_school_high = paste0(round(100*pct_school_high, 2), "%"),
+         elem_mid_diff = paste0(elem_mid_diff, "%"),
+         mid_high_diff = paste0(mid_high_diff, "%"),
+         high_elem_diff = paste0(high_elem_diff, "%")) %>% 
+  left_join(tag_labels, by = "tag") %>% 
+  select(c(label, elem_mid_diff, mid_high_diff, high_elem_diff, pct_school_elementary, pct_school_middle, pct_school_high, n_elementary, n_middle, n_high)) %>% 
+  rename(`Tag` = label,
+         `Elementary vs. Middle Difference` = elem_mid_diff,
+         `Middle vs. High Difference` = mid_high_diff,
+         `High vs. Elementary Difference` = high_elem_diff,
+         `Pct. Tags (Elementary)` = pct_school_elementary,
+         `Pct. Tags (Middle)` = pct_school_middle,
+         `Pct. Tags (High)` = pct_school_high,
+         `N Tags (Elementary)` = n_elementary,
+         `N Tags (Middle)` = n_middle,
+         `N Tags (High)` = n_high)
+#table
+datatable(level_diffs_tbl)
+```
+
+## Level Differences Table (Within)
+
+```{r level diff tbl within}
+#Get number of schools in each category
+counts <- clean_data_full %>% 
+  select(school_id, grades_elementary, grades_middle, grades_high, starts_with("practices")) %>% 
+  filter(!c(is.na(grades_elementary) & is.na(grades_middle) & is.na(grades_high))) %>% 
+  mutate(grades_elementary = ifelse(grades_elementary==1, "elementary", "none"),
+         grades_middle = ifelse(grades_middle==1, "middle", "none"),
+         grades_high = ifelse(grades_high==1, "high", "none")) %>% 
+  pivot_longer(cols = starts_with("grades"),
+               names_to = "og_level",
+               values_to = "level") %>% 
+  select(-og_level) %>% 
+  filter(!level=="none") %>% 
+  select(level) %>% 
+  summarize(n_sch_elem = sum(level=="elementary"),
+         n_sch_mid = sum(level=="middle"),
+         n_sch_high = sum(level=="high"))
+#now prep table
+level_diffs_tbl_2 <- level_diffs %>% 
+  mutate(pct_school_elementary = n_elementary / counts$n_sch_elem, #denom = total schools within category
+         pct_school_middle = n_middle / counts$n_sch_mid,
+         pct_school_high = n_high / counts$n_sch_high,
+         elem_mid_diff = abs(pct_school_elementary - pct_school_middle), #modify percentages to reflect within groups
+         mid_high_diff = abs(pct_school_middle - pct_school_high),
+         high_elem_diff = abs(pct_school_high - pct_school_elementary)) %>% 
+  left_join(tag_labels, by = "tag") %>% 
+  select(label, elem_mid_diff, mid_high_diff, high_elem_diff, pct_school_elementary, pct_school_middle, pct_school_high, n_elementary, n_middle, n_high) %>% 
+  #pretty up cols
+  mutate(pct_school_elementary = paste0(round(100*pct_school_elementary, 2), "%"),
+         pct_school_middle = paste0(round(100*pct_school_middle, 2), "%"),
+         pct_school_high = paste0(round(100*pct_school_high, 2), "%"),
+         elem_mid_diff = paste0(round(100*elem_mid_diff, 2), "%"),
+         mid_high_diff = paste0(round(100*mid_high_diff, 2), "%"),
+         high_elem_diff = paste0(round(100*high_elem_diff, 2), "%")) %>% 
+  rename(`Tag` = label,
+         `Elementary vs. Middle Difference` = elem_mid_diff,
+         `Middle vs. High Difference` = mid_high_diff,
+         `High vs. Elementary Difference` = high_elem_diff,
+         `Pct. Tags (Elementary)` = pct_school_elementary,
+         `Pct. Tags (Middle)` = pct_school_middle,
+         `Pct. Tags (High)` = pct_school_high,
+         `N Tags (Elementary)` = n_elementary,
+         `N Tags (Middle)` = n_middle,
+         `N Tags (High)` = n_high)
+#table
+datatable(level_diffs_tbl_2)
+```
+
+```{r within dat}
+within_diffs <- level_diffs %>% 
+  mutate(pct_school_elementary = n_elementary / counts$n_sch_elem, #denom = total schools within category
+         pct_school_middle = n_middle / counts$n_sch_mid,
+         pct_school_high = n_high / counts$n_sch_high,
+         elem_mid_diff = abs(pct_school_elementary - pct_school_middle), #modify percentages to reflect within groups
+         mid_high_diff = abs(pct_school_middle - pct_school_high),
+         high_elem_diff = abs(pct_school_high - pct_school_elementary))
+```
+
+## Elementary vs. Middle - Largest Differences
+
+```{r elem v mid lg}
+#pull top 10 lg diff
+elem_mid_diff <- within_diffs %>% 
+  select(tag, elem_mid_diff, pct_school_elementary, pct_school_middle) %>% 
+  slice_max(elem_mid_diff, n = 10, with_ties = FALSE) %>% 
+    mutate(elem_mid_diff = paste0(round(100*elem_mid_diff, 2), "%"),
+         pct_school_elementary = 100*pct_school_elementary,
+         pct_school_middle = 100*pct_school_middle) %>% 
+  pivot_longer(cols = c("pct_school_elementary", "pct_school_middle"),
+               names_to = "level",
+               names_prefix = "pct_school_",
+               values_to = "pct")
+#create labels
+elem_mid_labs <- data.frame(x = c(elem_mid_diff$tag),
+                            y = c(2 + elem_mid_diff$pct),
+                            lab = c("", "14.63%", "", "13.73%", "", "13.16%", "12.69%", "", "12.09%", "", "", "11.61%", "", "11.22%", "", "10.69%", "", "10.63%", "", "9.73%"))
+#reorder factor
+elem_mid_diff$tag <- factor(elem_mid_diff$tag, levels = c(unique(paste0(elem_mid_diff$tag))))
+levels(elem_mid_diff$tag)
+#side-side bar chart
+elem_mid_viz <- elem_mid_diff %>% 
+  ggplot(aes(tag, pct, fill = level)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = elem_mid_labs$x, y = elem_mid_labs$y, label = elem_mid_labs$lab), color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences between Elementary and Middle Schools",
+       subtitle = "Comparison within level types - denominator = schools within level")
+
+elem_mid_viz
+```
+
+
+## Middle vs. High - Largest Differences
+
+```{r mid v high lg}
+#pull top 10 lg diff
+mid_high_diff <- within_diffs %>% 
+  select(tag, mid_high_diff, pct_school_middle, pct_school_high) %>% 
+  slice_max(mid_high_diff, n = 10, with_ties = FALSE) %>% 
+    mutate(mid_high_diff = paste0(round(100*mid_high_diff, 2), "%"),
+         pct_school_middle = 100*pct_school_middle,
+         pct_school_high = 100*pct_school_high) %>% 
+  pivot_longer(cols = c("pct_school_middle", "pct_school_high"),
+               names_to = "level",
+               names_prefix = "pct_school_",
+               values_to = "pct")
+#create labels
+mid_high_labs <- data.frame(x = c(mid_high_diff$tag),
+                            y = c(2 + mid_high_diff$pct),
+                            lab = c("", "34.97%", "", "33.17%", "", "32.29%", "", "25.52%", "", "22.44%", "", "18.2%", "16.88%", "", "", "16.69%", "", "15.09%", "", "14.83%"))
+#reorder factor
+mid_high_diff$tag <- factor(mid_high_diff$tag, levels = c(unique(paste0(mid_high_diff$tag))))
+levels(mid_high_diff$tag)
+#side-side bar chart
+mid_high_viz <- mid_high_diff %>% 
+  ggplot(aes(tag, pct, fill = level)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = mid_high_labs$x, y = mid_high_labs$y, label = mid_high_labs$lab), color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences between Middle and High Schools",
+       subtitle = "Comparison within level types - denominator = schools within level")
+
+mid_high_viz
+```
+
+
+## High vs. Elementary - Largest Differences
+
+```{r high v elem lg}
+#pull top 10 lg diff
+high_elem_diff <- within_diffs %>% 
+  select(tag, high_elem_diff, pct_school_high, pct_school_elementary) %>% 
+  slice_max(high_elem_diff, n = 10, with_ties = FALSE) %>% 
+    mutate(high_elem_diff = paste0(round(100*high_elem_diff, 2), "%"),
+         pct_school_elementary = 100*pct_school_elementary,
+         pct_school_high = 100*pct_school_high) %>% 
+  pivot_longer(cols = c("pct_school_high", "pct_school_elementary"),
+               names_to = "level",
+               names_prefix = "pct_school_",
+               values_to = "pct")
+#create labels
+high_elem_labs <- data.frame(x = c(high_elem_diff$tag),
+                            y = c(2 + high_elem_diff$pct),
+                            lab = c("46.02%", "", "43.27%", "", "32.52%", "", "31.94%", "", "", "29.57%", "22.99%", "", "21.87%", "", "20.82%", "", "18.65%", "", "18.49%", ""))
+#reorder factor
+high_elem_diff$tag <- factor(high_elem_diff$tag, levels = c(unique(paste0(high_elem_diff$tag))))
+levels(high_elem_diff$tag)
+#side-side bar chart
+high_elem_viz <- high_elem_diff %>% 
+  ggplot(aes(tag, pct, fill = level)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = high_elem_labs$x, y = high_elem_labs$y, label = high_elem_labs$lab), color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences between High and Elementary Schools",
+       subtitle = "Comparison within level types - denominator = schools within level")
+
+high_elem_viz
+```
+
+
+## Elementary vs. Middle - Smallest Differences
+
+```{r elem v mid sm}
+#pull top 10 sm diff
+elem_mid_diff_sm <- within_diffs %>% 
+  select(tag, elem_mid_diff, pct_school_elementary, pct_school_middle) %>% 
+  slice_min(elem_mid_diff, n = 10, with_ties = FALSE) %>% 
+    mutate(elem_mid_diff = paste0(round(100*elem_mid_diff, 2), "%"),
+         pct_school_elementary = 100*pct_school_elementary,
+         pct_school_middle = 100*pct_school_middle) %>% 
+  pivot_longer(cols = c("pct_school_elementary", "pct_school_middle"),
+               names_to = "level",
+               names_prefix = "pct_school_",
+               values_to = "pct")
+#create labels
+elem_mid_labs_sm <- data.frame(x = c(elem_mid_diff_sm$tag),
+                            y = c(2 + elem_mid_diff_sm$pct),
+                            lab = c("< 1%", "", "", "< 1%", "", "< 1%", "< 1%", "", "< 1%", "", "", "< 1%", "", "< 1%", "< 1%", "", "", "< 1%", "< 1%", ""))
+#reorder factor
+elem_mid_diff_sm$tag <- factor(elem_mid_diff_sm$tag, levels = c(unique(paste0(elem_mid_diff_sm$tag))))
+levels(elem_mid_diff_sm$tag)
+#side-side bar chart
+elem_mid_viz_sm <- elem_mid_diff_sm %>% 
+  ggplot(aes(tag, pct, fill = level)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = elem_mid_labs_sm$x, y = elem_mid_labs_sm$y, label = elem_mid_labs_sm$lab), color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Smallest Differences between Elementary and Middle Schools",
+       subtitle = "Comparison within level types - denominator = schools within level")
+
+elem_mid_viz_sm
+```
+
+
+## Middle vs. High - Smallest Differences
+
+```{r mid v high sm}
+#pull top 10 lg diff
+mid_high_diff_sm <- within_diffs %>% 
+  select(tag, mid_high_diff, pct_school_middle, pct_school_high) %>% 
+  slice_min(mid_high_diff, n = 10, with_ties = FALSE) %>% 
+    mutate(mid_high_diff = paste0(round(100*mid_high_diff, 2), "%"),
+         pct_school_middle = 100*pct_school_middle,
+         pct_school_high = 100*pct_school_high) %>% 
+  pivot_longer(cols = c("pct_school_middle", "pct_school_high"),
+               names_to = "level",
+               names_prefix = "pct_school_",
+               values_to = "pct")
+#create labels
+mid_high_labs_sm <- data.frame(x = c(mid_high_diff_sm$tag),
+                            y = c(4 + mid_high_diff_sm$pct),
+                            lab = c("", "< 1%", "<1 %", "", "< 1%", "", "< 1%", "", "", "< 1%", "< 1%", "", "", "< 1%", "", "1%", "", "1.06%", "", "1.35%"))
+#reorder factor
+mid_high_diff_sm$tag <- factor(mid_high_diff_sm$tag, levels = c(unique(paste0(mid_high_diff_sm$tag))))
+levels(mid_high_diff_sm$tag)
+#side-side bar chart
+mid_high_viz_sm <- mid_high_diff_sm %>% 
+  ggplot(aes(tag, pct, fill = level)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = mid_high_labs_sm$x, y = mid_high_labs_sm$y, label = mid_high_labs_sm$lab), color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Smallest Differences between Middle and High Schools",
+       subtitle = "Comparison within level types - denominator = schools within level")
+
+mid_high_viz_sm
+```
+
+
+## High vs. Elementary - Smallest Differences
+
+```{r high v elem sm}
+#pull top 10 lg diff
+high_elem_diff_sm <- within_diffs %>% 
+  select(tag, high_elem_diff, pct_school_high, pct_school_elementary) %>% 
+  slice_min(high_elem_diff, n = 10, with_ties = FALSE) %>% 
+    mutate(high_elem_diff = paste0(round(100*high_elem_diff, 2), "%"),
+         pct_school_elementary = 100*pct_school_elementary,
+         pct_school_high = 100*pct_school_high) %>% 
+  pivot_longer(cols = c("pct_school_high", "pct_school_elementary"),
+               names_to = "level",
+               names_prefix = "pct_school_",
+               values_to = "pct")
+#create labels
+high_elem_labs_sm <- data.frame(x = c(high_elem_diff_sm$tag),
+                            y = c(2 + high_elem_diff_sm$pct),
+                            lab = c("", "< 1%", "< 1%", "", "< 1%", "", "", "< 1%", "", "< 1%", "< 1%", "", "< 1%", "", "", "< 1%", "", "< 1%", "1.14%", ""))
+#reorder factor
+high_elem_diff_sm$tag <- factor(high_elem_diff_sm$tag, levels = c(unique(paste0(high_elem_diff_sm$tag))))
+levels(high_elem_diff_sm$tag)
+#side-side bar chart
+high_elem_viz_sm <- high_elem_diff_sm %>% 
+  ggplot(aes(tag, pct, fill = level)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = high_elem_labs_sm$x, y = high_elem_labs_sm$y, label = high_elem_labs_sm$lab), color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Smallest Differences between High and Elementary Schools",
+       subtitle = "Comparison within level types - denominator = schools within level")
+
+high_elem_viz_sm
+```
+
+Save plots:
+```{r, eval = FALSE}
+#largest diffs
+ggsave("elem-mid_lg-diff.png", plot = elem_mid_viz, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("mid-high_lg-diff.png", plot = mid_high_viz, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("high-elem_lg-diff.png", plot = high_elem_viz, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+#smallest diffs
+ggsave("elem-mid_sm-diff.png", plot = elem_mid_viz_sm, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("mid-high_sm-diff.png", plot = mid_high_viz_sm, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("high-elem_sm-diff.png", plot = high_elem_viz_sm, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+```

@@ -600,3 +600,146 @@ ggsave("sub-rur_odds_chart_raw.png", plot = sub_rur_odds_viz, path = here("outpu
        width = 12, height = 8, units = "in")
 ```
 
+
+# Cycle 4 (6.3.22)
+
+Guiding questions/tasks & format:  
+`LOCALE`: How do tagging patterns differ among rural, urban, and suburban schools?  
+* viz of *smallest* differences between categories (urban vs. rural; rural vs. suburban; suburban vs. urban)  
+* odds ratio modeled  
+
+## Urban vs. Rural - Smallest Diffs
+
+```{r urb v rur small}
+#data prep
+urb_rur_diff_sm <- locale_diffs_2 %>% 
+  select(tag, urb_rur_diff, pct_locale_tag_urban, pct_locale_tag_rural) %>% 
+  slice_min(urb_rur_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(urb_rur_diff = paste(round(1*urb_rur_diff, 2), "%"),
+         pct_locale_tag_urban = 100*pct_locale_tag_urban,
+         pct_locale_tag_rural = 100*pct_locale_tag_rural) %>%
+  pivot_longer(cols = c("pct_locale_tag_urban", "pct_locale_tag_rural"),
+               names_to = "locale",
+               names_prefix = "pct_locale_tag_",
+               values_to = "pct")
+#pct labels
+urb_rur_labs_sm <- data.frame(x = c(urb_rur_diff_sm$tag),
+                             y = c(2 + urb_rur_diff_sm$pct),
+                             lab = c("< 1%", "", "< 1%", "", "", "< 1%", "", "< 1%", "", "< 1%", "", "< 1%", "", "< 1%", "", "1.68%", "", "1.72%", "", "1.96%"))
+#reorder 
+urb_rur_diff_sm$tag <- factor(urb_rur_diff_sm$tag,
+                              levels = c(unique(paste0(urb_rur_diff_sm$tag))))
+levels(urb_rur_diff_sm$tag)
+#side-side bar chart
+urb_rur_viz_sm <- urb_rur_diff_sm %>% 
+  ggplot(aes(tag, pct, fill = locale)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = urb_rur_labs_sm$x, y = urb_rur_labs_sm$y, label = urb_rur_labs_sm$lab),
+            color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools",
+       title = "Top 10 Tags with Smallest Differences between Urban and Rural Schools",
+       subtitle = "Comparison within locale types - denominator = schools within locale")
+urb_rur_viz_sm
+```
+
+## Urban vs. Suburban - Smallest Diffs
+
+```{r urb v sub small}
+#data prep
+urb_sub_diff_sm <- locale_diffs_2 %>% 
+  select(tag, urb_sub_diff, pct_locale_tag_urban, pct_locale_tag_suburban) %>% 
+  slice_min(urb_sub_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(urb_sub_diff = paste(round(1*urb_sub_diff, 2), "%"),
+         pct_locale_tag_urban = 100*pct_locale_tag_urban,
+         pct_locale_tag_suburban = 100*pct_locale_tag_suburban) %>%
+  pivot_longer(cols = c("pct_locale_tag_urban", "pct_locale_tag_suburban"),
+               names_to = "locale",
+               names_prefix = "pct_locale_tag_",
+               values_to = "pct")
+#pct labels
+urb_sub_labs_sm <- data.frame(x = c(urb_sub_diff_sm$tag),
+                             y = c(2 + urb_sub_diff_sm$pct),
+                             lab = c("< 1%", "", "", "< 1%", "< 1%", "", "", "< 1%", "< 1%", "", "", "< 1%", "", "< 1%", "", "1.06%", "", "1.06%", "1.36%", ""))
+#reorder 
+urb_sub_diff_sm$tag <- factor(urb_sub_diff_sm$tag,
+                              levels = c(unique(paste0(urb_sub_diff_sm$tag))))
+levels(urb_sub_diff_sm$tag)
+#side-side bar chart
+urb_sub_viz_sm <- urb_sub_diff_sm %>% 
+  ggplot(aes(tag, pct, fill = locale)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = urb_sub_labs_sm$x, y = urb_sub_labs_sm$y, label = urb_sub_labs_sm$lab),
+            color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools",
+       title = "Top 10 Tags with Smallest Differences between Urban and Suburban Schools",
+       subtitle = "Comparison within locale types - denominator = schools within locale")
+urb_sub_viz_sm
+```
+
+## Suburban vs. Rural - Smallest Diffs
+
+## Urban vs. Suburban
+
+```{r urb v sub small}
+#data prep
+sub_rur_diff_sm <- locale_diffs_2 %>% 
+  select(tag, sub_rur_diff, pct_locale_tag_suburban, pct_locale_tag_rural) %>% 
+  slice_min(sub_rur_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(sub_rur_diff = paste(round(1*sub_rur_diff, 2), "%"),
+         pct_locale_tag_suburban = 100*pct_locale_tag_suburban,
+         pct_locale_tag_rural = 100*pct_locale_tag_rural) %>%
+  pivot_longer(cols = c("pct_locale_tag_suburban", "pct_locale_tag_rural"),
+               names_to = "locale",
+               names_prefix = "pct_locale_tag_",
+               values_to = "pct")
+#pct labels
+sub_rur_labs_sm <- data.frame(x = c(sub_rur_diff_sm$tag),
+                             y = c(2 + sub_rur_diff_sm$pct),
+                             lab = c("< 1%", "", "", "< 1%", "< 1%", "", "< 1%", "", "1.03 %", "", "", "1.49 %", "1.61 %", "", "1.61 %", "", "", "1.84 %", "", "1.84 %"))
+#reorder 
+sub_rur_diff_sm$tag <- factor(sub_rur_diff_sm$tag,
+                              levels = c(unique(paste0(sub_rur_diff_sm$tag))))
+levels(sub_rur_diff_sm$tag)
+#side-side bar chart
+sub_rur_viz_sm <- sub_rur_diff_sm %>% 
+  ggplot(aes(tag, pct, fill = locale)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = sub_rur_labs_sm$x, y = sub_rur_labs_sm$y, label = sub_rur_labs_sm$lab),
+            color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools",
+       title = "Top 10 Tags with Smallest Differences between Suburban and Rural Schools",
+       subtitle = "Comparison within locale types - denominator = schools within locale")
+sub_rur_viz_sm
+```
+
+```{r save plots, eval = FALSE}
+#smallest differences plots
+ggsave("urb-rur_small.png", plot = urb_rur_viz_sm, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("urb-sub_small.png", plot = urb_sub_viz_sm, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sub-rur_small.png", plot = sub_rur_viz_sm, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+```
+
+
+## Modeled odds ratio
+
