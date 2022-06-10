@@ -160,6 +160,46 @@ efa_2022 = fa(practices_cor, nfactors = 5, rotate = "oblimin", fm = "minres")
 
 ## all the junk that prints is well-explained here: https://m-clark.github.io/posts/2020-04-10-psych-explained/
 print(efa_2022, sort = T)
+
+write_efa_files = function(efa, dir, file, threshold = 0.28) {
+  efa %>%
+    model_parameters(sort = TRUE, threshold = "max") %>%
+    write_tsv(here(dir, paste(file, "Max.txt")), na = "")
+  efa %>%
+    model_parameters(sort = TRUE, threshold = threshold) %>%
+    write_tsv(here(dir, paste(file, "Threshold.txt")), na = "")
+  efa %>%
+    model_parameters(sort = TRUE) %>%
+    write_tsv(here(dir, paste(file, "All.txt")), na = "")
+  invisible()
+}
+
+print_efa = function(
+  efa, 
+  type = c("max", "threshold", "all"), 
+  threshold = 0.28,
+  caption = "")
+{
+  type = match.arg(type)
+  if(type == "max") {
+    return(efa |> 
+      model_parameters(sort = TRUE, threshold = "max") |>
+      datatable(caption = paste(caption, "Max loadings")) |>
+      formatRound(digits = 2, columns = 2:(efa$factors + 3)))
+  }
+  if(type == "threshold") {
+    return(efa |> 
+      model_parameters(sort = TRUE, threshold = threshold) |>
+      datatable(caption = paste(caption, "Threshold loadings")) |>
+      formatRound(digits = 2, columns = 2:(efa$factors + 3)))
+  }
+  if(type == "all") {
+    return(efa |> 
+      model_parameters(sort = TRUE) |>
+      datatable(caption = paste(caption, "All loadings")) |>
+      formatRound(digits = 2, columns = 2:(efa$factors + 3)))
+  }
+}
 ```
 
 ```{r}
@@ -185,6 +225,41 @@ efa_2022 %>%
   datatable(caption = "All loadings") %>%
   formatRound(digits = 2, columns = 2:8) 
 ```
+
+## Experimenting with More Clusters
+
+
+```{r}
+clust = 6:8
+efa_list = lapply(clust, fa, r = practices_cor, rotate = "oblimin", fm = "minres")
+names(efa_list) = paste0("clust", clust)
+
+```
+
+### 6 Clusters
+```{r}
+print_efa(efa_list[["clust6"]], type = "max", caption = "6 Clusters")
+print_efa(efa_list[["clust6"]], type = "threshold", caption = "6 Clusters")
+print_efa(efa_list[["clust6"]], type = "all", caption = "6 Clusters")
+
+```
+
+
+
+### 7 Clusters
+```{r}
+print_efa(efa_list[["clust7"]], type = "max", caption = "7 Clusters")
+print_efa(efa_list[["clust7"]], type = "threshold", caption = "7 Clusters")
+print_efa(efa_list[["clust7"]], type = "all", caption = "7 Clusters")
+
+```
+
+
+### 8 Clusters
+```{r}
+print_efa(efa_list[["clust8"]], type = "max", caption = "8 Clusters")
+print_efa(efa_list[["clust8"]], type = "threshold", caption = "8 Clusters")
+print_efa(efa_list[["clust8"]], type = "all", caption = "8 Clusters")
 
 ```
 
