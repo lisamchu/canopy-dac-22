@@ -258,4 +258,93 @@ bipoc50_odds_viz <- top_bipoc50_odds %>%
 bipoc50_odds_viz
 ```
 
+# Biggest frequency differences
+
+## Setup
+```{r}
+leader_diffs <- leader_bipoc_tags %>% 
+  select(leader_bipoc, tag, n, pct_school) %>% 
+  pivot_wider(names_from = "leader_bipoc",
+              values_from = c("n", "pct_school")) %>% 
+  mutate(bipoc_white_diff = abs(round(100*(pct_school_bipoc - pct_school_white), 2)))
+```
+
+Setup for largest differences within each category (in this case, leader demographic). i.e. of leaders who are BIPOC, how many select certain tags?
+
+```{r within dat}
+
+#Get number of schools in each category
+counts <- clean_data_full %>% 
+  select(school_id, confidential_leader_race, starts_with("practices")) %>% 
+  filter(!c(is.na(confidential_leader_race))) %>% 
+  mutate(race_leader = ifelse(confidential_leader_race=="White", "white", "bipoc")) %>% 
+  pivot_longer(cols = starts_with("race"),
+               names_to = "og_race",
+               values_to = "race") %>% 
+  select(-og_race) %>% 
+  select(race) %>% 
+  summarize(n_bipoc = sum(race=="bipoc"),
+         n_white = sum(race=="white"))
+
+within_diffs <- leader_diffs %>% 
+  mutate(pct_school_bipoc= n_bipoc / counts$n_bipoc, #denom = total schools within category
+         pct_school_white = n_white / counts$n_white,
+         bipoc_white_diff = abs(pct_school_bipoc - pct_school_white))
+```
+
+
+
+## BIPOC vs. White Leaders - Largest Differences
+
+```{r white vs not leaders lg, fig.dim = c(9, 9)}
+#pull top 10 lg diff
+bipoc_white_diff <- leader_diffs %>% 
+  select(tag, bipoc_white_diff, pct_school_bipoc, pct_school_white) %>% 
+  slice_max(bipoc_white_diff, n = 10, with_ties = FALSE) %>% 
+    mutate(bipoc_white_diff = paste0(round(100*bipoc_white_diff, 2), "%"),
+         pct_school_bipoc = 100*pct_school_bipoc,
+         pct_school_white = 100*pct_school_white) %>% 
+  pivot_longer(cols = c("pct_school_bipoc", "pct_school_white"),
+               names_to = "demo",
+               names_prefix = "pct_school_",
+               values_to = "pct")
+#create labels
+# bipoc_white_labs <- data.frame(x = c(bipoc_white_diff$tag),
+#                             y = c(2 + bipoc_white_diff$pct),
+#                             lab = c("", "14.63%", "", "13.73%", "", "13.16%", "12.69%", "", "12.09%", "", "", "11.61%", "", "11.22%", "", "10.69%", "", "10.63%", "", "9.73%"))
+#reorder factor
+# bipoc_white_diff$tag <- factor(bipoc_white_diff$tag, levels = c(unique(paste0(bipoc_white_diff$tag))))
+#levels(bipoc_white_diff$tag)
+#side-side bar chart
+bipoc_white_leader_viz <- bipoc_white_diff %>% 
+  ggplot(aes(tag, pct, fill = demo)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+#  geom_text(aes(x = elem_mid_labs$x, y = elem_mid_labs$y, label = elem_mid_labs$lab), color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences between BIPOC and White Leaders",
+       subtitle = "Comparison within level types - denominator = schools within level") +
+  coord_flip()
+
+bipoc_white_leader_viz
+```
+
+```{r}
+leader_diffs_tbl_2 <- leader_diffs %>% 
+  mutate(pct_school_bipoc = n_bipoc / counts$n_bipoc, #denom = total schools within category
+         pct_school_white = n_white / counts$n_white,
+         bipoc_white_diff = abs(pct_school_bipoc - pct_school_white)) %>% 
+  left_join(tag_labels, by = "tag") %>% 
+  select(label, bipoc_white_diff, pct_school_bipoc, pct_school_white, n_bipoc, n_white)
+
+#table
+datatable(leader_diffs_tbl_2) %>% 
+  formatPercentage(c("bipoc_white_diff", "pct_school_bipoc", "pct_school_white"), 2)
+```
+
 
