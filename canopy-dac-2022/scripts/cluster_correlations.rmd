@@ -145,3 +145,12 @@ ggcorrplot(leaps_clusters, hc.order = FALSE, type = "upper") +
 ```
 
 
+```{r}
+leaps_clusters %>% 
+  datatable(
+    caption = "Leaps and Clusters Correlations"#,
+    #colnames = c("Jaccard (0,1)" = "jaccard", "Correlation (-1,1)" = "correlation")
+  ) %>%
+  formatRound(digits = 2, columns = colnames(leaps_clusters)) 
+```
+
