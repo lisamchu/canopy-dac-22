@@ -1,0 +1,147 @@
+---
+title: "Cluster Correlations"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+library(here)
+library(purrr)
+library(dplyr)
+library(tidyr)
+#library(proxy)
+library(ggcorrplot)
+library(plotly)
+#library(patchwork)
+#library(psych)
+#library(GPArotation)
+#library(parameters)
+library(DT)
+source(here("scripts/branding.R"))
+load(here("data/complete_canopy_2022.RData"))
+
+c5 = read_tsv(here("outputs/EFA 2022 Results All.txt"))
+
+clust_details = c(
+  "MR1" = "Educational justice and holistic student supports",
+  "MR2" = "Postsecondary pathways and the world outside school",
+  "MR4" = "Deeper learning for mastery",
+  "MR5" = "Flexible and individualized learning pathways",
+  "MR3" = "Blended learning"
+)
+clust_details_r = setNames(names(clust_details), clust_details)
+
+c5 %>% rename(all_of(clust_details_r)) %>%
+  select(-Complexity, -Uniqueness) %>%
+  pivot_longer(cols = -Variable, names_to = "cluster", values_to = "weight") %>%
+  rename(practice = Variable) -> cweights
+
+practices_long = 
+  practices_data %>% select(school_id, starts_with("practices")) %>%
+  pivot_longer(-school_id, names_to = "practice", values_to = "val")
+
+practices_long %>%
+  left_join(cweights, by = "practice") %>%
+  group_by(school_id, cluster) %>% 
+  summarize(cluster_weight = sum(val * weight, na.rm = TRUE), .groups = "drop") %>%
+  arrange(school_id) ->
+  clusters_by_school
+
+clusters_by_school %>%
+  pivot_wider(id_cols = school_id, names_from = cluster, values_from = cluster_weight) %>%
+  arrange(school_id) ->
+  clusters_by_school_wide
+
+write_tsv(clusters_by_school, file = here("outputs/cluster_scores_by_school_long.tsv"))
+write_tsv(clusters_by_school_wide, file = here("outputs/cluster_scores_by_school_wide.tsv"))
+
+
+clust_labels = c(
+  `Educational justice and holistic student supports` = "Educational justice and\nholistic student supports", 
+  `Postsecondary pathways and the world outside school` = "Postsecondary pathways\nand the world outside school", 
+  `Deeper learning for mastery` = "Deeper learning for mastery",
+  `Flexible and individualized learning pathways` = "Flexible and individualized\nlearning pathways", 
+  `Blended learning` = "Blended learning"
+)
+
+label_clust = function(x) {
+  clust_labels[x]
+}
+```
+
+```{r}
+ggplot(clusters_by_school, aes(x = cluster, y = cluster_weight)) +
+  geom_violin(fill = transcend_cols["teal"]) +
+  geom_point(
+    color = transcend_cols["red"],
+    position = position_jitter(width = 0.2),
+    size = 0.2
+  ) +
+  scale_x_discrete(labels = label_clust) +
+  labs(
+    x = "", y = "Weight",
+    title = "Distribution of cluster weights"
+  ) +
+  theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 1, size = rel(0.5)))
+```
+
+
+```{r}
+par_coord = ggplot(clusters_by_school, aes(x = cluster, y = cluster_weight)) +
+  geom_point(alpha = 0.5, color = transcend_cols["red"]) +
+  geom_line(aes(group = school_id), color = transcend_grays[1], alpha = 0.3) +
+  scale_x_discrete(labels = label_clust) +
+  labs(
+    x = "", y = "Weight",
+    title = "Cluster weight parallel coordinates by school"
+  ) +
+  theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 1, size = rel(0.5))) 
+
+ggplotly(par_coord)
+```
+
+```{r}
+ggplot(clusters_by_school, aes(x = cluster, y = factor(school_id), fill = cluster_weight)) +
+  geom_tile() +
+  labs(
+    x = "Cluster", y = "School", fill = "Weight",
+    title = "Cluster weights by school"
+  ) +
+  scale_x_discrete(labels = label_clust) +
+  scale_y_discrete(labels = NULL) +
+  theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 1, size = rel(0.5))) 
+```
+
+# Cluster Correlation with Leaps
+
+```{r, message = FALSE}
+leaps_ranks = learning_model_data %>%
+  select(school_id, starts_with("leaps_rank")) %>%
+  arrange(school_id)
+
+
+leaps_clusters = cor(
+  leaps_ranks %>% select(-school_id) %>% mutate(across(everything(), \(x) -x)),
+  clusters_by_school_wide %>% select(-school_id),
+  method = "spearman"
+)
+
+ggcorrplot(leaps_clusters, hc.order = FALSE, type = "upper") +
+    scale_fill_distiller(type = "div", limits = c(-1, 1), expand = c(0, 0)) +
+    labs(title = "Correlation between practice clusters\nand leaps ranks",
+         fill = "Correlation") +
+    #scale_x_discrete(labels = label_tags) +
+    #scale_y_discrete(labels = label_tags) +
+    labs(x = "", y = "") + 
+    #scale_fill_cc_gradient + 
+    theme_transcend_sparse + 
+  scale_y_discrete(labels = label_clust) +
+    theme(
+      axis.text.x = element_text(angle = 35, hjust = 1, vjust = 1, size = rel(0.5)),
+      #axis.text.y = element_blank(),
+      panel.border = element_blank(),
+      axis.ticks = element_blank()
+    )
+```
+
+
