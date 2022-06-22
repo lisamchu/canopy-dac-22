@@ -258,7 +258,7 @@ bipoc50_odds_viz <- top_bipoc50_odds %>%
 bipoc50_odds_viz
 ```
 
-# Biggest frequency differences
+# BIPOC vs. White Leader differences
 
 ## Setup
 ```{r}
@@ -291,7 +291,6 @@ within_diffs <- leader_diffs %>%
          pct_school_white = n_white / counts$n_white,
          bipoc_white_diff = abs(pct_school_bipoc - pct_school_white))
 ```
-
 
 
 ## BIPOC vs. White Leaders - Largest Differences
@@ -347,4 +346,191 @@ datatable(leader_diffs_tbl_2) %>%
   formatPercentage(c("bipoc_white_diff", "pct_school_bipoc", "pct_school_white"), 2)
 ```
 
+## BIPOC vs. White Leaders - Smallest Differences
 
+```{r white vs not leaders sm, fig.dim = c(9, 9)}
+#pull top 10 lg diff
+bipoc_white_diff <- leader_diffs %>% 
+  select(tag, bipoc_white_diff, pct_school_bipoc, pct_school_white) %>% 
+  slice_min(bipoc_white_diff, n = 10, with_ties = FALSE) %>% 
+    mutate(bipoc_white_diff = paste0(round(100*bipoc_white_diff, 2), "%"),
+         pct_school_bipoc = 100*pct_school_bipoc,
+         pct_school_white = 100*pct_school_white) %>% 
+  pivot_longer(cols = c("pct_school_bipoc", "pct_school_white"),
+               names_to = "demo",
+               names_prefix = "pct_school_",
+               values_to = "pct")
+
+bipoc_white_leader_viz <- bipoc_white_diff %>% 
+  ggplot(aes(tag, pct, fill = demo)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 40)) +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Smallest Differences between BIPOC and White Leaders",
+       subtitle = "Comparison within level types - denominator = schools within level") +
+  coord_flip()
+
+bipoc_white_leader_viz
+```
+
+# 75% BIPOC Team vs. less than 75% BIPOC Team
+
+## Setup
+```{r}
+bipoc75_diffs <- bipoc75_tags %>% 
+  select(bipoc_leadership, tag, n, pct_school) %>% 
+  pivot_wider(names_from = "bipoc_leadership",
+              values_from = c("n", "pct_school")) %>% 
+  janitor::clean_names() %>% 
+  mutate(bipoc_diff = abs(round(100*(pct_school_mostly_bipoc - pct_school_not_mostly_bipoc), 2)))
+```
+
+## 75% BIPOC Team vs. less than 75% BIPOC Team - Largest Differences
+
+```{r 75bipoc vs not lg, fig.dim = c(9, 9)}
+#pull top 10 lg diff
+bipoc75_other_diff <- bipoc75_diffs %>% 
+  select(tag, bipoc_diff, pct_school_mostly_bipoc, pct_school_not_mostly_bipoc) %>% 
+  slice_max(bipoc_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(bipoc_diff = paste0(round(100*bipoc_diff, 2), "%"),
+         pct_school_mostly_bipoc = round(100*pct_school_mostly_bipoc, 2),
+         pct_school_not_mostly_bipoc = round(100*pct_school_not_mostly_bipoc, 2)) %>% 
+  pivot_longer(cols = c("pct_school_mostly_bipoc", "pct_school_not_mostly_bipoc"),
+               names_to = "leadership_team",
+               names_prefix = "pct_school_",
+               values_to = "pct")
+
+bipoc75_viz <- bipoc75_other_diff %>% 
+  ggplot(aes(tag, pct, fill = leadership_team)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  theme(axis.text = element_text(size = 7, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences between 75% BIPOC Teams and those with less",
+       subtitle = "Comparison within level types - denominator = schools within level") +
+  coord_flip()
+
+bipoc75_viz
+```
+
+## 75% BIPOC Team vs. less than 75% BIPOC Team - Smallest Differences
+
+```{r 75bipoc vs not sm, fig.dim = c(9, 9)}
+#pull top 10 sm diff
+bipoc75_other_diff <- bipoc75_diffs %>% 
+  select(tag, bipoc_diff, pct_school_mostly_bipoc, pct_school_not_mostly_bipoc) %>% 
+  slice_min(bipoc_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(bipoc_diff = paste0(round(100*bipoc_diff, 2), "%"),
+         pct_school_mostly_bipoc = round(100*pct_school_mostly_bipoc, 2),
+         pct_school_not_mostly_bipoc = round(100*pct_school_not_mostly_bipoc, 2)) %>% 
+  pivot_longer(cols = c("pct_school_mostly_bipoc", "pct_school_not_mostly_bipoc"),
+               names_to = "leadership_team",
+               names_prefix = "pct_school_",
+               values_to = "pct")
+
+bipoc75_viz <- bipoc75_other_diff %>% 
+  ggplot(aes(tag, pct, fill = leadership_team)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  theme(axis.text = element_text(size = 7, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 40)) +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Smallest Differences between 75% BIPOC Teams and those with less",
+       subtitle = "Comparison within level types - denominator = schools within level") +
+  coord_flip()
+
+bipoc75_viz
+```
+
+# Half BIPOC Team vs. less than half BIPOC Team
+
+## Setup
+```{r}
+bipoc50_diffs <- bipoc50_tags %>% 
+  select(bipoc_leadership, tag, n, pct_school) %>% 
+  pivot_wider(names_from = "bipoc_leadership",
+              values_from = c("n", "pct_school")) %>% 
+  janitor::clean_names() %>% 
+  mutate(bipoc_diff = abs(round(100*(pct_school_majority_bipoc - pct_school_not_majority_bipoc), 2)))
+```
+
+## 50% BIPOC Team vs. less than 50% BIPOC Team - Largest Differences
+
+```{r 50bipoc vs not lg, fig.dim = c(9, 9)}
+#pull top 10 lg diff
+bipoc50_other_diff <- bipoc50_diffs %>% 
+  select(tag, bipoc_diff, pct_school_majority_bipoc, pct_school_not_majority_bipoc) %>% 
+  slice_max(bipoc_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(bipoc_diff = paste0(round(100*bipoc_diff, 2), "%"),
+         pct_school_majority_bipoc = round(100*pct_school_majority_bipoc, 2),
+         pct_school_not_majority_bipoc = round(100*pct_school_not_majority_bipoc, 2)) %>% 
+  pivot_longer(cols = c("pct_school_majority_bipoc", "pct_school_not_majority_bipoc"),
+               names_to = "leadership_team",
+               names_prefix = "pct_school_",
+               values_to = "pct")
+
+bipoc50_viz <- bipoc50_other_diff %>% 
+  ggplot(aes(tag, pct, fill = leadership_team)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  theme(axis.text = element_text(size = 7, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences between atleast half BIPOC Teams and those with less",
+       subtitle = "Comparison within level types - denominator = schools within level") +
+  coord_flip()
+
+bipoc50_viz
+```
+
+
+## 50% BIPOC Team vs. less than 50% BIPOC Team - Smallest Differences
+
+```{r 50bipoc vs not sm, fig.dim = c(9, 9)}
+#pull top 10 sm diff
+bipoc50_other_diff <- bipoc50_diffs %>% 
+  select(tag, bipoc_diff, pct_school_majority_bipoc, pct_school_not_majority_bipoc) %>% 
+  slice_min(bipoc_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(bipoc_diff = paste0(round(100*bipoc_diff, 2), "%"),
+         pct_school_majority_bipoc = round(100*pct_school_majority_bipoc, 2),
+         pct_school_not_majority_bipoc = round(100*pct_school_not_majority_bipoc, 2)) %>% 
+  pivot_longer(cols = c("pct_school_majority_bipoc", "pct_school_not_majority_bipoc"),
+               names_to = "leadership_team",
+               names_prefix = "pct_school_",
+               values_to = "pct")
+
+bipoc50_viz <- bipoc50_other_diff %>% 
+  ggplot(aes(tag, pct, fill = leadership_team)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  theme(axis.text = element_text(size = 7, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 40)) +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Smallest Differences between atleast half BIPOC Teams and those with less",
+       subtitle = "Comparison within level types - denominator = schools within level") +
+  coord_flip()
+
+bipoc50_viz
+```
+
+leadership team
+does leadership actually represent students they serve?
+within school comparisons rather than overall averages
