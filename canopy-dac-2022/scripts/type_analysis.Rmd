@@ -29,7 +29,7 @@ source(here("scripts", "branding.R")) #, local = knitr::knit_global()
 load(here("data", "complete_canopy_2022.RData"))
 ```
 
-# Cycle ? (6.17.22)
+# Cycle 5 (6.17.22)
 
 Guiding questions/tasks & format:  
 `SCHOOL TYPE`: How do tagging patterns differ among district, charter, independent, sws, virtual, microschool, homeschool, and hub schools?  
@@ -114,7 +114,7 @@ type_ip <- type_ip %>%
 #export(type_ip, "multicoded_type.csv")
 ```
 
-## Paring down to district, charter, and independent  
+Paring down to district, charter, and independent  
 * charter = 58  
 * district = 77  
 * independent/other = 26  
@@ -233,7 +233,9 @@ type_tbl <- type_tags %>%
 datatable(type_tbl)
 ```
 
-### District vs. Charter Barchart
+# Largest Differences
+
+## District vs. Charter Barchart
 
 ```{r dis v char, fig.dim = c(9, 9)}
 dis_char_diff <- type_tags %>% 
@@ -343,6 +345,10 @@ ind_dis_viz <- ind_dis_diff %>%
 
 ind_dis_viz
 ```
+
+# Smallest Differences
+
+# Individual Type Analysis
 
 ## Charter vs. non-Charter Bar Chart
 
@@ -568,6 +574,8 @@ ind_tags_viz <- ind_tags %>%
 
 ind_tags_viz
 ```
+
+# Variation Across All Types
 
 ## Variability Between All School Types
 
