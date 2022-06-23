@@ -1,0 +1,79 @@
+---
+title: "Do School Leaders Represent the Students they Serve?"
+author: "Anwesha Guha"
+date: "6/15/2022"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: tango
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Setup for analysis
+
+```{r}
+library(pacman)
+p_load(rio, here, psych, tidyverse, DT, scales, extrafont)
+source(here("scripts", "branding.R"))
+load(here("data", "complete_canopy_2022.RData"))
+```
+
+In this analysis, we are trying to answer the following question: *Do school leaders represent the students they serve?*
+
+Let's look at a school-level.
+
+Here are the demographic distributions for each school.
+
+Only looking at those with less than 10% White students:
+
+```{r}
+demos <- demographic_data %>% 
+  mutate(enrollment = case_when(
+    nces_total_enrollment > 0 ~ nces_total_enrollment,
+    TRUE ~ self_reported_total_enrollment)) %>% 
+  arrange(white_percent) %>% 
+  filter(enrollment > 10) %>% 
+  select(confidential_leader_race, confidential_leadership_team_diversity, confidential_teaching_staff_diversity, white_percent, enrollment)
+
+datatable(demos, colnames = c("School Leader Race", "Leadership Team", "Teaching Staff", "Pct. White Students", "Enrollment")) %>% 
+  formatPercentage(c("white_percent"), 2) 
+```
+
+Teaching Staff
+```{r}
+demos %>% 
+  filter(confidential_teaching_staff_diversity != "0" 
+         & confidential_teaching_staff_diversity != "Prefer not to say"
+         & confidential_leader_race != "NA") %>% 
+  ggplot(aes(confidential_teaching_staff_diversity, confidential_leader_race)) +
+  geom_tile(aes(fill = white_percent)) +
+  scale_fill_gradient(low = "pink", high = "purple") +
+  labs(x = "Teaching Staff",
+       y = "School Leader Race") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+  coord_flip()
+```
+
+Leadership Team
+```{r}
+demos %>% 
+  filter(confidential_leadership_team_diversity != "0" 
+         & confidential_leadership_team_diversity != "Prefer not to say"
+         & confidential_leadership_team_diversity != "Not sure"
+         & confidential_leader_race != "NA") %>%
+  ggplot(aes(confidential_leadership_team_diversity, confidential_leader_race)) +
+  geom_tile(aes(fill = white_percent)) +
+  labs(x = "Leadership Team",
+       y = "School Leader Race") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+  scale_fill_continuous(low = "pink", high = "purple", na.value = "gray") +
+  coord_flip()
+```
+
+
