@@ -107,14 +107,32 @@ label_percent_bins = function(breaks) {
   return(c(lo, med, hi))
 }
 
+# Cluster labels ####
+clust_details = c(
+  "MR1" = "Educational justice and holistic student supports",
+  "MR2" = "Postsecondary pathways and the world outside school",
+  "MR4" = "Deeper learning for mastery",
+  "MR5" = "Flexible and individualized learning pathways",
+  "MR3" = "Blended learning"
+)
+clust_details_r = setNames(names(clust_details), clust_details)
 
-# clust_5_order = c(
-#   "Blended Learning",
-#   "Project-Based Learning",
-#   "Competency-Based Education",
-#   "Equity & Social-Emotional Learning",
-#   "Flexible Pathways to College & Career"
-# )
+clust_labels = c(
+  `Educational justice and holistic student supports` = "Educational justice and\nholistic student supports", 
+  `Postsecondary pathways and the world outside school` = "Postsecondary pathways\nand the world outside school", 
+  `Deeper learning for mastery` = "Deeper learning for mastery",
+  `Flexible and individualized learning pathways` = "Flexible and individualized\nlearning pathways", 
+  `Blended learning` = "Blended learning"
+)
+
+label_clust = function(x) {
+  if(x %in% names(clust_details)) {
+    x = clust_details[x]
+  }
+  clust_labels[x]
+}
+
+
 
 # Colors ####
 
