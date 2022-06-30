@@ -24,6 +24,8 @@ source(here("scripts", "branding.R"))
 load(here("data", "complete_canopy_2022.RData"))
 ```
 
+## Overview
+
 In this analysis, we are trying to answer the following question: *Do school leaders represent the students they serve?*
 
 Let's look at a school-level.
@@ -37,12 +39,13 @@ demos <- demographic_data %>%
   mutate(enrollment = case_when(
     nces_total_enrollment > 0 ~ nces_total_enrollment,
     TRUE ~ self_reported_total_enrollment)) %>% 
-  arrange(white_percent) %>% 
+  mutate(bipoc_percent = 1 - white_percent) %>% 
+  arrange(-bipoc_percent) %>% 
   filter(enrollment > 10) %>% 
-  select(confidential_leader_race, confidential_leadership_team_diversity, confidential_teaching_staff_diversity, white_percent, enrollment)
+  select(confidential_leader_race, confidential_leadership_team_diversity, confidential_teaching_staff_diversity, bipoc_percent, enrollment)
 
-datatable(demos, colnames = c("School Leader Race", "Leadership Team", "Teaching Staff", "Pct. White Students", "Enrollment")) %>% 
-  formatPercentage(c("white_percent"), 2) 
+datatable(demos, colnames = c("School Leader Race", "Leadership Team", "Teaching Staff", "Pct. BIPOC Students", "Enrollment")) %>% 
+  formatPercentage(c("bipoc_percent"), 2) 
 ```
 
 Teaching Staff
@@ -52,7 +55,7 @@ demos %>%
          & confidential_teaching_staff_diversity != "Prefer not to say"
          & confidential_leader_race != "NA") %>% 
   ggplot(aes(confidential_teaching_staff_diversity, confidential_leader_race)) +
-  geom_tile(aes(fill = white_percent)) +
+  geom_tile(aes(fill = bipoc_percent)) +
   scale_fill_gradient(low = "pink", high = "purple") +
   labs(x = "Teaching Staff",
        y = "School Leader Race") +
@@ -68,12 +71,106 @@ demos %>%
          & confidential_leadership_team_diversity != "Not sure"
          & confidential_leader_race != "NA") %>%
   ggplot(aes(confidential_leadership_team_diversity, confidential_leader_race)) +
-  geom_tile(aes(fill = white_percent)) +
+  geom_tile(aes(fill = bipoc_percent)) +
   labs(x = "Leadership Team",
        y = "School Leader Race") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
   scale_fill_continuous(low = "pink", high = "purple", na.value = "gray") +
   coord_flip()
 ```
+
+```{r}
+table(demographic_data$confidential_leader_race)
+```
+
+
+```{r}
+table(demographic_data$confidential_leadership_team_diversity)
+```
+
+```{r}
+table(demographic_data$confidential_teaching_staff_diversity)
+```
+
+**Notes:**
+do 1- white pct 
+number of schools falling into categories (and then dot for size of school)
+filter out small schools
+what pct of students have same race/ethnicity 
+
+bipoc leadership vs bipoc student count
+focus on hispanic and black
+
+look at everyone above median for black stuednts and look at how many have black leaders
+y - same leader race pct, x - bins of students 
+
+# Representation Visualizations v2
+
+## Black students
+
+```{r}
+demo2 <- demographic_data %>% 
+  mutate(enrollment = case_when(
+    nces_total_enrollment > 0 ~ nces_total_enrollment,
+    TRUE ~ self_reported_total_enrollment)) %>% 
+  mutate(bipoc_percent = 1 - white_percent) %>% 
+  arrange(-bipoc_percent) %>% 
+  filter(enrollment > 10) %>% 
+  select(confidential_leader_race, confidential_leadership_team_diversity, confidential_teaching_staff_diversity, bipoc_percent, enrollment, black_percent, hispanic_percent)
+```
+
+```{r}
+hist(demo2$black_percent)
+```
+
+```{r}
+hist(demo2$hispanic_percent)
+```
+
+
+```{r black demo viz, fig.height=8, fig.width=8}
+demo2 %>% 
+  filter(black_percent > .5 & 
+           confidential_leadership_team_diversity != "Prefer not to say") %>% 
+  rename(`school leader race` = confidential_leader_race) %>% 
+  ggplot(aes(x = confidential_leadership_team_diversity, y = confidential_teaching_staff_diversity)) +
+  geom_jitter(aes(size = enrollment, color = `school leader race`), alpha = .6) +
+  theme(legend.position = c(0.8, 0.2),
+        legend.text = element_text(size = 10),
+        legend.title = element_text(size = 10),
+        legend.key = element_rect(fill = "transparent"),
+        axis.text = element_text(size = 10),
+        axis.text.x = element_text(angle = 40, vjust = 0.5),
+        plot.caption = element_text(size = 10, hjust = 0))  +
+  labs( x = "Leadership Team",
+        y = "Teaching Staff",
+        title = "For schools with more than 50% Black \nstudents, what do their leaders look like?",
+        caption = "Of the 16 schools included, there were 10 Black, 5 White, 3 Black, and 1 Biracial \nschool leaders. Size of points determined by school enrollment.") +
+  guides(size = "none")
+```
+
+```{r hispanic demo viz, fig.height=8, fig.width=8}
+demo2 %>% 
+  filter(hispanic_percent > .5 & 
+           confidential_leader_race != "No Response" & 
+           confidential_leadership_team_diversity != "Not sure") %>% 
+  rename(`school leader race` = confidential_leader_race) %>% 
+  ggplot(aes(x = confidential_leadership_team_diversity, y = confidential_teaching_staff_diversity)) +
+  geom_jitter(aes(size = enrollment, color = `school leader race`), alpha = .6) +
+  theme(legend.position = c(0.8, 0.2),
+        legend.text = element_text(size = 10),
+        legend.title = element_text(size = 10),
+        legend.key = element_rect(fill = "transparent"),
+        axis.text = element_text(size = 10),
+        axis.text.x = element_text(angle = 40, vjust = 0.5),
+        plot.caption = element_text(size = 10, hjust = 0))  +
+  labs( x = "Leadership Team",
+        y = "Teaching Staff",
+        title = "For schools with more than 50% Hispanic \nstudents, what do their leaders look like?",
+        caption = "Of the 30 schools included, there were 17 White, 8 Hispanic, 3 Black, and 1 Asian \nand Xicana Indigena school leaders. Size of points determined by school enrollment.") +
+  guides(size = "none")
+```
+
+
 
 
