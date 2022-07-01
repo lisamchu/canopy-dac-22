@@ -570,3 +570,164 @@ ggsave("mid-high_sm-diff.png", plot = mid_high_viz_sm, path = here("outputs", "l
 ggsave("high-elem_sm-diff.png", plot = high_elem_viz_sm, path = here("outputs", "level analysis"),
        width = 12, height = 8, units = "in")
 ```
+
+# Variation Across All Levels
+
+```{r all variability, fig.dim = c(9, 9)}
+#data prep
+#variance calculated as standard deviation within tag groups
+var_all <- level_diffs %>% 
+  select(-ends_with("_diff")) %>% 
+  mutate(pct_school_elementary = n_elementary / counts$n_sch_elem, #denom = total schools within category
+         pct_school_middle = n_middle / counts$n_sch_mid,
+         pct_school_high = n_high / counts$n_sch_high) %>% 
+  pivot_longer(cols = c("pct_school_elementary", "pct_school_middle", "pct_school_high"),
+               names_to = "level",
+               names_prefix = "pct_school_",
+               values_to = "proportion") %>% 
+  ungroup() %>% 
+  group_by(tag) %>% 
+  mutate(variance = sd(proportion))
+
+#max variability plot - top 10
+var_max_10 <- var_all %>% 
+  group_by(level) %>% 
+  slice_max(variance, n = 10, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = level)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 10 Tags with Largest Variability for Elementary, Middle, and High Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_10
+
+#min variability plot - top 10
+var_min_10 <- var_all %>% 
+  group_by(level) %>% 
+  slice_min(variance, n = 10, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = level)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Least Variability",
+       title = "Lowest 10 Tags with Largest Variability for Elementary, Middle, and High Schools",
+       subtitle = "In order of increasing variability")
+
+var_min_10
+
+#max variability plot - top 15
+var_max_15 <- var_all %>% 
+  group_by(level) %>% 
+  slice_max(variance, n = 15, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = level)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 15 Tags with Largest Variability for Elementary, Middle, and High Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_15
+
+#min variability plot - top 15
+var_min_15 <- var_all %>% 
+  group_by(level) %>% 
+  slice_min(variance, n = 15, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = level)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Least Variability",
+       title = "Lowest 15 Tags with Largest Variability for Elementary, Middle, and High Schools",
+       subtitle = "In order of increasing variability")
+
+var_min_15
+
+#max variability plot - top 20
+var_max_20 <- var_all %>% 
+  group_by(level) %>% 
+  slice_max(variance, n = 20, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = level)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 20 Tags with Largest Variability for Elementary, Middle, and High Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_20
+
+#min variability plot - top 20
+var_min_20 <- var_all %>% 
+  group_by(level) %>% 
+  slice_min(variance, n = 20, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = level)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Least Variability",
+       title = "Lowest 20 Tags with Largest Variability for Elementary, Middle, and High Schools",
+       subtitle = "In order of increasing variability")
+
+var_min_20
+```
+
+Save plots
+
+```{r save variance plots, eval = FALSE}
+#variability across tags
+#top 10
+ggsave("lg-tag-variability-10.png", plot = var_max_10, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sm-tag-variability-10.png", plot = var_min_10, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+#top 15
+ggsave("lg-tag-variability-15.png", plot = var_max_15, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sm-tag-variability-15.png", plot = var_min_15, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+#top 20
+ggsave("lg-tag-variability-20.png", plot = var_max_20, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sm-tag-variability-20.png", plot = var_min_20, path = here("outputs", "level analysis"),
+       width = 12, height = 8, units = "in")
+```
+

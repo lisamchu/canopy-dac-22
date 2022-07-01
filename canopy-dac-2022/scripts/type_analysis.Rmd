@@ -592,8 +592,8 @@ var_all <- type_tags %>%
   group_by(tag) %>% 
   mutate(variance = sd(proportion))
 
-#max variability plot
-var_max_viz <- var_all %>% 
+#max variability plot - top 10
+var_max_10 <- var_all %>% 
   group_by(type) %>% 
   slice_max(variance, n = 10, with_ties = FALSE) %>% 
   ggplot(aes(tag, proportion, fill = type)) + 
@@ -610,10 +610,10 @@ var_max_viz <- var_all %>%
        title = "Top 10 Tags with Largest Variability for Charter, District, and Independent Schools",
        subtitle = "In order of increasing variability")
 
-var_max_viz
+var_max_10
 
-#min variability plot
-var_min_viz <- var_all %>% 
+#min variability plot - top 10
+var_min_10 <- var_all %>% 
   group_by(type) %>% 
   slice_min(variance, n = 10, with_ties = FALSE) %>% 
   ggplot(aes(tag, proportion, fill = type)) + 
@@ -630,7 +630,87 @@ var_min_viz <- var_all %>%
        title = "Lowest 10 Tags with Largest Variability for Charter, District, and Independent Schools",
        subtitle = "In order of increasing variability")
 
-var_min_viz
+var_min_10
+
+#max variability plot - top 15
+var_max_15 <- var_all %>% 
+  group_by(type) %>% 
+  slice_max(variance, n = 15, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = type)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 15 Tags with Largest Variability for Charter, District, and Independent Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_15
+
+#min variability plot - top 15
+var_min_15 <- var_all %>% 
+  group_by(type) %>% 
+  slice_min(variance, n = 15, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = type)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Least Variability",
+       title = "Lowest 15 Tags with Largest Variability for Charter, District, and Independent Schools",
+       subtitle = "In order of increasing variability")
+
+var_min_15
+
+#max variability plot - top 20
+var_max_20 <- var_all %>% 
+  group_by(type) %>% 
+  slice_max(variance, n = 20, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = type)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 20 Tags with Largest Variability for Charter, District, and Independent Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_20
+
+#min variability plot - top 20
+var_min_20 <- var_all %>% 
+  group_by(type) %>% 
+  slice_min(variance, n = 20, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = type)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Least Variability",
+       title = "Lowest 20 Tags with Largest Variability for Charter, District, and Independent Schools",
+       subtitle = "In order of increasing variability")
+
+var_min_20
 ```
 
 Save plots:
@@ -652,8 +732,22 @@ ggsave("independent-not_lg-diff.png", plot = ind_tags_viz, path = here("outputs"
        width = 12, height = 8, units = "in")
 
 #variability across tags
-ggsave("lg-tag-variability.png", plot = var_max_viz, path = here("outputs", "type analysis"),
+#top 10
+ggsave("lg-tag-variability-10.png", plot = var_max_10, path = here("outputs", "type analysis"),
        width = 12, height = 8, units = "in")
-ggsave("sm-tag-variability.png", plot = var_min_viz, path = here("outputs", "type analysis"),
+ggsave("sm-tag-variability-10.png", plot = var_min_10, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+#top 15
+ggsave("lg-tag-variability-15.png", plot = var_max_15, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sm-tag-variability-15.png", plot = var_min_15, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+#top 20
+ggsave("lg-tag-variability-20.png", plot = var_max_20, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sm-tag-variability-20.png", plot = var_min_20, path = here("outputs", "type analysis"),
        width = 12, height = 8, units = "in")
 ```
+
+
+
