@@ -226,7 +226,8 @@ efa_2022 %>%
   formatRound(digits = 2, columns = 2:8) 
 ```
 
-## Experimenting with More Clusters
+
+# Experimenting with More Clusters
 
 
 ```{r}
