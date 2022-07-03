@@ -17,6 +17,10 @@ library(plotly)
 #library(GPArotation)
 #library(parameters)
 library(DT)
+library(rstanarm)
+library(broom.mixed)
+library(tibble)
+library(forcats)
 
 update = FALSE # set to TRUE to write out data
 
@@ -205,4 +209,115 @@ leapsv_clusters %>%
   ) %>%
   formatRound(digits = 2, columns = colnames(leaps_clusters)) 
 ```
+
+# Cluster Associations with Demographics
+
+```{r prep_models}
+features_df = read_rds(here("data/features_for_models.rds"))
+
+# editing down to the features to use right now
+# trying bipoc_percent rather than Black and Hispanic for students
+# leaving independent schools in, at least for now
+feature_names = c("grades_elementary", "grades_middle", "grades_high", 
+"locale", "school_descriptor_district", "school_descriptor_charter", 
+"school_descriptor_independent", "diversity_staff", "diversity_leads", 
+"ell_percent_scaled", "frpl_percent_scaled", "swd_percent_scaled", 
+"bipoc_percent_scaled", "n_students_scaled")
+
+response_names = c(
+  "Blended learning",
+  "Deeper learning for mastery",
+  "Educational justice and holistic student supports",
+  "Flexible and individualized learning pathways",
+  "Postsecondary pathways and the world outside school"
+)
+
+clust_labs = c("blended_learning", "deeper_learning", "holistic_student_justice", "flexible_pathways", "postsec_pathways_world")
+
+model_data =
+  inner_join(clusters_by_school_wide, features_df, by = "school_id") %>%
+  mutate(across(all_of(response_names), scale)) %>%
+  rename(set_names(response_names, clust_labs))
+
+formulas = sprintf("%s ~ %s", clust_labs, paste(feature_names, collapse = " + "))
+```
+
+```{r fit_models, message = FALSE, cache = TRUE, include = FALSE}
+mods = list()
+
+for(i in seq_along(formulas)) {
+  message("\n\n\nSTARTING MODEL ", i, " OF ", length(formulas), "\n\n\n")
+  mods[[clust_labs[i]]] = stan_lm(
+    formulas[i],
+    data = model_data,
+    prior = R2(location = 0.3)
+  )
+}
+```
+
+```{r report_models, fig.width = 15, fig.height = 10}
+mods %>% map_df(tidy, .id = "response") %>% 
+    filter(!term %in% c("(Intercept)")) ->
+  coef_df
+    
+coef_labeler = function(x) {
+  x %>% 
+    str_replace(pattern = "diversity_staff", "Staff: ") %>%
+    str_replace(pattern = "diversity_leads", "Leadership: ") %>%
+    str_replace("_scaled", "") %>%
+    str_replace("grades_", "Level: ") %>%
+    str_replace("schooL_descriptor_", "Type: ") %>%
+    str_replace("locale", "Locale: ") %>%
+    str_replace("n_students", "Number of students") %>%
+    label_dems
+}
+
+
+ggplot(
+  coef_df, 
+  aes(x = estimate, y = fct_reorder(term, estimate, .fun = mean))
+) + 
+  geom_col(fill = transcend_cols[2]) + 
+  geom_errorbarh(aes(xmin = estimate - std.error, xmax = estimate + std.error), height = 0.2) +
+  labs(y = "",
+       x = "Average change in cluster score (in standard deviations)", 
+       title = "Association between school characteristics and practice clusters",
+       subtitle = "Compared to urban schools with white staff/leadership sorted by average effect across all clusters.\nError bars show +/- 1 std deviation, about a 65% confidence interval--there's a lot of variability here!") +
+  guides(fill = FALSE) +
+  facet_grid(~ response) + 
+  scale_y_discrete(labels = coef_labeler) + 
+  theme(#axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank()#,
+        #axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0)
+      ) 
+```
+
+The graph above is super interesting! It looks like having a diverse staff has by far the strongest association with practices in 4 of the 5 clusters, especially Deeper Learning for Mastery and Educational Justice and Holistic Student Supports. I think there's a positive message here that those associations are so much higher than the Leadership Diversity measures.
+
+We see a lot of confirmations here - the strongest negative association across the board is between rural schools and Educational Justice/Holistic Student Supports. All rural coefficients are negative--they tend to do fewer practices than their urban and suburban counterparts. Suburban schools tend to do less than urban schools in all clusters *except* Flexible and Individualized Learning Pathways, where they lead.
+
+Student demographics and enrollment (labeled "Number of students" on the chart) didn't have nearly the extreme effects of staff diversity and locale. The staff drive the practices ("drive" implies far too much causality, I should be stricter with my wording...).
+
+School level doesn't have much effect on the clustering except for High Schools beign all-in on Postsecondary pathways and the world outside school.
+
+We can try different variations of these models with different variable sets, but I think this is a very interesting start. Coefficient estimates and their standard errors are shown in the table below.
+
+
+```{r coef_table}
+coef_df %>% 
+  pivot_wider(names_from = "response", 
+              values_from = c("estimate", "std.error"),
+              names_glue = c("{response} {.value}")
+             ) -> coef_wide
+
+coef_wide = coef_wide[sort(names(coef_wide))] %>%
+  select(term, everything()) %>%
+  mutate(term = coef_labeler(term))
+datatable(
+  coef_wide,
+  caption = "Model coefficients for cluster score") %>%
+  formatRound(digits = 2, columns = 2:ncol(coef_wide))
+
+```
+
 

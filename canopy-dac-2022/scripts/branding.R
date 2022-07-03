@@ -64,6 +64,7 @@ dem_labs = c(
   "% Native Hawaiian and\nPacific Islander students" = "nhpi_percent",
   "% Multiracial students" = "multiple_percent",
   "% White students" = "white_percent",
+  "% BIPOC students" = "bipoc_percent",
   "# FRPL eligible" = "FRPL_count",
   "% FRPL eligible" = "FRPL_percent",
   "% FRPL eligible" = "frpl_percent",
