@@ -749,5 +749,294 @@ ggsave("sm-tag-variability-20.png", plot = var_min_20, path = here("outputs", "t
        width = 12, height = 8, units = "in")
 ```
 
+# Models
 
+## Race and SES
 
+```{r data prep}
+# mod_prep <- clean_data_full %>% 
+#   select(school_id, starts_with("practices_"), grades_elementary, grades_middle, grades_high)
+
+mod_prep <- clean_data_full %>% 
+  select(school_id, starts_with("practices_"), ends_with("_percent"), self_reported_total_enrollment) %>% 
+  left_join(type_recode, by = "school_id") %>% 
+  mutate(school_descriptor_charter = ifelse(type == "charter", 1, 0),
+         school_descriptor_district = ifelse(type == "district", 1, 0),
+         school_descriptor_independent = ifelse(type == "independent", 1, 0)) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "value") %>% 
+  select(-type)
+
+##from Gregor's code:
+#first will run black percent and hispanic percent as controls
+one_vars = c("self_reported_total_enrollment", "black_percent", "hispanic_percent", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "frpl_percent", "swd_percent", "ell_percent")
+
+logistic_one_dat = 
+  mod_prep %>%
+  select(value, tag, one_of(one_vars)) %>%
+  na.omit() %>%
+  group_by(tag) %>%
+  # scaling non-binary predictors
+  mutate_at(vars(
+    c(
+      "self_reported_total_enrollment",
+      "black_percent",
+      "hispanic_percent",
+      "frpl_percent",
+      "swd_percent",
+      "ell_percent"
+    )
+  ), scale)
+
+one_form = as.formula(paste("value", "~", paste(one_vars, collapse = "+")))
+#plot(xm, "areas", prob = 0.9, prob_outer = 1)
+
+bayes_mods = list()
+
+for(this_tag in unique(mod_prep$tag)) {
+  bayes_mods[[this_tag]] = stan_glm(
+    one_form,
+    data = filter(logistic_one_dat, tag == this_tag),
+    family = binomial(link = "logit"),
+    prior = student_t( #I'm not familiar with the functions in this loop, does df need to change within student_t()?
+      df = 7,
+      location = 0,
+      scale = 2.5
+    )
+  )
+  
+}
+
+bayes_tidy = lapply(bayes_mods, tidy) %>%
+  bind_rows(.id = "response") %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    nice_tag = label_tags(response),
+    nice_demog = factor(label_dems(term))
+  )
+
+## top 10 absolute effects per demo:
+
+bayes_facet_dat = bayes_tidy %>% group_by(nice_demog) %>%
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10)
+
+bayes_facet = 
+  ggplot(bayes_facet_dat,
+    aes(y = exp(estimate),
+        x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean),
+    )) +
+  geom_col() + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       #fill = "Demographic",
+       title = "Top 10 tags most/least related to each demographic") +
+  facet_wrap(~ nice_demog, scales = "free_y") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.0625, .125, .25, .5, 1, 2, 4, 8, 16),
+    labels = c("1/16", "1/8", "1/4", "1/2", "1", "2", "4", "8", "16"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0))
+
+bayes_facet
+```
+
+## Controlling for Aggregate BIPOC Population
+
+The second model uses the same demographic variables, but rather than drawing from black and hispanic percentages, it uses an overall BIPOC student percentage (as calculated by non-white percent). I recognize this may not be super useful for reporting, but I was interested to see if there were any significant differences between majority-majority and majority-minority schools when racial demographics are not disaggregated.
+
+```{r model 2 - bipoc}
+#also run bipoc percent (all non-white)?
+mod_prep2 <- mod_prep %>% 
+  mutate(non_white_percent = 1 - white_percent)
+
+##from Gregor's code:
+#first will run black percent and hispanic percent as controls
+one_vars2 = c("non_white_percent", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "frpl_percent", "swd_percent", "ell_percent")
+
+logistic_one_dat2 = 
+  mod_prep2 %>%
+  select(value, tag, one_of(one_vars2)) %>%
+  na.omit() %>%
+  group_by(tag) %>%
+  # scaling non-binary predictors
+  mutate_at(vars(
+    c(
+      "non_white_percent",
+      "frpl_percent",
+      "swd_percent",
+      "ell_percent"
+    )
+  ), scale)
+
+one_form2 = as.formula(paste("value", "~", paste(one_vars2, collapse = "+")))
+#plot(xm, "areas", prob = 0.9, prob_outer = 1)
+
+bayes_mods2 = list()
+
+for(this_tag in unique(mod_prep2$tag)) {
+  bayes_mods2[[this_tag]] = stan_glm(
+    one_form2,
+    data = filter(logistic_one_dat2, tag == this_tag),
+    family = binomial(link = "logit"),
+    prior = student_t(
+      df = 7,
+      location = 0,
+      scale = 2.5
+    )
+  )
+  
+}
+
+bayes_tidy2 = lapply(bayes_mods2, tidy) %>%
+  bind_rows(.id = "response") %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    nice_tag = label_tags(response),
+    nice_demog = factor(label_dems(term))
+  )
+
+## top 10 absolute effects per demo:
+
+bayes_facet_dat2 = bayes_tidy2 %>% group_by(nice_demog) %>%
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10)
+
+bayes_facet2 = 
+  ggplot(bayes_facet_dat2,
+    aes(y = exp(estimate),
+        x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean),
+    )) +
+  geom_col() + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       #fill = "Demographic",
+       title = "Top 10 tags most/least related to each demographic") +
+  facet_wrap(~ nice_demog, scales = "free_y") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.125, .25, .5, 1, 2, 4, 8),
+    labels = c("1/8", "1/4", "1/2", "1", "2", "4", "8"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0))
+
+bayes_facet2
+```
+
+## Controlling for Locale
+
+```{r model 3 - locale}
+#also run bipoc percent (all non-white)?
+mod_prep3 <- clean_data_full %>% 
+  select(school_id, starts_with("practices_"), ends_with("_percent"), locale) %>% 
+  mutate(locale_urban = ifelse(locale == "Urban", 1, 0),
+         locale_rural = ifelse(locale == "Rural", 1, 0),
+         locale_suburban = ifelse(locale == "Suburban", 1, 0)) %>% 
+  left_join(type_recode, by = "school_id") %>% 
+  mutate(school_descriptor_charter = ifelse(type == "charter", 1, 0),
+         school_descriptor_district = ifelse(type == "district", 1, 0),
+         school_descriptor_independent = ifelse(type == "independent", 1, 0)) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "value") %>% 
+  select(-c(type, locale)) %>% 
+  mutate(non_white_percent = 1 - white_percent)
+
+##from Gregor's code:
+#use all 3 racial categories
+one_vars3 = c("non_white_percent", "black_percent", "hispanic_percent", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "locale_urban", "locale_suburban", "locale_rural", "frpl_percent")
+
+logistic_one_dat3 = 
+  mod_prep3 %>%
+  select(value, tag, one_of(one_vars3)) %>%
+  na.omit() %>%
+  group_by(tag) %>%
+  # scaling non-binary predictors
+  mutate_at(vars(
+    c(ends_with("_percent"))), scale)
+
+one_form3 = as.formula(paste("value", "~", paste(one_vars3, collapse = "+")))
+#plot(xm, "areas", prob = 0.9, prob_outer = 1)
+
+bayes_mods3 = list()
+
+for(this_tag in unique(mod_prep3$tag)) {
+  bayes_mods3[[this_tag]] = stan_glm(
+    one_form3,
+    data = filter(logistic_one_dat3, tag == this_tag),
+    family = binomial(link = "logit"),
+    prior = student_t(
+      df = 7,
+      location = 0,
+      scale = 2.5
+    )
+  )
+  
+}
+
+bayes_tidy3 = lapply(bayes_mods3, tidy) %>%
+  bind_rows(.id = "response") %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    nice_tag = label_tags(response),
+    nice_demog = factor(label_dems(term))
+  )
+
+## top 10 absolute effects per demo:
+
+bayes_facet_dat3 = bayes_tidy3 %>% group_by(nice_demog) %>%
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10)
+
+bayes_facet3 = 
+  ggplot(bayes_facet_dat3,
+    aes(y = exp(estimate),
+        x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean),
+    )) +
+  geom_col() + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       #fill = "Demographic",
+       title = "Top 10 tags most/least related to each demographic") +
+  facet_wrap(~ nice_demog, scales = "free_y") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.125, .25, .5, 1, 2, 4, 8),
+    labels = c("1/8", "1/4", "1/2", "1", "2", "4", "8"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0))
+
+bayes_facet3
+```
+
+```{r save model plots, eval = FALSE}
+#black and hispanic percent as variable in odds model
+ggsave("type-odds-model-top10.png", plot = bayes_facet, path = here("outputs", "type analysis"), 
+       width = 20, height = 12, units = "in")
+#nonwhite/bipoc percent as variable in odds model
+ggsave("type-bipoc-odds-model-top10.png", plot = bayes_facet2, path = here("outputs", "type analysis"), 
+       width = 20, height = 12, units = "in")
+#racial vars + locale
+ggsave("type-locale-odds-model-top10.png", plot = bayes_facet2, path = here("outputs", "type analysis"), 
+       width = 13, units = "in")
+```
