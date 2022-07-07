@@ -25,6 +25,9 @@ library(tidyverse)
 library(ggplot2)
 library(DT)
 library(scales)
+library(rstanarm)
+library(broom.mixed)
+library(gmodels)
 source(here("scripts", "branding.R")) #, local = knitr::knit_global()
 load(here("data", "complete_canopy_2022.RData"))
 ```
@@ -1039,4 +1042,117 @@ ggsave("type-bipoc-odds-model-top10.png", plot = bayes_facet2, path = here("outp
 #racial vars + locale
 ggsave("type-locale-odds-model-top10.png", plot = bayes_facet2, path = here("outputs", "type analysis"), 
        width = 13, units = "in")
+```
+
+# Odds and Ends (7.6.22)
+
+Outstanding questions to help build this out:
+How big are independent schools (enrollment) compared to charters & districts?  
+* would you rather have this reported as averages within each type or using bins?*
+What proportion of district schools are high schools? What proportion of charters are HS? What proportion of independent schools are HS?
+What proportion of charter schools are urban/suburban/rural, vs. district and independent schools?
+
+```{r odds and ends prep}
+type_desc <- school_data %>% 
+  select(school_id, school_name, locale, grades_elementary, grades_middle, grades_high) %>% 
+  left_join(type_recode, by = "school_id")
+
+size <- demographic_data %>% 
+  select(school_id, nces_total_enrollment, self_reported_total_enrollment)
+
+type_desc <- type_desc %>% 
+  left_join(size, by = "school_id") %>% 
+  unite("student_tot", c(nces_total_enrollment, self_reported_total_enrollment), na.rm = TRUE)
+
+type_desc <- type_desc %>%
+  mutate(student_tot = str_remove(student_tot, "_..."))
+type_desc[12,3] <- "Rural" #Community Lab
+type_desc[138,3] <- "Urban" #Utah Schools for the Deaf
+type_desc[152,3] <- "Urban" #Unidos Homeschool Cooperative
+type_desc[151,3] <- "Suburban" #Portal Schools
+type_desc[82,3] <- "Suburban" #Verdi Ecoschool
+type_desc[157,3] <- "Urban" #Lumen High School
+type_desc[41,3] <- "Urban" #One Stone
+type_desc[121,3] <- "Urban" #KIPP Philadelphia Preparatory Academy
+type_desc[123,3] <- "Rural" #Cabot School
+# type_desc[124,3] <- "" #CLK Engage At CLK Elementary School
+type_desc[140,3] <- "Urban" #Southern Nevada Urban Micro Academy
+```
+
+## What proportion of district/charter/independent schools are high schools?
+
+```{r high schools by type}
+hs_prop <- type_desc %>% 
+  group_by(type) %>% 
+  mutate(hs_n = sum(as.numeric(grades_high), na.rm = TRUE),
+         type_n = length(school_id),
+         hs_prop = hs_n/type_n,
+         hs_prop = paste0(round(hs_prop*100, 2), "%")) %>% 
+  select(type, hs_n, type_n, hs_prop) %>% 
+  unique() %>% 
+  rename(`Type of School` = type,
+         `Number of High Schools` = hs_n,
+         `Total Schools Within Type` = type_n,
+         `Proportion of High Schools` = hs_prop)
+datatable(hs_prop)
+```
+
+## What proportion of *charter* schools are urban/suburban/rural?  
+
+```{r locale props for charter}
+# Charter schools
+charter_locale_prop <- type_desc %>% 
+  filter(type == "charter") %>% 
+  group_by(locale) %>% 
+  mutate(locale_n = length(locale)) %>% 
+  ungroup() %>% 
+  mutate(school_n = length(school_id),
+         locale_prop = paste0(round(100*(locale_n/school_n), 2), "%")) %>% 
+  select(locale, locale_n, school_n, locale_prop) %>% 
+  unique() %>% 
+  rename(`Locale` = locale,
+         `Schools Within Locale` = locale_n,
+         `Total Number of Charter Schools` = school_n,
+         `Proportion of Charter Schools within Locale` = locale_prop)
+datatable(charter_locale_prop)
+```
+
+## What proportion of *district* schools are urban/suburban/rural?  
+
+```{r locale props for district}
+# District schools
+district_locale_prop <- type_desc %>% 
+  filter(type == "district") %>% 
+  group_by(locale) %>% 
+  mutate(locale_n = length(locale)) %>% 
+  ungroup() %>% 
+  mutate(school_n = length(school_id),
+         locale_prop = paste0(round(100*(locale_n/school_n), 2), "%")) %>% 
+  select(locale, locale_n, school_n, locale_prop) %>% 
+  unique() %>% 
+  rename(`Locale` = locale,
+         `Schools Within Locale` = locale_n,
+         `Total Number of District Schools` = school_n,
+         `Proportion of District Schools within Locale` = locale_prop)
+datatable(district_locale_prop)
+```
+
+## What proportion of *independent* schools are urban/suburban/rural?  
+
+```{r locale props for independent}
+# Independent schools
+independent_locale_prop <- type_desc %>% 
+  filter(type == "independent") %>% 
+  group_by(locale) %>% 
+  mutate(locale_n = length(locale)) %>% 
+  ungroup() %>% 
+  mutate(school_n = length(school_id),
+         locale_prop = paste0(round(100*(locale_n/school_n), 2), "%")) %>% 
+  select(locale, locale_n, school_n, locale_prop) %>% 
+  unique() %>% 
+  rename(`Locale` = locale,
+         `Schools Within Locale` = locale_n,
+         `Total Number of Independent Schools` = school_n,
+         `Proportion of Independent Schools within Locale` = locale_prop)
+datatable(independent_locale_prop)
 ```
