@@ -754,26 +754,34 @@ ggsave("sm-tag-variability-20.png", plot = var_min_20, path = here("outputs", "t
 
 # Models
 
-## Race and SES
+## Race and SES  
+
+Predictors: number of students, black percent, hispanic percent, school type, FRPL percent, SWD percent, ELL percent
 
 ```{r data prep}
 # mod_prep <- clean_data_full %>% 
 #   select(school_id, starts_with("practices_"), grades_elementary, grades_middle, grades_high)
 
 mod_prep <- clean_data_full %>% 
-  select(school_id, starts_with("practices_"), ends_with("_percent"), self_reported_total_enrollment) %>% 
+  select(school_id, starts_with("practices_"), ends_with("_percent"), self_reported_total_enrollment, nces_total_enrollment) %>% 
   left_join(type_recode, by = "school_id") %>% 
   mutate(school_descriptor_charter = ifelse(type == "charter", 1, 0),
          school_descriptor_district = ifelse(type == "district", 1, 0),
          school_descriptor_independent = ifelse(type == "independent", 1, 0)) %>% 
+  unite("n_student", c(nces_total_enrollment, self_reported_total_enrollment), na.rm = TRUE) %>% 
+  mutate(n_student = na_if(n_student, ""),
+         n_student = str_remove_all(n_student, "_..."),
+         n_student = as.integer(n_student)) %>% 
   pivot_longer(cols = starts_with("practices"),
                names_to = "tag",
                values_to = "value") %>% 
   select(-type)
 
+
 ##from Gregor's code:
 #first will run black percent and hispanic percent as controls
-one_vars = c("self_reported_total_enrollment", "black_percent", "hispanic_percent", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "frpl_percent", "swd_percent", "ell_percent")
+one_vars = c("n_student", "black_percent", "hispanic_percent", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "frpl_percent", "swd_percent", "ell_percent")
+
 
 logistic_one_dat = 
   mod_prep %>%
@@ -783,7 +791,7 @@ logistic_one_dat =
   # scaling non-binary predictors
   mutate_at(vars(
     c(
-      "self_reported_total_enrollment",
+      "n_student",
       "black_percent",
       "hispanic_percent",
       "frpl_percent",
@@ -847,14 +855,18 @@ bayes_facet =
   guides(fill = "none") +
   theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
         panel.grid.major.y = element_blank(),
-        axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0))
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0)) +
+  geom_hline(yintercept = 1) +
+  expand_limits(y = c(1/4, 4))
 
 bayes_facet
 ```
 
 ## Controlling for Aggregate BIPOC Population
 
-The second model uses the same demographic variables, but rather than drawing from black and hispanic percentages, it uses an overall BIPOC student percentage (as calculated by non-white percent). I recognize this may not be super useful for reporting, but I was interested to see if there were any significant differences between majority-majority and majority-minority schools when racial demographics are not disaggregated.
+The second model uses the same demographic variables, but rather than drawing from black and hispanic percentages, it uses an overall BIPOC student percentage (as calculated by non-white percent). I recognize this may not be super useful for reporting, but I was interested to see if there were any significant differences between majority-majority and majority-minority schools when racial demographics are not disaggregated.  
+
+Predictors: bipoc percent, school type, FRPL percent, SWD percent, ELL percent, number of students
 
 ```{r model 2 - bipoc}
 #also run bipoc percent (all non-white)?
@@ -863,7 +875,7 @@ mod_prep2 <- mod_prep %>%
 
 ##from Gregor's code:
 #first will run black percent and hispanic percent as controls
-one_vars2 = c("non_white_percent", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "frpl_percent", "swd_percent", "ell_percent")
+one_vars2 = c("non_white_percent", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "frpl_percent", "swd_percent", "ell_percent", "n_student")
 
 logistic_one_dat2 = 
   mod_prep2 %>%
@@ -873,6 +885,7 @@ logistic_one_dat2 =
   # scaling non-binary predictors
   mutate_at(vars(
     c(
+      "n_student",
       "non_white_percent",
       "frpl_percent",
       "swd_percent",
@@ -935,17 +948,20 @@ bayes_facet2 =
   guides(fill = "none") +
   theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
         panel.grid.major.y = element_blank(),
-        axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0))
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0)) +
+  geom_hline(yintercept = 1) +
+  expand_limits(y = c(1/4, 4))
 
 bayes_facet2
 ```
 
-## Controlling for Locale
+## Controlling for Locale  
+Predictors: bipoc percent, number of students, school type, school locale, FRPL percent
 
 ```{r model 3 - locale}
-#also run bipoc percent (all non-white)?
+#also run bipoc percent?
 mod_prep3 <- clean_data_full %>% 
-  select(school_id, starts_with("practices_"), ends_with("_percent"), locale) %>% 
+  select(school_id, starts_with("practices_"), ends_with("_percent"), locale, nces_total_enrollment, self_reported_total_enrollment) %>% 
   mutate(locale_urban = ifelse(locale == "Urban", 1, 0),
          locale_rural = ifelse(locale == "Rural", 1, 0),
          locale_suburban = ifelse(locale == "Suburban", 1, 0)) %>% 
@@ -953,6 +969,10 @@ mod_prep3 <- clean_data_full %>%
   mutate(school_descriptor_charter = ifelse(type == "charter", 1, 0),
          school_descriptor_district = ifelse(type == "district", 1, 0),
          school_descriptor_independent = ifelse(type == "independent", 1, 0)) %>% 
+  unite("n_student", c(nces_total_enrollment, self_reported_total_enrollment), na.rm = TRUE) %>% 
+  mutate(n_student = na_if(n_student, ""),
+         n_student = str_remove_all(n_student, "_..."),
+         n_student = as.integer(n_student)) %>% 
   pivot_longer(cols = starts_with("practices"),
                names_to = "tag",
                values_to = "value") %>% 
@@ -961,7 +981,7 @@ mod_prep3 <- clean_data_full %>%
 
 ##from Gregor's code:
 #use all 3 racial categories
-one_vars3 = c("non_white_percent", "black_percent", "hispanic_percent", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "locale_urban", "locale_suburban", "locale_rural", "frpl_percent")
+one_vars3 = c("non_white_percent", "n_student", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "locale_urban", "locale_suburban", "locale_rural", "frpl_percent")
 
 logistic_one_dat3 = 
   mod_prep3 %>%
@@ -970,7 +990,7 @@ logistic_one_dat3 =
   group_by(tag) %>%
   # scaling non-binary predictors
   mutate_at(vars(
-    c(ends_with("_percent"))), scale)
+    c(ends_with("_percent"), n_student)), scale)
 
 one_form3 = as.formula(paste("value", "~", paste(one_vars3, collapse = "+")))
 #plot(xm, "areas", prob = 0.9, prob_outer = 1)
@@ -1027,21 +1047,23 @@ bayes_facet3 =
   guides(fill = "none") +
   theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
         panel.grid.major.y = element_blank(),
-        axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0))
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0)) +
+  geom_hline(yintercept = 1) +
+  expand_limits(y = c(1/9, 4))
 
 bayes_facet3
 ```
 
 ```{r save model plots, eval = FALSE}
 #black and hispanic percent as variable in odds model
-ggsave("type-odds-model-top10.png", plot = bayes_facet, path = here("outputs", "type analysis"), 
+ggsave("model-race-ses.png", plot = bayes_facet, path = here("outputs", "type analysis"), 
        width = 20, height = 12, units = "in")
 #nonwhite/bipoc percent as variable in odds model
-ggsave("type-bipoc-odds-model-top10.png", plot = bayes_facet2, path = here("outputs", "type analysis"), 
+ggsave("model-bipoc-ses.png", plot = bayes_facet2, path = here("outputs", "type analysis"), 
        width = 20, height = 12, units = "in")
 #racial vars + locale
-ggsave("type-locale-odds-model-top10.png", plot = bayes_facet2, path = here("outputs", "type analysis"), 
-       width = 13, units = "in")
+ggsave("model-type-locale.png", plot = bayes_facet2, path = here("outputs", "type analysis"), 
+       width = 20, height = 12, units = "in")
 ```
 
 # Odds and Ends (7.6.22)
