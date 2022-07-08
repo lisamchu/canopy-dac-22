@@ -756,9 +756,11 @@ ggsave("sm-tag-variability-20.png", plot = var_min_20, path = here("outputs", "t
 
 ## Race and SES  
 
-Predictors: number of students, black percent, hispanic percent, school type, FRPL percent, SWD percent, ELL percent
+Predictors: number of students, black percent, hispanic percent, school type, FRPL percent, SWD percent, ELL percent  
 
-```{r data prep}
+Plot found in `outputs` > `type analysis` > `model-race-ses.png`. Code takes a long time to run, so I don't recommend pulling from this document.
+
+```{r data prep, eval = FALSE}
 # mod_prep <- clean_data_full %>% 
 #   select(school_id, starts_with("practices_"), grades_elementary, grades_middle, grades_high)
 
@@ -866,9 +868,11 @@ bayes_facet
 
 The second model uses the same demographic variables, but rather than drawing from black and hispanic percentages, it uses an overall BIPOC student percentage (as calculated by non-white percent). I recognize this may not be super useful for reporting, but I was interested to see if there were any significant differences between majority-majority and majority-minority schools when racial demographics are not disaggregated.  
 
-Predictors: bipoc percent, school type, FRPL percent, SWD percent, ELL percent, number of students
+Predictors: bipoc percent, school type, FRPL percent, SWD percent, ELL percent, number of students  
 
-```{r model 2 - bipoc}
+Plot found in `outputs` > `type analysis` > `model-bipoc-ses.png`. Code takes a long time to run, so I don't recommend pulling from this document.
+
+```{r model 2 - bipoc, eval = FALSE}
 #also run bipoc percent (all non-white)?
 mod_prep2 <- mod_prep %>% 
   mutate(non_white_percent = 1 - white_percent)
@@ -956,9 +960,12 @@ bayes_facet2
 ```
 
 ## Controlling for Locale  
-Predictors: bipoc percent, number of students, school type, school locale, FRPL percent
 
-```{r model 3 - locale}
+Predictors: bipoc percent, number of students, school type, school locale, FRPL percent  
+
+Plot found in `outputs` > `type analysis` > `model-type-locale.png`. Code takes a long time to run, so I don't recommend pulling from this document.
+
+```{r model 3 - locale, eval = FALSE}
 #also run bipoc percent?
 mod_prep3 <- clean_data_full %>% 
   select(school_id, starts_with("practices_"), ends_with("_percent"), locale, nces_total_enrollment, self_reported_total_enrollment) %>% 
@@ -1062,7 +1069,7 @@ ggsave("model-race-ses.png", plot = bayes_facet, path = here("outputs", "type an
 ggsave("model-bipoc-ses.png", plot = bayes_facet2, path = here("outputs", "type analysis"), 
        width = 20, height = 12, units = "in")
 #racial vars + locale
-ggsave("model-type-locale.png", plot = bayes_facet2, path = here("outputs", "type analysis"), 
+ggsave("model-type-locale.png", plot = bayes_facet3, path = here("outputs", "type analysis"), 
        width = 20, height = 12, units = "in")
 ```
 
@@ -1073,6 +1080,7 @@ How big are independent schools (enrollment) compared to charters & districts?
 * would you rather have this reported as averages within each type or using bins?*
 What proportion of district schools are high schools? What proportion of charters are HS? What proportion of independent schools are HS?
 What proportion of charter schools are urban/suburban/rural, vs. district and independent schools?
+
 
 ```{r odds and ends prep}
 type_desc <- school_data %>% 
@@ -1100,6 +1108,47 @@ type_desc[123,3] <- "Rural" #Cabot School
 # type_desc[124,3] <- "" #CLK Engage At CLK Elementary School
 type_desc[140,3] <- "Urban" #Southern Nevada Urban Micro Academy
 ```
+
+## How big are independent schools (enrollment) compared to charters & districts? 
+
+```{r size by type, fig.dim = c(9, 9)}
+#table with mean and median for each group
+type_size <- type_desc %>% 
+  group_by(type) %>% 
+  mutate(student_tot = as.integer(student_tot),
+         mean = round(mean(student_tot, na.rm = TRUE), 2),
+         median = median(student_tot, na.rm = TRUE)) %>% 
+  select(type, mean, median) %>% 
+  unique()
+datatable(type_size)
+
+#viz for type - violin plot
+type_size_viz <- type_size <- type_desc %>% 
+  group_by(type) %>% 
+  mutate(student_tot = as.integer(student_tot),
+         mean = round(mean(student_tot, na.rm = TRUE), 2)) %>% 
+  ggplot(aes(y = student_tot, x = type, fill)) +
+  geom_violin(fill = transcend_cols["teal"]) +
+  geom_point(color = transcend_cols["red"],
+             position = position_jitter(width = .2),
+             size = 0.5) +
+  labs(x = "",
+       y = "number of students",
+       title = "Student Population across School Type",
+       subtitle = "Wider areas indicate more schools with given student population") +
+    # theme(axis.text.x = element_blank(),
+    #       strip.text = element_text(size = rel(0.5)),
+    #       plot.subtitle = element_text(size = rel(0.7)))
+  scale_y_continuous(expand=c(0,0)) +
+  scale_x_discrete(labels=c("charter" = "Charter Schools \nmean = 299.5", 
+                            "district" = "District Schools \nmean = 458",
+                            "independent" = "Independent Schools \nmean = 458"))
+
+type_size_viz
+
+```
+
+I'd love to put a horizontal line in the violin plots indicating where the average is for each group so we can see the distribution relative to that, but I'm not sure how to do that with categorical data in this type of plot. Will do some digging if it seems worth it.
 
 ## What proportion of district/charter/independent schools are high schools?
 
