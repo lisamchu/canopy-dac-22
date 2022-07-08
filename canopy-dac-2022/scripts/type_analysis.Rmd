@@ -1150,6 +1150,13 @@ type_size_viz
 
 I'd love to put a horizontal line in the violin plots indicating where the average is for each group so we can see the distribution relative to that, but I'm not sure how to do that with categorical data in this type of plot. Will do some digging if it seems worth it.
 
+```{r save type size plot}
+#racial vars + locale
+ggsave("type-school-size.png", plot = type_size_viz, path = here("outputs", "type analysis"), 
+       width = 12, height = 8, units = "in")
+```
+
+
 ## What proportion of district/charter/independent schools are high schools?
 
 ```{r high schools by type}
