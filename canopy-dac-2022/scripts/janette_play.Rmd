@@ -127,6 +127,9 @@ datatable(top_10_core)
 # double check accuracy
 # max(core_prac_freq$Total)
 # output is 50 -- bottom tail = 50
+
+##save CSV for Figure G
+#export(top_10_core, "fig_g_data.csv")
 ```
 
 ## How long have schools been implementing each core practice?

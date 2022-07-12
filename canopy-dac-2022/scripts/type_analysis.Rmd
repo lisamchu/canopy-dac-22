@@ -615,6 +615,34 @@ var_max_10 <- var_all %>%
 
 var_max_10
 
+##save data for Figure H
+# var_max_10_dat <- var_all %>% 
+#   group_by(type) %>% 
+#   slice_max(variance, n = 10, with_ties = FALSE)
+# export(var_max_10_dat, "fig_h_data.csv")
+
+## more fixing up for readability
+
+var_max_10_edit <- var_all %>% 
+  group_by(type) %>% 
+  slice_max(variance, n = 10, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = type)) + 
+  geom_bar(stat = "identity", position = "identity") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  coord_flip() +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 10 Tags with Largest Variability for Charter, District, and Independent Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_10_edit
+
 #min variability plot - top 10
 var_min_10 <- var_all %>% 
   group_by(type) %>% 
@@ -1142,13 +1170,20 @@ type_size_viz <- type_size <- type_desc %>%
   scale_y_continuous(expand=c(0,0)) +
   scale_x_discrete(labels=c("charter" = "Charter Schools \nmean = 299.5", 
                             "district" = "District Schools \nmean = 458",
-                            "independent" = "Independent Schools \nmean = 458"))
+                            "independent" = "Independent Schools \nmean = 95.88"))
 
 type_size_viz
 
 ```
 
 I'd love to put a horizontal line in the violin plots indicating where the average is for each group so we can see the distribution relative to that, but I'm not sure how to do that with categorical data in this type of plot. Will do some digging if it seems worth it.
+
+Curious about the size outliers in district schools, are these P-12 or not?
+
+```{r big district dig}
+
+```
+
 
 ```{r save type size plot}
 #racial vars + locale

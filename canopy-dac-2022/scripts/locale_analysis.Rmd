@@ -804,6 +804,12 @@ var_min_10 <- var_all %>%
 
 var_min_10
 
+#saving Figure J data
+# var_min_10_dat <- var_all %>% 
+#   group_by(locale) %>% 
+#   slice_min(variance, n = 10, with_ties = FALSE)
+#export(var_min_10_dat, "fig_j_data.csv")
+
 #max variability plot - top 15
 var_max_15 <- var_all %>% 
   group_by(locale) %>% 
