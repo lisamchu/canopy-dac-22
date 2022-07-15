@@ -1089,6 +1089,21 @@ bayes_facet3 =
 bayes_facet3
 ```
 
+## TO DO: *redo model 3 including ELL % and SWD %*
+
+```{r}
+
+```
+
+
+## TO DO: Model using cluster weights as outcomes  
+* remember weights need to be standardized -- may want to double check if Gregor's document included a standardized variable for cluster weights or not
+
+```{r}
+
+```
+
+
 ```{r save model plots, eval = FALSE}
 #black and hispanic percent as variable in odds model
 ggsave("model-race-ses.png", plot = bayes_facet, path = here("outputs", "type analysis"), 

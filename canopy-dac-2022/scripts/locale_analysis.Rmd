@@ -1207,3 +1207,18 @@ ggsave("locale-bipoc-odds-model-top10.png", plot = bayes_facet2, path = here("ou
        width = 20, height = 12, units = "in")
 ```
 
+## Odds and ends
+
+Chart showing urban, suburban, rural school frequencies for the following tags: hiring for equity and inclusion values, culturally responsive teaching, anti-racist practices, and social justice focus (tags on x-axis, percentages (within) on y-axis)
+
+```{r tag-specific bar chart}
+sj_tags <- locale_tags_2 %>% 
+  filter(tag == "practices_hiring_equity" | 
+         tag == "practices_culturally_responsive" | 
+         tag == "practices_anti_racist" | 
+         tag == "practices_social_justice") %>% 
+  select(tag, locale, pct_locale_tag)
+
+#export(sj_tags, "sj-fig.csv")
+```
+
