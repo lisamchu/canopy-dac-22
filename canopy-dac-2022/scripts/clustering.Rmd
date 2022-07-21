@@ -1,0 +1,266 @@
+---
+title: "Clustering  Practices in Canopy Schools"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+library(here)
+library(purrr)
+library(dplyr)
+library(tidyr)
+library(proxy)
+library(ggcorrplot)
+library(plotly)
+library(patchwork)
+library(psych)
+library(GPArotation)
+library(parameters)
+library(DT)
+source(here("scripts/branding.R"))
+load(here("data/complete_canopy_2022.RData"))
+```
+
+# Correlations
+
+First we calculate a correlation matrix for the tags.
+
+```{r, message=FALSE}
+practices_cor = practices_data %>%
+  select(starts_with("practices")) %>%
+  cor
+
+practices_jac = practices_data %>%
+  select(starts_with("practices")) %>%
+  simil(method = "Jaccard", by_rows = FALSE)
+
+plot_tag_cor = function(cor_mat, title = "") {
+  ggcorrplot(cor_mat, hc.order = T, type = "upper") +
+    scale_fill_distiller(type = "div", limits = c(-1, 1), expand = c(0, 0)) +
+    labs(title = title,
+         fill = "Correlation") +
+    #scale_x_discrete(labels = label_tags) +
+    #scale_y_discrete(labels = label_tags) +
+    labs(x = "", y = "") + 
+    #scale_fill_cc_gradient + 
+    theme_transcend_sparse + 
+    theme(axis.text.x = element_blank(), 
+          axis.text.y = element_blank(),
+          panel.border = element_blank(),
+          axis.ticks = element_blank()
+          )
+}
+
+plot_tag_cor(practices_cor, title = "Correlation heat map for all tags") +
+  theme(legend.position = c(.85, .25)) -> 
+  cor_plot
+#cor_plot
+```
+
+```{r, message = FALSE}
+plot_tag_cor(as.matrix(practices_jac), title = "Jaccard similarity for all tags") +
+  theme(legend.position = c(.85, .25)) + 
+  scale_fill_distiller(type = "div", limits = c(0, 1), expand = c(0, 0)) ->
+  jac_plot
+
+#jac_plot
+```
+
+
+
+```{r}
+ggplotly(cor_plot)
+```
+
+```{r}
+ggplotly(jac_plot)
+```
+
+```{r}
+mat_to_df = function(m) {
+  data.frame(row=rownames(m)[row(m)[upper.tri(m)]], 
+           col=colnames(m)[col(m)[upper.tri(m)]], 
+           corr=m[upper.tri(m)])
+}
+d_corr = mat_to_df(practices_cor)
+d_jacc = mat_to_df(as.matrix(practices_jac))
+
+d_jacc %>%
+  rename(jaccard = corr) %>%
+  left_join(d_corr, by = c("row", "col")) %>%
+  rename(correlation = corr) %>%
+  mutate(
+    jacc_rank = rank(-jaccard),
+    corr_rank = rank(-correlation),
+    rank_diff = jacc_rank - corr_rank
+  ) %>% 
+  arrange(desc(jaccard)) ->
+  jacc_corr
+
+jacc_corr %>% 
+  datatable(
+    caption = "Comparison of Jaccard Similarity and Correlation Coeffficients",
+    colnames = c("Jaccard (0,1)" = "jaccard", "Correlation (-1,1)" = "correlation")
+  ) %>%
+  formatRound(digits = 2, columns = c("Jaccard (0,1)", "Correlation (-1,1)")) 
+```
+
+
+```{r, fig.width = 12}
+corr_hist = ggplot(jacc_corr, aes(x = correlation)) +
+  geom_histogram(binwidth = 0.03, fill = transcend_cols["blue"]) +
+  geom_vline(aes(xintercept = mean(correlation)), color = transcend_cols["red"], size = 1) +
+  geom_text(aes(x = mean(correlation), y = Inf, label = paste("Average:", round(mean(correlation), 2))), hjust = -.1, check_overlap = TRUE, vjust = 1.1, family = "Open Sans") + 
+  bar_y_scale_count +
+  scale_x_continuous(limits = c(-1, 1), expand = expansion(0, 0)) +
+  labs(title = "Distribution of pairwise tag correlations", y = "Count of Tag Pairs",
+       x = "Correlation") +
+  theme(plot.margin = margin(t = 8, r = 12, b = 8, l = 8, unit = "pt"))
+
+jacc_hist = ggplot(jacc_corr, aes(x = jaccard)) +
+  geom_histogram(binwidth = 0.03, fill = transcend_cols["teal"]) +
+  geom_vline(aes(xintercept = mean(jaccard)), color = transcend_cols["red"], size = 1) +
+  geom_text(aes(x = mean(jaccard), y = Inf, label = paste("Average:", round(mean(jaccard), 2))), hjust = -.1, check_overlap = TRUE, vjust = 1.1, family = "Open Sans") + 
+  bar_y_scale_count +
+  scale_x_continuous(limits = c(0, 1), expand = expansion(0, 0)) +
+  labs(title = "Distribution of pairwise tag similarities", y = "Count of Tag Pairs",
+       x = "Jaccard Similarity") +
+  theme(plot.margin = margin(t = 8, r = 12, b = 8, l = 8, unit = "pt"))
+
+corr_hist + jacc_hist
+```
+
+
+# Clustering
+
+```{r}
+fa_cor = fa.parallel(
+  practices_cor, fm = "pa", fa = "fa", n.obs = nrow(practices_data),
+  main = "Correlation scree plot"
+)
+```
+
+```{r}
+jac_mat = as.matrix(practices_jac)
+jac_mat[is.na(jac_mat)] = 1
+fa_jac = fa.parallel(
+  jac_mat, fm = "pa", fa = "fa", n.obs = nrow(practices_data),
+  main = "Jaccard scree plot"
+)
+```
+
+Using correlations, 3-6 clusters seems reasonable, so we can go with 5 as was previously useful.
+With the Jaccard similarity metric, more than 3 clusters seems like a stretch... for now we'll
+leave this method behind.
+
+
+```{r, include=FALSE}
+## using methods that worked well previously
+efa_2022 = fa(practices_cor, nfactors = 5, rotate = "oblimin", fm = "minres")
+
+## all the junk that prints is well-explained here: https://m-clark.github.io/posts/2020-04-10-psych-explained/
+print(efa_2022, sort = T)
+
+write_efa_files = function(efa, dir, file, threshold = 0.28) {
+  efa %>%
+    model_parameters(sort = TRUE, threshold = "max") %>%
+    write_tsv(here(dir, paste(file, "Max.txt")), na = "")
+  efa %>%
+    model_parameters(sort = TRUE, threshold = threshold) %>%
+    write_tsv(here(dir, paste(file, "Threshold.txt")), na = "")
+  efa %>%
+    model_parameters(sort = TRUE) %>%
+    write_tsv(here(dir, paste(file, "All.txt")), na = "")
+  invisible()
+}
+
+print_efa = function(
+  efa, 
+  type = c("max", "threshold", "all"), 
+  threshold = 0.28,
+  caption = "")
+{
+  type = match.arg(type)
+  if(type == "max") {
+    return(efa |> 
+      model_parameters(sort = TRUE, threshold = "max") |>
+      datatable(caption = paste(caption, "Max loadings")) |>
+      formatRound(digits = 2, columns = 2:(efa$factors + 3)))
+  }
+  if(type == "threshold") {
+    return(efa |> 
+      model_parameters(sort = TRUE, threshold = threshold) |>
+      datatable(caption = paste(caption, "Threshold loadings")) |>
+      formatRound(digits = 2, columns = 2:(efa$factors + 3)))
+  }
+  if(type == "all") {
+    return(efa |> 
+      model_parameters(sort = TRUE) |>
+      datatable(caption = paste(caption, "All loadings")) |>
+      formatRound(digits = 2, columns = 2:(efa$factors + 3)))
+  }
+}
+```
+
+```{r}
+efa_2022 %>%
+  model_parameters(sort = TRUE, threshold = "max") %>%
+  write_tsv(here("outputs", "EFA 2022 Results Max.txt"), na = "") %>%
+  datatable(caption = "Max loadings") %>%
+  formatRound(digits = 2, columns = 2:8) 
+```
+
+```{r}
+efa_2022 %>%
+  model_parameters(sort = TRUE, threshold = 0.28) %>%
+  write_tsv(here("outputs", "EFA 2022 Results Threshold.txt"), na = "") %>%
+  datatable(caption = "Threshold loadings") %>%
+  formatRound(digits = 2, columns = 2:8) 
+```
+
+```{r}
+efa_2022 %>%
+  model_parameters(sort = TRUE) %>%
+  write_tsv(here("outputs", "EFA 2022 Results All.txt"), na = "") %>%
+  datatable(caption = "All loadings") %>%
+  formatRound(digits = 2, columns = 2:8) 
+```
+
+
+# Experimenting with More Clusters
+
+
+```{r}
+clust = 6:8
+efa_list = lapply(clust, fa, r = practices_cor, rotate = "oblimin", fm = "minres")
+names(efa_list) = paste0("clust", clust)
+
+```
+
+### 6 Clusters
+```{r}
+print_efa(efa_list[["clust6"]], type = "max", caption = "6 Clusters")
+print_efa(efa_list[["clust6"]], type = "threshold", caption = "6 Clusters")
+print_efa(efa_list[["clust6"]], type = "all", caption = "6 Clusters")
+
+```
+
+
+
+### 7 Clusters
+```{r}
+print_efa(efa_list[["clust7"]], type = "max", caption = "7 Clusters")
+print_efa(efa_list[["clust7"]], type = "threshold", caption = "7 Clusters")
+print_efa(efa_list[["clust7"]], type = "all", caption = "7 Clusters")
+
+```
+
+
+### 8 Clusters
+```{r}
+print_efa(efa_list[["clust8"]], type = "max", caption = "8 Clusters")
+print_efa(efa_list[["clust8"]], type = "threshold", caption = "8 Clusters")
+print_efa(efa_list[["clust8"]], type = "all", caption = "8 Clusters")
+
+```
+

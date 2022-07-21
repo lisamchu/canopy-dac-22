@@ -4,6 +4,7 @@ library(dplyr)
 library(ggplot2)
 library(ggthemes)
 library(glue)
+library(here)
 library(systemfonts)
 ## FONTS
 
@@ -28,7 +29,7 @@ if(!all(c("Open Sans", "Bebas Neue") %in% system_fonts()$family)) {
 #   x
 # }
 
-tag_labels = read_csv("data/Tags-SY2021-22 Tags.csv") %>%
+tag_labels = read_csv(here("data/Tags-SY2021-22 Tags.csv")) %>%
   select(tag = `Variable name`, label = `short name`) #%>%
   #mutate(across(everything(), fix_accent_a))
 
@@ -54,17 +55,19 @@ scale_y_tag = function(...) scale_y_discrete(labels = label_tags)
 dem_labs = c(
   "Number of students" = "nces_total_enrollment",
   "% students of color" = "non_white_percent",
-  "% Native American and Alaskan Native students" = "aian_percent",
+  "% Native American and\nAlaskan Native students" = "aian_percent",
   "% Asian students" = "asian_percent",
   "# Black students" = "black_count",
   "% Black students" = "black_percent",
   "# Hispanic students" = "hispanic_count",
   "% Hispanic students" = "hispanic_percent",
-  "% Native Hawaiian and Pacific Islander students" = "nhpi_percent",
+  "% Native Hawaiian and\nPacific Islander students" = "nhpi_percent",
   "% Multiracial students" = "multiple_percent",
   "% White students" = "white_percent",
+  "% BIPOC students" = "bipoc_percent",
   "# FRPL eligible" = "FRPL_count",
   "% FRPL eligible" = "FRPL_percent",
+  "% FRPL eligible" = "frpl_percent",
   "% English Language Learner" = "ell_percent",
   "% Limited English Proficiency" = "LEP_percent",
   "% Special Education" = "IDEA_percent",
@@ -105,14 +108,32 @@ label_percent_bins = function(breaks) {
   return(c(lo, med, hi))
 }
 
+# Cluster labels ####
+clust_details = c(
+  "MR1" = "Educational justice and holistic student supports",
+  "MR2" = "Postsecondary pathways and the world outside school",
+  "MR4" = "Deeper learning for mastery",
+  "MR5" = "Flexible and individualized learning pathways",
+  "MR3" = "Blended learning"
+)
+clust_details_r = setNames(names(clust_details), clust_details)
 
-# clust_5_order = c(
-#   "Blended Learning",
-#   "Project-Based Learning",
-#   "Competency-Based Education",
-#   "Equity & Social-Emotional Learning",
-#   "Flexible Pathways to College & Career"
-# )
+clust_labels = c(
+  `Educational justice and holistic student supports` = "Educational justice and\nholistic student supports", 
+  `Postsecondary pathways and the world outside school` = "Postsecondary pathways\nand the world outside school", 
+  `Deeper learning for mastery` = "Deeper learning for mastery",
+  `Flexible and individualized learning pathways` = "Flexible and individualized\nlearning pathways", 
+  `Blended learning` = "Blended learning"
+)
+
+label_clust = function(x) {
+  if(x %in% names(clust_details)) {
+    x = clust_details[x]
+  }
+  clust_labels[x]
+}
+
+
 
 # Colors ####
 
@@ -123,6 +144,10 @@ transcend_cols = c(
   teal = "#59C3B4",
   `light blue` = "#ADE0EE"
 )
+
+transcend_cols_noname = function(col) {
+  unname(transcend_cols[col])
+}
 
 # secondary Transcend colors when needed
 transcend_cols2 = c(

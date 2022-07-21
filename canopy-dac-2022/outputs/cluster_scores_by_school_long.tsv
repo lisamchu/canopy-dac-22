@@ -1,0 +1,806 @@
+school_id	cluster	cluster_weight
+7	Blended learning	0.24958220723078822
+7	Deeper learning for mastery	4.830537879507079
+7	Educational justice and holistic student supports	4.55784875255677
+7	Flexible and individualized learning pathways	5.0305452947339715
+7	Postsecondary pathways and the world outside school	5.294208751319225
+8	Blended learning	-0.40802753621476406
+8	Deeper learning for mastery	7.1193604666790975
+8	Educational justice and holistic student supports	7.10255692299044
+8	Flexible and individualized learning pathways	7.564184605808421
+8	Postsecondary pathways and the world outside school	1.6045404350711274
+11	Blended learning	3.861321388177521
+11	Deeper learning for mastery	8.287100160600842
+11	Educational justice and holistic student supports	9.684748601150293
+11	Flexible and individualized learning pathways	8.325837335415821
+11	Postsecondary pathways and the world outside school	4.729938427420959
+16	Blended learning	1.5591494655569123
+16	Deeper learning for mastery	7.157924703877347
+16	Educational justice and holistic student supports	10.674701836792863
+16	Flexible and individualized learning pathways	7.150934241174875
+16	Postsecondary pathways and the world outside school	5.861582324804536
+21	Blended learning	3.3339280292750826
+21	Deeper learning for mastery	4.7210022479995315
+21	Educational justice and holistic student supports	4.135892059347084
+21	Flexible and individualized learning pathways	4.832355183174034
+21	Postsecondary pathways and the world outside school	7.033582323830848
+24	Blended learning	2.60596535912738
+24	Deeper learning for mastery	6.207429996285436
+24	Educational justice and holistic student supports	8.70972537585474
+24	Flexible and individualized learning pathways	6.536705676967336
+24	Postsecondary pathways and the world outside school	6.812878065618844
+26	Blended learning	1.1197747834150438
+26	Deeper learning for mastery	5.106877444336399
+26	Educational justice and holistic student supports	8.97715025998132
+26	Flexible and individualized learning pathways	4.576500285937222
+26	Postsecondary pathways and the world outside school	6.965081614039384
+27	Blended learning	0.37803408574619335
+27	Deeper learning for mastery	7.740349868954478
+27	Educational justice and holistic student supports	7.051623901994842
+27	Flexible and individualized learning pathways	2.858011217809615
+27	Postsecondary pathways and the world outside school	4.355475620077495
+41	Blended learning	2.1046733243363387
+41	Deeper learning for mastery	3.5500055690803007
+41	Educational justice and holistic student supports	5.509687513804056
+41	Flexible and individualized learning pathways	3.282258904717468
+41	Postsecondary pathways and the world outside school	5.439965331772279
+42	Blended learning	1.9437662863481795
+42	Deeper learning for mastery	5.3542909073869245
+42	Educational justice and holistic student supports	10.277727081220087
+42	Flexible and individualized learning pathways	4.121480367348643
+42	Postsecondary pathways and the world outside school	6.454097854210839
+44	Blended learning	0.39463475177855317
+44	Deeper learning for mastery	4.994327863617322
+44	Educational justice and holistic student supports	7.552310624565731
+44	Flexible and individualized learning pathways	4.256624124493886
+44	Postsecondary pathways and the world outside school	4.331815465265447
+45	Blended learning	-1.4271767766807009
+45	Deeper learning for mastery	6.574428877989389
+45	Educational justice and holistic student supports	7.988640882701954
+45	Flexible and individualized learning pathways	5.294171534293612
+45	Postsecondary pathways and the world outside school	2.2935156404850523
+47	Blended learning	2.9519846314961433
+47	Deeper learning for mastery	6.908213070238545
+47	Educational justice and holistic student supports	4.712756082586458
+47	Flexible and individualized learning pathways	6.3332837457002356
+47	Postsecondary pathways and the world outside school	2.452366939120087
+52	Blended learning	3.9011576728799318
+52	Deeper learning for mastery	6.721998976188271
+52	Educational justice and holistic student supports	4.874226497383456
+52	Flexible and individualized learning pathways	7.2238081276464605
+52	Postsecondary pathways and the world outside school	6.997352680534904
+67	Blended learning	1.4652298324944621
+67	Deeper learning for mastery	7.182713688675813
+67	Educational justice and holistic student supports	10.920231008714323
+67	Flexible and individualized learning pathways	5.953631830189725
+67	Postsecondary pathways and the world outside school	5.536978984830139
+69	Blended learning	3.608953759304121
+69	Deeper learning for mastery	7.636580323450032
+69	Educational justice and holistic student supports	8.21908948529769
+69	Flexible and individualized learning pathways	6.303921178732934
+69	Postsecondary pathways and the world outside school	3.1996450375331325
+70	Blended learning	0.9799796079120816
+70	Deeper learning for mastery	6.0073262610846605
+70	Educational justice and holistic student supports	9.53714039826177
+70	Flexible and individualized learning pathways	3.247464350890045
+70	Postsecondary pathways and the world outside school	1.9091789055534465
+71	Blended learning	1.4885308999656297
+71	Deeper learning for mastery	3.9232699747887656
+71	Educational justice and holistic student supports	7.111467267491909
+71	Flexible and individualized learning pathways	4.1930710693598074
+71	Postsecondary pathways and the world outside school	4.716685398985348
+79	Blended learning	1.1445393040854095
+79	Deeper learning for mastery	6.987209645837441
+79	Educational justice and holistic student supports	7.994001358659193
+79	Flexible and individualized learning pathways	5.917873538667702
+79	Postsecondary pathways and the world outside school	4.281156481329038
+81	Blended learning	3.3121183997516224
+81	Deeper learning for mastery	3.6105040231812757
+81	Educational justice and holistic student supports	9.228327500476325
+81	Flexible and individualized learning pathways	5.16644871521395
+81	Postsecondary pathways and the world outside school	1.6003983922081388
+83	Blended learning	3.621815798719996
+83	Deeper learning for mastery	4.597471066840731
+83	Educational justice and holistic student supports	4.149756864475907
+83	Flexible and individualized learning pathways	5.559846185535195
+83	Postsecondary pathways and the world outside school	0.49017378976429493
+84	Blended learning	-0.4507621365873915
+84	Deeper learning for mastery	6.689671086443516
+84	Educational justice and holistic student supports	6.56908346488473
+84	Flexible and individualized learning pathways	7.1676176197383565
+84	Postsecondary pathways and the world outside school	4.098833078477354
+85	Blended learning	2.9413319436898466
+85	Deeper learning for mastery	6.414389241540979
+85	Educational justice and holistic student supports	9.48853858206001
+85	Flexible and individualized learning pathways	4.0285312688418635
+85	Postsecondary pathways and the world outside school	1.8547208875292722
+91	Blended learning	2.966180499305864
+91	Deeper learning for mastery	5.652566243590208
+91	Educational justice and holistic student supports	9.929810898247593
+91	Flexible and individualized learning pathways	6.158735564694741
+91	Postsecondary pathways and the world outside school	2.4812439037496574
+94	Blended learning	0.30673140547996713
+94	Deeper learning for mastery	6.746113591929446
+94	Educational justice and holistic student supports	8.829340069194151
+94	Flexible and individualized learning pathways	6.634563503678489
+94	Postsecondary pathways and the world outside school	5.666460084851269
+97	Blended learning	0.6321880425552913
+97	Deeper learning for mastery	3.447536056347088
+97	Educational justice and holistic student supports	2.4906467890818855
+97	Flexible and individualized learning pathways	3.1740695449070127
+97	Postsecondary pathways and the world outside school	2.472187466098881
+98	Blended learning	4.212791134678
+98	Deeper learning for mastery	5.674106873420987
+98	Educational justice and holistic student supports	9.14497343969133
+98	Flexible and individualized learning pathways	7.119419007771557
+98	Postsecondary pathways and the world outside school	2.2925217472526516
+100	Blended learning	3.945858487946641
+100	Deeper learning for mastery	7.4991895926923595
+100	Educational justice and holistic student supports	10.62602412461472
+100	Flexible and individualized learning pathways	8.064324927937992
+100	Postsecondary pathways and the world outside school	6.9724890493781135
+101	Blended learning	2.565304287984156
+101	Deeper learning for mastery	6.817091940846637
+101	Educational justice and holistic student supports	8.933932595753571
+101	Flexible and individualized learning pathways	5.018471023291635
+101	Postsecondary pathways and the world outside school	1.3325070104833736
+105	Blended learning	4.017191549177296
+105	Deeper learning for mastery	4.172804263573787
+105	Educational justice and holistic student supports	2.174261971380363
+105	Flexible and individualized learning pathways	3.5780045406526795
+105	Postsecondary pathways and the world outside school	5.679601972648402
+119	Blended learning	-0.22997404616533165
+119	Deeper learning for mastery	4.282701457262211
+119	Educational justice and holistic student supports	2.920418559928493
+119	Flexible and individualized learning pathways	2.643934687615156
+119	Postsecondary pathways and the world outside school	5.8052487050337245
+120	Blended learning	1.5274310893237497
+120	Deeper learning for mastery	3.326860177504793
+120	Educational justice and holistic student supports	7.6579237897611945
+120	Flexible and individualized learning pathways	4.59063244959074
+120	Postsecondary pathways and the world outside school	1.1125415700785108
+122	Blended learning	3.213533921147623
+122	Deeper learning for mastery	4.307717408947173
+122	Educational justice and holistic student supports	7.295218245595434
+122	Flexible and individualized learning pathways	8.095844005610743
+122	Postsecondary pathways and the world outside school	6.096471240577856
+132	Blended learning	3.7180858399009096
+132	Deeper learning for mastery	6.220482106109434
+132	Educational justice and holistic student supports	7.6994394783695395
+132	Flexible and individualized learning pathways	5.209822003999634
+132	Postsecondary pathways and the world outside school	4.693063782904742
+138	Blended learning	-0.1829267376699447
+138	Deeper learning for mastery	4.8066505817492615
+138	Educational justice and holistic student supports	6.049779738193754
+138	Flexible and individualized learning pathways	1.5175560555312742
+138	Postsecondary pathways and the world outside school	2.2669718087191693
+139	Blended learning	1.882353937993376
+139	Deeper learning for mastery	5.741596399481654
+139	Educational justice and holistic student supports	6.50844389726199
+139	Flexible and individualized learning pathways	6.015052061316888
+139	Postsecondary pathways and the world outside school	5.150798373572029
+140	Blended learning	3.8686148998744665
+140	Deeper learning for mastery	6.4390780785982935
+140	Educational justice and holistic student supports	10.273901815177291
+140	Flexible and individualized learning pathways	7.124718583195609
+140	Postsecondary pathways and the world outside school	8.458403429718853
+141	Blended learning	2.0274261629042147
+141	Deeper learning for mastery	6.393366118427486
+141	Educational justice and holistic student supports	6.671753791810275
+141	Flexible and individualized learning pathways	8.508711305305178
+141	Postsecondary pathways and the world outside school	5.227198435568336
+144	Blended learning	3.3150958989995885
+144	Deeper learning for mastery	3.8422845439518944
+144	Educational justice and holistic student supports	3.5242455101742496
+144	Flexible and individualized learning pathways	4.096466075563103
+144	Postsecondary pathways and the world outside school	-0.3858490227035344
+146	Blended learning	1.8047214755295882
+146	Deeper learning for mastery	4.27601645020553
+146	Educational justice and holistic student supports	5.67337175321145
+146	Flexible and individualized learning pathways	4.8419098581359945
+146	Postsecondary pathways and the world outside school	1.449449245163335
+150	Blended learning	2.12664940138572
+150	Deeper learning for mastery	8.404419445223738
+150	Educational justice and holistic student supports	10.413312313773858
+150	Flexible and individualized learning pathways	8.544667061362212
+150	Postsecondary pathways and the world outside school	4.693745188056069
+157	Blended learning	2.765742478029107
+157	Deeper learning for mastery	1.1923066617986846
+157	Educational justice and holistic student supports	1.944578380241896
+157	Flexible and individualized learning pathways	1.5132824126542628
+157	Postsecondary pathways and the world outside school	5.081492666001315
+165	Blended learning	0.264699976955716
+165	Deeper learning for mastery	4.701673648870562
+165	Educational justice and holistic student supports	7.328714085087403
+165	Flexible and individualized learning pathways	7.03080048985743
+165	Postsecondary pathways and the world outside school	5.918714723108114
+172	Blended learning	3.5476360501583963
+172	Deeper learning for mastery	5.772783271124912
+172	Educational justice and holistic student supports	7.5242178266806254
+172	Flexible and individualized learning pathways	4.4282096599526
+172	Postsecondary pathways and the world outside school	5.798494124167004
+180	Blended learning	-0.18009136716191546
+180	Deeper learning for mastery	8.081836595525798
+180	Educational justice and holistic student supports	7.164330597457233
+180	Flexible and individualized learning pathways	6.030520457320916
+180	Postsecondary pathways and the world outside school	2.0527615454754233
+189	Blended learning	2.8412338395776144
+189	Deeper learning for mastery	7.417365325080064
+189	Educational justice and holistic student supports	10.412046086226146
+189	Flexible and individualized learning pathways	4.4268834632031115
+189	Postsecondary pathways and the world outside school	3.8407560495612882
+197	Blended learning	0.5688156134807235
+197	Deeper learning for mastery	5.5344049166387
+197	Educational justice and holistic student supports	8.980428782026145
+197	Flexible and individualized learning pathways	3.073619339158778
+197	Postsecondary pathways and the world outside school	3.1142767580527506
+204	Blended learning	-0.07856169864055793
+204	Deeper learning for mastery	5.762690024695145
+204	Educational justice and holistic student supports	10.11730310922254
+204	Flexible and individualized learning pathways	6.667698349013001
+204	Postsecondary pathways and the world outside school	6.33529197131939
+209	Blended learning	2.3821611548499098
+209	Deeper learning for mastery	6.193786130204425
+209	Educational justice and holistic student supports	9.48250418707401
+209	Flexible and individualized learning pathways	2.1239971837653147
+209	Postsecondary pathways and the world outside school	1.9930301983920418
+225	Blended learning	1.1405185834053713
+225	Deeper learning for mastery	2.888455106936947
+225	Educational justice and holistic student supports	8.205021582247548
+225	Flexible and individualized learning pathways	3.7552304745060168
+225	Postsecondary pathways and the world outside school	4.804391364272806
+228	Blended learning	-0.5223999801472436
+228	Deeper learning for mastery	7.351005370663798
+228	Educational justice and holistic student supports	6.6117188798148945
+228	Flexible and individualized learning pathways	3.2949602887198672
+228	Postsecondary pathways and the world outside school	2.5667422124445594
+234	Blended learning	0.3401478494021751
+234	Deeper learning for mastery	3.3661136584808626
+234	Educational justice and holistic student supports	0.17315712175006742
+234	Flexible and individualized learning pathways	3.654935432701465
+234	Postsecondary pathways and the world outside school	4.650611435782273
+235	Blended learning	1.8686373333436546
+235	Deeper learning for mastery	7.331210501720422
+235	Educational justice and holistic student supports	8.70535962355318
+235	Flexible and individualized learning pathways	3.1215520391767217
+235	Postsecondary pathways and the world outside school	5.4373239383766565
+236	Blended learning	0.30453918768036825
+236	Deeper learning for mastery	6.336645328014756
+236	Educational justice and holistic student supports	8.380733477223169
+236	Flexible and individualized learning pathways	3.624867218787119
+236	Postsecondary pathways and the world outside school	4.912439373441315
+237	Blended learning	0.46579151589738693
+237	Deeper learning for mastery	5.8994226333177435
+237	Educational justice and holistic student supports	8.858369687153171
+237	Flexible and individualized learning pathways	5.684331455991595
+237	Postsecondary pathways and the world outside school	6.060394881596526
+241	Blended learning	2.2533439967903828
+241	Deeper learning for mastery	4.219230616623841
+241	Educational justice and holistic student supports	6.053886573597018
+241	Flexible and individualized learning pathways	6.16154033671553
+241	Postsecondary pathways and the world outside school	6.3429649913232
+246	Blended learning	3.498275935137169
+246	Deeper learning for mastery	1.249512935404546
+246	Educational justice and holistic student supports	2.271305643913605
+246	Flexible and individualized learning pathways	2.540485547455103
+246	Postsecondary pathways and the world outside school	-0.18629088844283165
+247	Blended learning	1.0378961995023201
+247	Deeper learning for mastery	5.671066920101453
+247	Educational justice and holistic student supports	4.068533585481863
+247	Flexible and individualized learning pathways	7.220851500751571
+247	Postsecondary pathways and the world outside school	6.853624806356542
+251	Blended learning	1.8910147033938471
+251	Deeper learning for mastery	6.817433882144267
+251	Educational justice and holistic student supports	9.065313373112462
+251	Flexible and individualized learning pathways	8.156234120183765
+251	Postsecondary pathways and the world outside school	6.258771654714014
+266	Blended learning	0.5991914186723628
+266	Deeper learning for mastery	6.723991332090583
+266	Educational justice and holistic student supports	5.768751716728757
+266	Flexible and individualized learning pathways	5.474539125382425
+266	Postsecondary pathways and the world outside school	3.5962912749535785
+275	Blended learning	0.7991770480442637
+275	Deeper learning for mastery	4.137439177639181
+275	Educational justice and holistic student supports	4.944204970344941
+275	Flexible and individualized learning pathways	4.097183327936745
+275	Postsecondary pathways and the world outside school	2.9140314635557227
+276	Blended learning	0.4749914627891029
+276	Deeper learning for mastery	6.961149496288527
+276	Educational justice and holistic student supports	6.346815468914416
+276	Flexible and individualized learning pathways	4.865104258608395
+276	Postsecondary pathways and the world outside school	4.426824889423486
+281	Blended learning	3.2065863615414245
+281	Deeper learning for mastery	7.623000026272463
+281	Educational justice and holistic student supports	10.518984133219107
+281	Flexible and individualized learning pathways	9.350806693647394
+281	Postsecondary pathways and the world outside school	7.696034088060466
+292	Blended learning	3.683336165390956
+292	Deeper learning for mastery	4.241125469020511
+292	Educational justice and holistic student supports	4.756201944572626
+292	Flexible and individualized learning pathways	3.3881624625834865
+292	Postsecondary pathways and the world outside school	2.823017920417317
+293	Blended learning	-0.05697284159948712
+293	Deeper learning for mastery	7.517331727445224
+293	Educational justice and holistic student supports	6.098982648869694
+293	Flexible and individualized learning pathways	7.595772065492143
+293	Postsecondary pathways and the world outside school	3.606259695467702
+296	Blended learning	4.374716850388301
+296	Deeper learning for mastery	7.120777908513862
+296	Educational justice and holistic student supports	8.746269134830204
+296	Flexible and individualized learning pathways	6.161948962489778
+296	Postsecondary pathways and the world outside school	2.7786666580450854
+299	Blended learning	3.1842557402141223
+299	Deeper learning for mastery	7.6202340764551755
+299	Educational justice and holistic student supports	6.573454501332089
+299	Flexible and individualized learning pathways	5.7417465933138025
+299	Postsecondary pathways and the world outside school	5.193454219970916
+302	Blended learning	3.62581431529615
+302	Deeper learning for mastery	5.620306702724529
+302	Educational justice and holistic student supports	8.200823745239756
+302	Flexible and individualized learning pathways	7.001802688855679
+302	Postsecondary pathways and the world outside school	1.5907228619969493
+303	Blended learning	2.404880322018443
+303	Deeper learning for mastery	5.430736794467665
+303	Educational justice and holistic student supports	11.056150874991083
+303	Flexible and individualized learning pathways	7.019302686105625
+303	Postsecondary pathways and the world outside school	7.20168437021272
+306	Blended learning	2.304527906329434
+306	Deeper learning for mastery	3.250638663013902
+306	Educational justice and holistic student supports	9.436712477182338
+306	Flexible and individualized learning pathways	3.7419885126673496
+306	Postsecondary pathways and the world outside school	2.277125080103443
+312	Blended learning	2.8843835070162673
+312	Deeper learning for mastery	5.223950602446882
+312	Educational justice and holistic student supports	10.820296860563111
+312	Flexible and individualized learning pathways	5.24457499293612
+312	Postsecondary pathways and the world outside school	5.633586871196347
+319	Blended learning	1.052765888106008
+319	Deeper learning for mastery	5.831830690866456
+319	Educational justice and holistic student supports	3.91536971836192
+319	Flexible and individualized learning pathways	3.028393416703124
+319	Postsecondary pathways and the world outside school	2.1628713490304885
+323	Blended learning	1.5191778433635954
+323	Deeper learning for mastery	6.56824447334368
+323	Educational justice and holistic student supports	4.588428397992783
+323	Flexible and individualized learning pathways	4.419462780201223
+323	Postsecondary pathways and the world outside school	5.926234416316151
+333	Blended learning	-0.09304585491809178
+333	Deeper learning for mastery	6.615629056350907
+333	Educational justice and holistic student supports	6.699077404115406
+333	Flexible and individualized learning pathways	4.312932408010347
+333	Postsecondary pathways and the world outside school	0.978623034499605
+345	Blended learning	2.545564152039987
+345	Deeper learning for mastery	2.8567923155614188
+345	Educational justice and holistic student supports	4.383934889748583
+345	Flexible and individualized learning pathways	1.7340889884860191
+345	Postsecondary pathways and the world outside school	0.62307347149752
+348	Blended learning	4.192516070233102
+348	Deeper learning for mastery	5.733955017480409
+348	Educational justice and holistic student supports	8.830344418330512
+348	Flexible and individualized learning pathways	4.787234089579521
+348	Postsecondary pathways and the world outside school	6.807685312584187
+353	Blended learning	3.387633997601354
+353	Deeper learning for mastery	7.5503496491434205
+353	Educational justice and holistic student supports	10.242473077364465
+353	Flexible and individualized learning pathways	7.268131624312437
+353	Postsecondary pathways and the world outside school	6.791867384216436
+356	Blended learning	1.4767806206736216
+356	Deeper learning for mastery	5.23152489519692
+356	Educational justice and holistic student supports	5.16952452287569
+356	Flexible and individualized learning pathways	4.450277900615408
+356	Postsecondary pathways and the world outside school	3.0071708009720655
+358	Blended learning	1.8423325338672358
+358	Deeper learning for mastery	8.37224519371956
+358	Educational justice and holistic student supports	9.101627579389792
+358	Flexible and individualized learning pathways	7.174202472345867
+358	Postsecondary pathways and the world outside school	4.071186341166903
+360	Blended learning	0.7677133831728005
+360	Deeper learning for mastery	5.960862240808529
+360	Educational justice and holistic student supports	9.199892695614315
+360	Flexible and individualized learning pathways	6.21138294671003
+360	Postsecondary pathways and the world outside school	5.7288553519926015
+364	Blended learning	0.927930693308197
+364	Deeper learning for mastery	1.2765427256114155
+364	Educational justice and holistic student supports	3.720085911645205
+364	Flexible and individualized learning pathways	1.2757225406434047
+364	Postsecondary pathways and the world outside school	2.0126574931995393
+368	Blended learning	0.8710486182443252
+368	Deeper learning for mastery	8.017487197335164
+368	Educational justice and holistic student supports	8.82800730579628
+368	Flexible and individualized learning pathways	8.339279597988757
+368	Postsecondary pathways and the world outside school	5.2597131089721545
+371	Blended learning	4.201003514280652
+371	Deeper learning for mastery	3.2109578975779125
+371	Educational justice and holistic student supports	7.1912810956831
+371	Flexible and individualized learning pathways	7.475708398918927
+371	Postsecondary pathways and the world outside school	3.494749347974719
+380	Blended learning	1.9109644397611458
+380	Deeper learning for mastery	6.025450651652737
+380	Educational justice and holistic student supports	9.697018310516858
+380	Flexible and individualized learning pathways	6.533439909720551
+380	Postsecondary pathways and the world outside school	7.782342856053804
+382	Blended learning	0.058419051898895125
+382	Deeper learning for mastery	5.521835726844432
+382	Educational justice and holistic student supports	7.95562862889458
+382	Flexible and individualized learning pathways	7.9327039455254935
+382	Postsecondary pathways and the world outside school	2.5087993129938173
+383	Blended learning	2.642639349394841
+383	Deeper learning for mastery	3.673720645846991
+383	Educational justice and holistic student supports	7.057561090284877
+383	Flexible and individualized learning pathways	6.062870239611812
+383	Postsecondary pathways and the world outside school	7.267136972102047
+384	Blended learning	2.5919138742158445
+384	Deeper learning for mastery	0.7940623582993835
+384	Educational justice and holistic student supports	2.562146440799727
+384	Flexible and individualized learning pathways	5.293342988861493
+384	Postsecondary pathways and the world outside school	7.096231962386633
+394	Blended learning	-0.048325996941990024
+394	Deeper learning for mastery	0.9011234900582794
+394	Educational justice and holistic student supports	3.7562371476011065
+394	Flexible and individualized learning pathways	1.9877583067758502
+394	Postsecondary pathways and the world outside school	1.1035543553277727
+411	Blended learning	1.3653066362303217
+411	Deeper learning for mastery	2.8612114125052743
+411	Educational justice and holistic student supports	6.558327508143529
+411	Flexible and individualized learning pathways	3.847730302531641
+411	Postsecondary pathways and the world outside school	0.3734527681737596
+417	Blended learning	2.8103377882926246
+417	Deeper learning for mastery	2.8035052838532106
+417	Educational justice and holistic student supports	5.026961356920869
+417	Flexible and individualized learning pathways	2.410823395766381
+417	Postsecondary pathways and the world outside school	0.7672872193031018
+418	Blended learning	2.255160192791845
+418	Deeper learning for mastery	2.5865080986605298
+418	Educational justice and holistic student supports	1.8639722957675162
+418	Flexible and individualized learning pathways	1.6468554109816034
+418	Postsecondary pathways and the world outside school	0.06599056729411876
+421	Blended learning	5.745821330805683
+421	Deeper learning for mastery	5.156358688789966
+421	Educational justice and holistic student supports	7.903525757670062
+421	Flexible and individualized learning pathways	6.544097705835465
+421	Postsecondary pathways and the world outside school	4.011440803778392
+429	Blended learning	0.4580664722625356
+429	Deeper learning for mastery	6.669734702183899
+429	Educational justice and holistic student supports	9.009402906238712
+429	Flexible and individualized learning pathways	4.2310997616995225
+429	Postsecondary pathways and the world outside school	6.14506265891429
+440	Blended learning	-0.7731640018556316
+440	Deeper learning for mastery	4.176882234466971
+440	Educational justice and holistic student supports	5.386323817690536
+440	Flexible and individualized learning pathways	1.8400183929605693
+440	Postsecondary pathways and the world outside school	3.560535105272506
+445	Blended learning	3.4307331509243646
+445	Deeper learning for mastery	4.873864646528791
+445	Educational justice and holistic student supports	4.601950009064812
+445	Flexible and individualized learning pathways	3.972980840089482
+445	Postsecondary pathways and the world outside school	3.481044874201025
+452	Blended learning	2.2472886547335054
+452	Deeper learning for mastery	5.7798562835046345
+452	Educational justice and holistic student supports	4.40978810071034
+452	Flexible and individualized learning pathways	3.8978362363696712
+452	Postsecondary pathways and the world outside school	6.849525073072231
+455	Blended learning	1.985289570733699
+455	Deeper learning for mastery	6.356280609196878
+455	Educational justice and holistic student supports	7.892854520810683
+455	Flexible and individualized learning pathways	6.795928955158193
+455	Postsecondary pathways and the world outside school	6.035550147293298
+458	Blended learning	2.756560591323452
+458	Deeper learning for mastery	5.643194865619209
+458	Educational justice and holistic student supports	9.215768262022408
+458	Flexible and individualized learning pathways	7.618274179496453
+458	Postsecondary pathways and the world outside school	4.744489568995384
+462	Blended learning	0.9905256665355384
+462	Deeper learning for mastery	6.063248182917211
+462	Educational justice and holistic student supports	5.712750993716135
+462	Flexible and individualized learning pathways	4.754998750065696
+462	Postsecondary pathways and the world outside school	6.551179004069719
+465	Blended learning	0.6598879228219955
+465	Deeper learning for mastery	3.38608047134202
+465	Educational justice and holistic student supports	6.681964025895673
+465	Flexible and individualized learning pathways	5.396058547970425
+465	Postsecondary pathways and the world outside school	3.863580352654802
+466	Blended learning	2.1167765201245747
+466	Deeper learning for mastery	7.405650414849229
+466	Educational justice and holistic student supports	8.914066673366158
+466	Flexible and individualized learning pathways	9.1811505627051
+466	Postsecondary pathways and the world outside school	7.694589334136593
+475	Blended learning	4.168592776304307
+475	Deeper learning for mastery	2.1919299672736368
+475	Educational justice and holistic student supports	4.864816892667676
+475	Flexible and individualized learning pathways	6.021729510710963
+475	Postsecondary pathways and the world outside school	3.7277061564837854
+477	Blended learning	0.49075756654325575
+477	Deeper learning for mastery	5.374555849688406
+477	Educational justice and holistic student supports	9.65311147246269
+477	Flexible and individualized learning pathways	5.950230100139165
+477	Postsecondary pathways and the world outside school	2.572438763196569
+480	Blended learning	2.9303812222709915
+480	Deeper learning for mastery	4.033801563370281
+480	Educational justice and holistic student supports	5.605828491955053
+480	Flexible and individualized learning pathways	4.431940116399257
+480	Postsecondary pathways and the world outside school	3.890829793479125
+483	Blended learning	1.9160676262748633
+483	Deeper learning for mastery	7.182352742034413
+483	Educational justice and holistic student supports	10.363351642293075
+483	Flexible and individualized learning pathways	5.140939296337914
+483	Postsecondary pathways and the world outside school	2.729887041022892
+493	Blended learning	-0.9017133573621081
+493	Deeper learning for mastery	6.952134213062209
+493	Educational justice and holistic student supports	7.631767640959155
+493	Flexible and individualized learning pathways	6.139296966902592
+493	Postsecondary pathways and the world outside school	2.4451173181927937
+499	Blended learning	2.1741614251959698
+499	Deeper learning for mastery	7.193640130351114
+499	Educational justice and holistic student supports	8.178094925415392
+499	Flexible and individualized learning pathways	9.075504040036208
+499	Postsecondary pathways and the world outside school	6.667740834481935
+501	Blended learning	0.7768908906857465
+501	Deeper learning for mastery	5.824728533373024
+501	Educational justice and holistic student supports	2.413677054521985
+501	Flexible and individualized learning pathways	7.1924661982506555
+501	Postsecondary pathways and the world outside school	4.952845062687313
+502	Blended learning	0.6944894918934404
+502	Deeper learning for mastery	7.796022934180062
+502	Educational justice and holistic student supports	8.497475316667193
+502	Flexible and individualized learning pathways	8.702241431979422
+502	Postsecondary pathways and the world outside school	6.247935507888596
+505	Blended learning	0.48561726396356397
+505	Deeper learning for mastery	4.557058957021531
+505	Educational justice and holistic student supports	9.302724751958095
+505	Flexible and individualized learning pathways	6.683855582469915
+505	Postsecondary pathways and the world outside school	5.150967611366643
+506	Blended learning	2.119942790622821
+506	Deeper learning for mastery	7.951024991093519
+506	Educational justice and holistic student supports	7.960063395847134
+506	Flexible and individualized learning pathways	8.879609492445608
+506	Postsecondary pathways and the world outside school	1.2258700924487778
+512	Blended learning	-1.0255540712758673
+512	Deeper learning for mastery	3.8542924688992874
+512	Educational justice and holistic student supports	1.6872649192336775
+512	Flexible and individualized learning pathways	5.808084594390949
+512	Postsecondary pathways and the world outside school	1.2983637656936156
+515	Blended learning	-0.7609300308521685
+515	Deeper learning for mastery	1.9324936744613008
+515	Educational justice and holistic student supports	6.4178011611082475
+515	Flexible and individualized learning pathways	3.874305643222241
+515	Postsecondary pathways and the world outside school	1.8216199691898818
+518	Blended learning	1.3636257309159137
+518	Deeper learning for mastery	5.4388747952663685
+518	Educational justice and holistic student supports	0.9127452781069726
+518	Flexible and individualized learning pathways	4.264380560663605
+518	Postsecondary pathways and the world outside school	5.922071273220911
+520	Blended learning	-0.176168766601357
+520	Deeper learning for mastery	1.3917155249770439
+520	Educational justice and holistic student supports	0.570260696979762
+520	Flexible and individualized learning pathways	0.6680033455801321
+520	Postsecondary pathways and the world outside school	0.28360426923733056
+521	Blended learning	1.0053905522153976
+521	Deeper learning for mastery	2.3455992501843967
+521	Educational justice and holistic student supports	3.5032487957941703
+521	Flexible and individualized learning pathways	1.0150109412977204
+521	Postsecondary pathways and the world outside school	4.2395006414680925
+522	Blended learning	-0.07275250530203113
+522	Deeper learning for mastery	0.3079600911738508
+522	Educational justice and holistic student supports	3.4749791765943865
+522	Flexible and individualized learning pathways	2.2814598360939504
+522	Postsecondary pathways and the world outside school	5.980411702711685
+523	Blended learning	0.590330928548186
+523	Deeper learning for mastery	6.218565226774704
+523	Educational justice and holistic student supports	7.0094424851991395
+523	Flexible and individualized learning pathways	6.346298821307276
+523	Postsecondary pathways and the world outside school	5.249991702154282
+526	Blended learning	2.4286302950771343
+526	Deeper learning for mastery	2.93365352215272
+526	Educational justice and holistic student supports	1.3884609215978265
+526	Flexible and individualized learning pathways	2.3445255679207797
+526	Postsecondary pathways and the world outside school	6.443134166569834
+527	Blended learning	0.773497501855487
+527	Deeper learning for mastery	3.0942042261752802
+527	Educational justice and holistic student supports	4.829771790176118
+527	Flexible and individualized learning pathways	5.562208581498798
+527	Postsecondary pathways and the world outside school	5.573375579572914
+528	Blended learning	2.0031044055285707
+528	Deeper learning for mastery	3.4827368981544327
+528	Educational justice and holistic student supports	8.797922925321036
+528	Flexible and individualized learning pathways	5.838023307533173
+528	Postsecondary pathways and the world outside school	1.7752720482675968
+530	Blended learning	1.2211224816883175
+530	Deeper learning for mastery	3.21451349641743
+530	Educational justice and holistic student supports	2.7473806200207758
+530	Flexible and individualized learning pathways	3.023899243750055
+530	Postsecondary pathways and the world outside school	0.7826341531264988
+532	Blended learning	0.28237932177019603
+532	Deeper learning for mastery	4.921659883469254
+532	Educational justice and holistic student supports	6.250939038123251
+532	Flexible and individualized learning pathways	4.0987301654092745
+532	Postsecondary pathways and the world outside school	3.381494967064459
+535	Blended learning	0.8920936950747365
+535	Deeper learning for mastery	3.413065714099824
+535	Educational justice and holistic student supports	4.844800163007268
+535	Flexible and individualized learning pathways	4.953361882593592
+535	Postsecondary pathways and the world outside school	2.1914724953977824
+537	Blended learning	2.3020399433309464
+537	Deeper learning for mastery	4.8601402575458295
+537	Educational justice and holistic student supports	4.906330926737999
+537	Flexible and individualized learning pathways	5.085173878344141
+537	Postsecondary pathways and the world outside school	4.986370432082471
+539	Blended learning	2.1403078378326015
+539	Deeper learning for mastery	4.810849006244229
+539	Educational justice and holistic student supports	5.619025002676165
+539	Flexible and individualized learning pathways	5.503802900953378
+539	Postsecondary pathways and the world outside school	6.802206347546994
+540	Blended learning	-1.2573646734033768
+540	Deeper learning for mastery	5.335184646143351
+540	Educational justice and holistic student supports	2.6690034932483178
+540	Flexible and individualized learning pathways	6.703083310732851
+540	Postsecondary pathways and the world outside school	5.166501827594608
+541	Blended learning	0.6485082381779914
+541	Deeper learning for mastery	7.177244564165546
+541	Educational justice and holistic student supports	9.038729805833794
+541	Flexible and individualized learning pathways	6.537422518030686
+541	Postsecondary pathways and the world outside school	4.977943971358298
+542	Blended learning	4.596620578140963
+542	Deeper learning for mastery	3.0151500408890595
+542	Educational justice and holistic student supports	2.69972686959422
+542	Flexible and individualized learning pathways	5.6680399295831165
+542	Postsecondary pathways and the world outside school	3.7291528880071163
+543	Blended learning	0.8338343716343395
+543	Deeper learning for mastery	6.603935710240371
+543	Educational justice and holistic student supports	8.26927902743487
+543	Flexible and individualized learning pathways	4.840340761302499
+543	Postsecondary pathways and the world outside school	5.528371831590738
+545	Blended learning	1.1497688652025195
+545	Deeper learning for mastery	8.736809999227935
+545	Educational justice and holistic student supports	6.1278439519483525
+545	Flexible and individualized learning pathways	8.021417206895839
+545	Postsecondary pathways and the world outside school	4.435962785559151
+549	Blended learning	0.5861034803378958
+549	Deeper learning for mastery	6.488647757237662
+549	Educational justice and holistic student supports	5.677865808053421
+549	Flexible and individualized learning pathways	7.2281359269518655
+549	Postsecondary pathways and the world outside school	1.052549991094693
+559	Blended learning	1.7123330010366986
+559	Deeper learning for mastery	0.2488412767503898
+559	Educational justice and holistic student supports	2.4054257375764543
+559	Flexible and individualized learning pathways	3.453306795323672
+559	Postsecondary pathways and the world outside school	-0.33304695480923285
+565	Blended learning	-0.7173725439660521
+565	Deeper learning for mastery	5.532023508798536
+565	Educational justice and holistic student supports	7.112358838317082
+565	Flexible and individualized learning pathways	7.815916567102078
+565	Postsecondary pathways and the world outside school	4.569142939491461
+566	Blended learning	-0.7937926699243788
+566	Deeper learning for mastery	6.660776203904856
+566	Educational justice and holistic student supports	5.315912543833132
+566	Flexible and individualized learning pathways	2.9840527502077143
+566	Postsecondary pathways and the world outside school	1.331426268188876
+567	Blended learning	-1.0687319308853673
+567	Deeper learning for mastery	6.703160335322346
+567	Educational justice and holistic student supports	8.828417297252395
+567	Flexible and individualized learning pathways	6.9288225009933555
+567	Postsecondary pathways and the world outside school	4.729194997487505
+569	Blended learning	0.30756568993192734
+569	Deeper learning for mastery	7.817275039378695
+569	Educational justice and holistic student supports	9.202934253771543
+569	Flexible and individualized learning pathways	8.329345822768651
+569	Postsecondary pathways and the world outside school	4.699716292804755
+571	Blended learning	1.898319389883945
+571	Deeper learning for mastery	4.730823230745405
+571	Educational justice and holistic student supports	3.829822286271879
+571	Flexible and individualized learning pathways	5.290998440787373
+571	Postsecondary pathways and the world outside school	3.2479724526765614
+572	Blended learning	2.083140961195237
+572	Deeper learning for mastery	3.1814434597409953
+572	Educational justice and holistic student supports	7.75584373846796
+572	Flexible and individualized learning pathways	7.842414726756465
+572	Postsecondary pathways and the world outside school	1.9418590139988485
+573	Blended learning	3.0128487574229936
+573	Deeper learning for mastery	2.8730498078709825
+573	Educational justice and holistic student supports	5.726575593713699
+573	Flexible and individualized learning pathways	7.913480320183121
+573	Postsecondary pathways and the world outside school	2.4185836506017484
+575	Blended learning	3.380996090031052
+575	Deeper learning for mastery	6.296353767741336
+575	Educational justice and holistic student supports	4.111702177624358
+575	Flexible and individualized learning pathways	6.726406270658856
+575	Postsecondary pathways and the world outside school	5.231223118857713
+579	Blended learning	4.461887813483374
+579	Deeper learning for mastery	7.299549266097541
+579	Educational justice and holistic student supports	10.695268445005084
+579	Flexible and individualized learning pathways	9.56019096733401
+579	Postsecondary pathways and the world outside school	7.001638561562548
+581	Blended learning	2.2035260580422795
+581	Deeper learning for mastery	2.5103728106864467
+581	Educational justice and holistic student supports	7.3226443927062554
+581	Flexible and individualized learning pathways	4.035912011120018
+581	Postsecondary pathways and the world outside school	2.6463687043382143
+586	Blended learning	-0.24547166210091134
+586	Deeper learning for mastery	0.21913599433318692
+586	Educational justice and holistic student supports	0.6537327196621041
+586	Flexible and individualized learning pathways	1.2572312046303502
+586	Postsecondary pathways and the world outside school	0.18583587878054705
+587	Blended learning	1.5740015880809368
+587	Deeper learning for mastery	1.542388224434212
+587	Educational justice and holistic student supports	5.249549229323922
+587	Flexible and individualized learning pathways	3.983396291284302
+587	Postsecondary pathways and the world outside school	4.128443909599724
+588	Blended learning	3.164023555145924
+588	Deeper learning for mastery	2.641990985346448
+588	Educational justice and holistic student supports	3.20595651791971
+588	Flexible and individualized learning pathways	4.392168979676164
+588	Postsecondary pathways and the world outside school	4.860857515854451
+594	Blended learning	1.3966561913731061
+594	Deeper learning for mastery	2.506461929084195
+594	Educational justice and holistic student supports	6.404314415678953
+594	Flexible and individualized learning pathways	3.1119096408887463
+594	Postsecondary pathways and the world outside school	0.18266220430517732
+601	Blended learning	-0.24133991356353943
+601	Deeper learning for mastery	3.5240683060610003
+601	Educational justice and holistic student supports	6.1362896141026395
+601	Flexible and individualized learning pathways	2.255963027647562
+601	Postsecondary pathways and the world outside school	6.3417488268355
+604	Blended learning	0.7392211250890344
+604	Deeper learning for mastery	2.224666167043472
+604	Educational justice and holistic student supports	4.531532644890857
+604	Flexible and individualized learning pathways	7.454714396817725
+604	Postsecondary pathways and the world outside school	5.604113350072119
+608	Blended learning	0.10041342331539113
+608	Deeper learning for mastery	2.791485754986966
+608	Educational justice and holistic student supports	5.597834457651353
+608	Flexible and individualized learning pathways	2.9729395181252856
+608	Postsecondary pathways and the world outside school	3.2895739351333457
+610	Blended learning	1.3462298152720877
+610	Deeper learning for mastery	3.884879498893066
+610	Educational justice and holistic student supports	2.295355180243654
+610	Flexible and individualized learning pathways	5.32177531123023
+610	Postsecondary pathways and the world outside school	4.503321843824421
+612	Blended learning	0.09064227414651155
+612	Deeper learning for mastery	1.289557107594589
+612	Educational justice and holistic student supports	8.612543054217126
+612	Flexible and individualized learning pathways	5.854144920688952
+612	Postsecondary pathways and the world outside school	5.0923631009007755
+615	Blended learning	0.5501467638097767
+615	Deeper learning for mastery	2.2697048702468323
+615	Educational justice and holistic student supports	8.258585648421013
+615	Flexible and individualized learning pathways	5.932447402924608
+615	Postsecondary pathways and the world outside school	3.395577697489177
+620	Blended learning	0.0600591220892435
+620	Deeper learning for mastery	2.1619744849960445
+620	Educational justice and holistic student supports	8.131626899530286
+620	Flexible and individualized learning pathways	3.606320139373884
+620	Postsecondary pathways and the world outside school	1.4916194237580414
+622	Blended learning	1.8489405209460035
+622	Deeper learning for mastery	4.403933927432648
+622	Educational justice and holistic student supports	7.514285698923622
+622	Flexible and individualized learning pathways	6.683072504985667
+622	Postsecondary pathways and the world outside school	0.9539341108270236
+623	Blended learning	1.9059856632073313
+623	Deeper learning for mastery	2.820202103083775
+623	Educational justice and holistic student supports	8.325488962024904
+623	Flexible and individualized learning pathways	5.395859257982505
+623	Postsecondary pathways and the world outside school	2.402003068244417
+625	Blended learning	0.002696385764540392
+625	Deeper learning for mastery	5.05165368910943
+625	Educational justice and holistic student supports	8.679363134568755
+625	Flexible and individualized learning pathways	5.801638615387861
+625	Postsecondary pathways and the world outside school	3.5905050454075247
+627	Blended learning	0.2979849957132847
+627	Deeper learning for mastery	6.395662489544588
+627	Educational justice and holistic student supports	8.606700919876019
+627	Flexible and individualized learning pathways	6.922999767302407
+627	Postsecondary pathways and the world outside school	0.890073277552184
+628	Blended learning	2.55031678274013
+628	Deeper learning for mastery	3.439815739362331
+628	Educational justice and holistic student supports	10.142470020851194
+628	Flexible and individualized learning pathways	3.4862487072093815
+628	Postsecondary pathways and the world outside school	1.635205454306963
+630	Blended learning	0.21190887315884285
+630	Deeper learning for mastery	4.427122247879397
+630	Educational justice and holistic student supports	4.154121615254625
+630	Flexible and individualized learning pathways	2.685860242402538
+630	Postsecondary pathways and the world outside school	2.542388378023854
+633	Blended learning	2.4873404554485155
+633	Deeper learning for mastery	2.4577274383628236
+633	Educational justice and holistic student supports	8.349242713891831
+633	Flexible and individualized learning pathways	2.6943980725088585
+633	Postsecondary pathways and the world outside school	1.0816829450876475

@@ -25,15 +25,15 @@ library(tidyverse)
 library(ggplot2)
 library(DT)
 library(scales)
+library(rstanarm)
+library(broom.mixed)
+library(gmodels)
+source(here("scripts", "branding.R")) #, local = knitr::knit_global()
 ```
 
 ```{r modify practices data}
 load(here("data", "complete_canopy_2022.RData"))
 tags <- import(here("data", "Tags-SY2021-22 Tags.csv"))
-practices_data <- practices_data %>%
-  select(school_id, starts_with("practices_")) %>%
-  mutate_at(vars(starts_with("practices_")), str_replace, "1-2 years", "1")
-save(practices_data, file = "complete_canopy_2022.RData")
 ```
 
 
@@ -67,7 +67,7 @@ locale_tags <- clean_data_full %>%
   left_join(practices_data, by = "school_id") %>% 
   select(school_id, locale, starts_with("practices_")) %>% 
   filter(!c(locale == "")) %>%  #Horizons Alternative; Iowa Big; The Forest Schools; Link Learning
-  mutate_at(vars(starts_with("practices_")), as.integer, na.rm = TRUE) %>% 
+  # mutate_at(vars(starts_with("practices_")), as.integer, na.rm = TRUE) %>% 
   pivot_longer(cols = starts_with("practices"),
                names_to = "tag",
                values_to = "n") %>% 
@@ -157,19 +157,21 @@ urb_rur_diff <- tags %>%
 #pct labels
 urb_rur_labs <- data.frame(x = c(urb_rur_diff$short_name),
                            y = c(5 + urb_rur_diff$pct),
-                           lab = c("45%", "", "38%", "", "38%", "", "38%", "", "37%", "", "36%", "", "35%", "", "34%", "", "34%", "", "34%", ""))
+                           lab = c("40%", "", "36%", "", "35%", "", "34%", "", "34%", "", "33%", "", "32%", "", "32%", "", "31%", "", "31%", ""))
 #reorder tags
 urb_rur_diff$short_name <- factor(urb_rur_diff$short_name,
-                                    levels = c("culturally responsive practices", "anti-racist practices", "hiring for equity and inclusion values", "real-world problem solving", "student-led goal setting", "schoolwide social-emotional learning integration", "design to meet needs of students who have been marginalized", "deeper learning assessments", "restorative practices", "tutoring"))
+                                    levels = c(unique(paste0(urb_rur_diff$short_name))))
 #side-side bar chart
 urb_rur_viz <- urb_rur_diff %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
   geom_text(aes(x = short_name, y = urb_rur_labs$y, label = urb_rur_labs$lab)) +
+  theme_transcend_sparse +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
   scale_y_continuous(limits = c(0, 70)) +
-  labs(x = "Tag",
-       y = "Percent of Rural vs. Urban Schools Selecting Tag",
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
        title = "Top 10 Tags with Largest Differences between Urban and Rural Schools",
        subtitle = "Comparison across locale types - denominator = total schools")
 
@@ -196,20 +198,21 @@ urb_sub_diff <- tags %>%
 #pct labels
 urb_sub_labs <- data.frame(x = c(urb_sub_diff$short_name),
                            y = c(5 + urb_sub_diff$pct),
-                           lab = c("38%", "", "34%", "", "34%", "", "34%", "", "33%", "", "33%", "", "33%", "", "32%", "", "32%", "", "31%", ""))
+                           lab = c("34%", "", "32%", "", "32%", "", "32%", "", "31%", "", "31%", "", "31%", "", "31%", "", "29%", "", "29%", ""))
 #reorder tags
 urb_sub_diff$short_name <- factor(urb_sub_diff$short_name,
-                                    levels = c("culturally responsive practices", "deeper learning assessments", "student-led goal setting", "schoolwide social-emotional learning integration", "mental health services", "project-based learning", "real-world problem solving",  "design to meet needs of students who have been marginalized",  "multiple opportunities to demonstrate mastery", "anti-racist practices"))
+                                    levels = c(unique(paste0(urb_sub_diff$short_name))))
 #side-side bar chart
 urb_sub_viz <- urb_sub_diff %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
   ylim(0, 70) +
-  #scale_fill_manual(values = transcend_cols) +
+  scale_fill_manual(values = paste(transcend_cols)) +
   geom_text(aes(x = short_name, y = urb_sub_labs$y, label = urb_sub_labs$lab)) +
+  theme_transcend_sparse +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
-  labs(x = "Tag",
-       y = "Percent of Urban vs. Suburban Schools Selecting Tag",
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
        title = "Top 10 Tags with Largest Differences between Urban and Suburban Schools",
        subtitle = "Comparison across locale types - denominator = total schools")
 
@@ -236,21 +239,21 @@ sub_rur_diff <- tags %>%
 #pct labels
 sub_rur_labs <- data.frame(x = c(sub_rur_diff$short_name),
                            y = c(1 + sub_rur_diff$pct),
-                           lab = c("", "9%", "", "7%", "", "7%", "", "7%", "", "6%", "", "6%", "", "5%", "", "5%", "", "5%", "", "5%"))
+                           lab = c("", "8%", "", "6%", "", "6%", "", "6%", "", "6%", "", "6%", "", "6%", "", "5%", "", "5%", "", "5%"))
 #reorder tags
 sub_rur_diff$short_name <- factor(sub_rur_diff$short_name,
-                                    levels = c("adaptive content", "anti-racist practices", "career readiness assessments", "hiring for equity and inclusion values", "culturally responsive practices", "1:1 mentoring", "flexible facilities & classroom design",  "interdisciplinary",  "individual learner profiles
-", "individual learning paths"))
+                                    levels = c(unique(paste0(sub_rur_diff$short_name))))
 #side-side bar chart
 sub_rur_viz <- sub_rur_diff %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
   ylim(0, 30) +
-  #scale_fill_manual(values = transcend_cols) +
+  scale_fill_manual(values = paste(transcend_cols)) +
   geom_text(aes(x = short_name, y = sub_rur_labs$y, label = sub_rur_labs$lab)) +
+  theme_transcend_sparse +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
-  labs(x = "Tag",
-       y = "Percent of Suburban vs. Rural Schools Selecting Tag",
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
        title = "Top 10 Tags with Largest Differences between Rural and Suburban Schools",
        subtitle = "Comparison across locale types - denominator = total schools")
 
@@ -352,19 +355,22 @@ urb_rur_diff_2 <- tags %>%
 #pct labels
 urb_rur_labs_2 <- data.frame(x = c(urb_rur_diff_2$short_name),
                              y = c(5 + urb_rur_diff_2$pct),
-                             lab = c("48%", "", "44%", "", "44%", "", "40%", "", "34%", "", "", "24%", "22%", "", "21%", "", "21%", "", "", "19%"))
+                             lab = c("49%", "", "47%", "", "42%", "", "38%", "", "29%", "", "", "25%", "21%", "", "21%", "", "", "20%", "20%", ""))
 #reorder 
 urb_rur_diff_2$short_name <- factor(urb_rur_diff_2$short_name,
-                                    levels = c("anti-racist practices", "culturally responsive practices", "hiring for equity and inclusion values", "social justice focus", "tutoring", "à la carte model", "student-led goal setting", "real-world problem solving", "family & community support services", "makerspace"))
+                                    levels = c(unique(paste0(urb_rur_diff_2$short_name))))
+levels(urb_rur_diff_2$short_name)
 #side-side bar chart
 urb_rur_viz_2 <- urb_rur_diff_2 %>% 
   ggplot(aes(reorder(short_name, urb_rur_diff), pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
   geom_text(aes(x = short_name, y = urb_rur_labs_2$y, label = urb_rur_labs_2$lab)) +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
   scale_y_continuous(limits = c(0, 100)) +
-  labs(x = "Tag",
-       y = "Percent of Rural vs. Urban Schools Selecting Tag",
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
        title = "Top 10 Tags with Largest Differences between Urban and Rural Schools",
        subtitle = "Comparison within locale types - denominator = schools within locale")
 
@@ -391,19 +397,21 @@ urb_sub_diff_2 <- tags %>%
 #pct labels
 urb_sub_labs_2 <- data.frame(x = c(urb_sub_diff_2$short_name),
                              y = c(5 + urb_sub_diff_2$pct),
-                             lab = c("", "27%", "", "25%", "", "24%", "", "21%", "", "21%", "", "20%", "20%", "", "19%", "", "", "19%", "18%", ""))
+                             lab = c("", "31%", "", "28%", "", "26%", "", "25%", "23%", "", "", "20%", "", "20%", "19%", "", "19%", "", "", "18%"))
 #reorder tags
 urb_sub_diff_2$short_name <- factor(urb_sub_diff_2$short_name,
-                                    levels = c("adaptive content", "career readiness assessments", "individual learning paths", "1:1 mentoring", "flexible facilities & classroom design", "industry credentials", "mental health services",  "social justice focus",  "à la carte model", "physical well being services"))
+                                    levels = c(unique(paste0(urb_sub_diff_2$short_name))))
 #side-side bar chart
 urb_sub_viz_2 <- urb_sub_diff_2 %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
   ylim(0, 100) +
   geom_text(aes(x = short_name, y = urb_sub_labs_2$y, label = urb_sub_labs_2$lab)) +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
-  labs(x = "Tag",
-       y = "Percent of Urban vs. Suburban Schools Selecting Tag",
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
        title = "Top 10 Tags with Largest Differences between Urban and Suburban Schools",
        subtitle = "Comparison within locale types - denominator = schools within locale")
 
@@ -430,19 +438,21 @@ sub_rur_diff_2 <- tags %>%
 #pct labels
 sub_rur_labs_2 <- data.frame(x = c(sub_rur_diff_2$short_name),
                            y = c(5 + sub_rur_diff_2$pct),
-                           lab = c("", "42%", "", "33%", "", "32%", "", "32%", "", "29%", "", "29%", "27%", "", "", "22%", "", "22%", "", "22%"))
+                           lab = c("", "43%", "", "33%", "", "32%", "", "32%", "", "29%", "", "29%", "", "29%", "", "25%", "", "25%", "", "25%"))
 #reorder tags
 sub_rur_diff_2$short_name <- factor(sub_rur_diff_2$short_name,
-                                    levels = c("adaptive content", "anti-racist practices", "hiring for equity and inclusion values", "career readiness assessments", "1:1 mentoring", "culturally responsive practices", "mental health services",  "individual learner profiles",  "students access their own data", "individual learning paths"))
+                                    levels = c(unique(paste0(sub_rur_diff_2$short_name))))
 #side-side bar chart
 sub_rur_viz_2 <- sub_rur_diff_2 %>% 
   ggplot(aes(short_name, pct, fill = locale)) +
   geom_bar(stat = "identity", position = "dodge") +
   ylim(0, 100) +
   geom_text(aes(x = short_name, y = sub_rur_labs_2$y, label = sub_rur_labs_2$lab)) +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
   theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
-  labs(x = "Tag",
-       y = "Percent of Suburban vs. Rural Schools Selecting Tag",
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
        title = "Top 10 Tags with Largest Differences between Rural and Suburban Schools",
        subtitle = "Comparison within locale types - denominator = schools within locale")
 
@@ -452,3 +462,763 @@ sub_rur_viz_2
 ## Probability and Odds Ratios
 
 In this final analysis, I calculated probability for each practice and converted to odds ratio in order to plot how much more or less likely a given locale was to select each tag.
+
+```{r locale odds}
+locale_odds <- locale_tags %>% 
+  select(locale, tag, pct_school) %>% 
+  pivot_wider(names_from = "locale",
+              values_from = "pct_school",
+              names_glue = "{.value}_{locale}") %>% 
+  janitor::clean_names() %>% 
+  mutate(odds_urban = pct_school_urban / (1 - pct_school_urban),
+         odds_suburban = pct_school_suburban / (1 - pct_school_suburban),
+         odds_rural = pct_school_rural / (1 - pct_school_rural),
+         urb_rur_ratio = odds_urban / odds_rural,
+         urb_sub_ratio = odds_urban / odds_suburban,
+         sub_rur_ratio = odds_suburban / odds_rural)
+```
+
+### Urban vs. Rural (Odd Ratio)
+
+```{r urb v rur viz 3, fig.dim = c(9, 9)}
+urb_rur_odds <- tags %>% 
+  janitor::clean_names() %>% 
+  select(variable_name, short_name) %>% 
+  rename(tag = variable_name) %>% 
+  left_join(locale_odds, by = "tag") %>% 
+  select(short_name, urb_rur_ratio) %>% 
+  slice_max(urb_rur_ratio, n = 15, with_ties = FALSE)
+#odd ratio labels labels
+urb_rur_odds_lab <- data.frame(x = c(urb_rur_odds$short_name),
+                           y = c(urb_rur_odds$urb_rur_ratio + .75),
+                           lab = c(paste0(round(urb_rur_odds$urb_rur_ratio, 1), "x")))
+#viz
+urb_rur_odds_viz <- urb_rur_odds %>% 
+  ggplot(aes(reorder(short_name, -urb_rur_ratio), urb_rur_ratio)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1A4C81") +
+  coord_flip() +
+  geom_text(aes(x = short_name, y = urb_rur_odds_lab$y, label = urb_rur_odds_lab$lab), 
+            color = "#EF464B", size = 7, family = "Bebas Neue") +
+  scale_color_manual(values = paste(transcend_cols)) +
+  theme_transcend +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  labs(x = "",
+       y = "",
+       title = "How Much More Likely Urban Schools were to \n Select a Tag",
+       subtitle = "as compared to rural schools using raw odds ratios")
+  
+urb_rur_odds_viz
+```
+
+### Urban vs. Suburban (Odd Ratio)
+
+```{r urb v sub viz 3, fig.dim = c(9, 9)}
+urb_sub_odds <- tags %>% 
+  janitor::clean_names() %>% 
+  select(variable_name, short_name) %>% 
+  rename(tag = variable_name) %>% 
+  left_join(locale_odds, by = "tag") %>% 
+  select(short_name, urb_sub_ratio) %>% 
+  slice_max(urb_sub_ratio, n = 16, with_ties = FALSE) %>% 
+  filter(!c(short_name == "dual language programming"))
+#odd ratio labels labels
+urb_sub_odds_lab <- data.frame(x = c(urb_sub_odds$short_name),
+                           y = c(.45 + urb_sub_odds$urb_sub_ratio),
+                           lab = c(paste0(round(urb_sub_odds$urb_sub_ratio, 1), "x")))
+#viz
+urb_sub_odds_viz <- urb_sub_odds %>% 
+  ggplot(aes(reorder(short_name, -urb_sub_ratio), urb_sub_ratio)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1A4C81") +
+  coord_flip() +
+  geom_text(aes(x = short_name, y = urb_sub_odds_lab$y, label = urb_sub_odds_lab$lab),
+            color = "#EF464B", size = 7, family = "Bebas Neue") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  labs(x = "",
+       y = "",
+       title = "How Much More Likely Urban Schools were to \n Select a Tag",
+       subtitle = "as compared to suburban schools using raw odds ratios \n \n Note: dual language programming left out because no \n suburban schools selected it")
+  
+urb_sub_odds_viz
+```
+
+### Suburban vs. Rural (Odd Ratio)
+
+```{r sub v rur viz 3, fig.dim = c(9, 9)}
+sub_rur_odds <- tags %>% 
+  janitor::clean_names() %>% 
+  select(variable_name, short_name) %>% 
+  rename(tag = variable_name) %>% 
+  left_join(locale_odds, by = "tag") %>% 
+  select(short_name, sub_rur_ratio) %>% 
+  slice_max(sub_rur_ratio, n = 15, with_ties = FALSE)
+#odd ratio labels labels
+sub_rur_odds_lab <- data.frame(x = c(sub_rur_odds$short_name),
+                           y = c(.15 + sub_rur_odds$sub_rur_ratio),
+                           lab = c(paste0(round(sub_rur_odds$sub_rur_ratio, 1), "x")))
+#viz
+sub_rur_odds_viz <- sub_rur_odds %>% 
+  ggplot(aes(reorder(short_name, -sub_rur_ratio), sub_rur_ratio)) +
+  geom_bar(stat = "identity", position = "dodge", fill = "#1A4C81") +
+  coord_flip() +
+  geom_text(aes(x = short_name, y = sub_rur_odds_lab$y, label = sub_rur_odds_lab$lab),
+            color = "#EF464B", size = 7, family = "Bebas Neue") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  labs(x = "",
+       y = "",
+       title = "How Much More Likely Suburban Schools were to \n Select a Tag",
+       subtitle = "as compared to rural schools using raw odds ratios")
+  
+sub_rur_odds_viz
+```
+
+Save plots:
+```{r, eval = FALSE}
+#across plots
+ggsave("urb-rur_across.png", plot = urb_rur_viz, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("urb-sub_across.png", plot = urb_sub_viz, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sub-rur_across.png", plot = urb_sub_viz, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+#within plots
+ggsave("urb-rur_within.png", plot = urb_rur_viz_2, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("urb-sub_within.png", plot = urb_sub_viz_2, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sub-rur_within.png", plot = sub_rur_viz_2, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+#odds charts
+ggsave("urb-rur_odds_chart_raw.png", plot = urb_rur_odds_viz, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("urb-sub_odds_chart_raw.png", plot = urb_sub_odds_viz, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sub-rur_odds_chart_raw.png", plot = sub_rur_odds_viz, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+```
+
+
+# Cycle 4 (6.3.22)
+
+Guiding questions/tasks & format:  
+`LOCALE`: How do tagging patterns differ among rural, urban, and suburban schools?  
+* viz of *smallest* differences between categories (urban vs. rural; rural vs. suburban; suburban vs. urban)  
+* odds ratio modeled  
+
+## Urban vs. Rural - Smallest Diffs
+
+```{r urb v rur small, fig.dim = c(9, 9)}
+#data prep
+urb_rur_diff_sm <- locale_diffs_2 %>% 
+  select(tag, urb_rur_diff, pct_locale_tag_urban, pct_locale_tag_rural) %>% 
+  slice_min(urb_rur_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(urb_rur_diff = paste(round(1*urb_rur_diff, 2), "%"),
+         pct_locale_tag_urban = 100*pct_locale_tag_urban,
+         pct_locale_tag_rural = 100*pct_locale_tag_rural) %>%
+  pivot_longer(cols = c("pct_locale_tag_urban", "pct_locale_tag_rural"),
+               names_to = "locale",
+               names_prefix = "pct_locale_tag_",
+               values_to = "pct")
+#pct labels
+urb_rur_labs_sm <- data.frame(x = c(urb_rur_diff_sm$tag),
+                             y = c(2 + urb_rur_diff_sm$pct),
+                             lab = c("< 1%", "", "< 1%", "", "", "< 1%", "", "< 1%", "", "< 1%", "", "< 1%", "", "< 1%", "", "1.68%", "", "1.72%", "", "1.96%"))
+#reorder 
+urb_rur_diff_sm$tag <- factor(urb_rur_diff_sm$tag,
+                              levels = c(unique(paste0(urb_rur_diff_sm$tag))))
+#levels(urb_rur_diff_sm$tag)
+#side-side bar chart
+urb_rur_viz_sm <- urb_rur_diff_sm %>% 
+  ggplot(aes(tag, pct, fill = locale)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = urb_rur_labs_sm$x, y = urb_rur_labs_sm$y, label = urb_rur_labs_sm$lab),
+            color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools",
+       title = "Top 10 Tags with Smallest Differences between Urban and Rural Schools",
+       subtitle = "Comparison within locale types - denominator = schools within locale")
+urb_rur_viz_sm
+```
+
+## Urban vs. Suburban - Smallest Diffs
+
+```{r urb v sub small, fig.dim = c(9, 9)}
+#data prep
+urb_sub_diff_sm <- locale_diffs_2 %>% 
+  select(tag, urb_sub_diff, pct_locale_tag_urban, pct_locale_tag_suburban) %>% 
+  slice_min(urb_sub_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(urb_sub_diff = paste(round(1*urb_sub_diff, 2), "%"),
+         pct_locale_tag_urban = 100*pct_locale_tag_urban,
+         pct_locale_tag_suburban = 100*pct_locale_tag_suburban) %>%
+  pivot_longer(cols = c("pct_locale_tag_urban", "pct_locale_tag_suburban"),
+               names_to = "locale",
+               names_prefix = "pct_locale_tag_",
+               values_to = "pct")
+#pct labels
+urb_sub_labs_sm <- data.frame(x = c(urb_sub_diff_sm$tag),
+                             y = c(2 + urb_sub_diff_sm$pct),
+                             lab = c("< 1%", "", "", "< 1%", "< 1%", "", "", "< 1%", "< 1%", "", "", "< 1%", "", "< 1%", "", "1.06%", "", "1.06%", "1.36%", ""))
+#reorder 
+urb_sub_diff_sm$tag <- factor(urb_sub_diff_sm$tag,
+                              levels = c(unique(paste0(urb_sub_diff_sm$tag))))
+#levels(urb_sub_diff_sm$tag)
+#side-side bar chart
+urb_sub_viz_sm <- urb_sub_diff_sm %>% 
+  ggplot(aes(tag, pct, fill = locale)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = urb_sub_labs_sm$x, y = urb_sub_labs_sm$y, label = urb_sub_labs_sm$lab),
+            color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools",
+       title = "Top 10 Tags with Smallest Differences between Urban and Suburban Schools",
+       subtitle = "Comparison within locale types - denominator = schools within locale")
+urb_sub_viz_sm
+```
+
+## Suburban vs. Rural - Smallest Diffs
+
+```{r sub v rur small, fig.dim = c(9, 9)}
+#data prep
+sub_rur_diff_sm <- locale_diffs_2 %>% 
+  select(tag, sub_rur_diff, pct_locale_tag_suburban, pct_locale_tag_rural) %>% 
+  slice_min(sub_rur_diff, n = 10, with_ties = FALSE) %>% 
+  mutate(sub_rur_diff = paste(round(1*sub_rur_diff, 2), "%"),
+         pct_locale_tag_suburban = 100*pct_locale_tag_suburban,
+         pct_locale_tag_rural = 100*pct_locale_tag_rural) %>%
+  pivot_longer(cols = c("pct_locale_tag_suburban", "pct_locale_tag_rural"),
+               names_to = "locale",
+               names_prefix = "pct_locale_tag_",
+               values_to = "pct")
+#pct labels
+sub_rur_labs_sm <- data.frame(x = c(sub_rur_diff_sm$tag),
+                             y = c(2 + sub_rur_diff_sm$pct),
+                             lab = c("< 1%", "", "", "< 1%", "< 1%", "", "< 1%", "", "1.03 %", "", "", "1.49 %", "1.61 %", "", "1.61 %", "", "", "1.84 %", "", "1.84 %"))
+#reorder 
+sub_rur_diff_sm$tag <- factor(sub_rur_diff_sm$tag,
+                              levels = c(unique(paste0(sub_rur_diff_sm$tag))))
+#levels(sub_rur_diff_sm$tag)
+#side-side bar chart
+sub_rur_viz_sm <- sub_rur_diff_sm %>% 
+  ggplot(aes(tag, pct, fill = locale)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = sub_rur_labs_sm$x, y = sub_rur_labs_sm$y, label = sub_rur_labs_sm$lab),
+            color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_x_tag() +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(x = "",
+       y = "Percent of Schools",
+       title = "Top 10 Tags with Smallest Differences between Suburban and Rural Schools",
+       subtitle = "Comparison within locale types - denominator = schools within locale")
+sub_rur_viz_sm
+```
+
+```{r save plots, eval = FALSE}
+#smallest differences plots
+ggsave("urb-rur_small.png", plot = urb_rur_viz_sm, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("urb-sub_small.png", plot = urb_sub_viz_sm, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sub-rur_small.png", plot = sub_rur_viz_sm, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+```
+
+# Variation Across All Locales
+
+## Variability Between All Locales
+
+```{r all variability, fig.dim = c(9, 9)}
+#data prep
+#variance calculated as standard deviation within tag groups
+var_all <- locale_tags_2 %>% 
+  rename(pct_within = pct_locale_tag,
+         n = n_tag) %>% 
+  select(-c(n_school)) %>% 
+  mutate(locale = str_to_lower(locale)) %>% 
+  pivot_wider(names_from = "locale",
+              values_from = c("n", "pct_within")) %>% #only pct_within used for differences
+  select(tag, starts_with("pct_within_")) %>% 
+  pivot_longer(cols = c("pct_within_urban", "pct_within_suburban", "pct_within_rural"),
+               names_to = "locale",
+               names_prefix = "pct_within_",
+               values_to = "proportion") %>% 
+  ungroup() %>% 
+  group_by(tag) %>% 
+  mutate(variance = sd(proportion))
+
+#max variability plot - top 10
+var_max_10 <- var_all %>% 
+  group_by(locale) %>% 
+  slice_max(variance, n = 10, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = locale)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 10 Tags with Largest Variability for Urban, Suburban, and Rural Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_10
+
+#min variability plot - top 10
+var_min_10 <- var_all %>% 
+  group_by(locale) %>% 
+  slice_min(variance, n = 10, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = locale)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Least Variability",
+       title = "Lowest 10 Tags with Largest Variability for Urban, Suburban, and Rural Schools",
+       subtitle = "In order of increasing variability")
+
+var_min_10
+
+#saving Figure J data
+# var_min_10_dat <- var_all %>% 
+#   group_by(locale) %>% 
+#   slice_min(variance, n = 10, with_ties = FALSE)
+#export(var_min_10_dat, "fig_j_data.csv")
+
+#max variability plot - top 15
+var_max_15 <- var_all %>% 
+  group_by(locale) %>% 
+  slice_max(variance, n = 15, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = locale)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 15 Tags with Largest Variability for Urban, Suburban, and Rural Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_15
+
+#min variability plot - top 15
+var_min_15 <- var_all %>% 
+  group_by(locale) %>% 
+  slice_min(variance, n = 15, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = locale)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Least Variability",
+       title = "Lowest 15 Tags with Largest Variability for Urban, Suburban, and Rural Schools",
+       subtitle = "In order of increasing variability")
+
+var_min_15
+
+#max variability plot - top 20
+var_max_20 <- var_all %>% 
+  group_by(locale) %>% 
+  slice_max(variance, n = 20, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = locale)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 20 Tags with Largest Variability for Urban, Suburban, and Rural Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_20
+
+#min variability plot - top 20
+var_min_20 <- var_all %>% 
+  group_by(locale) %>% 
+  slice_min(variance, n = 20, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = locale)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Least Variability",
+       title = "Lowest 20 Tags with Largest Variability for Urban, Suburban, and Rural Schools",
+       subtitle = "In order of increasing variability")
+
+var_min_20
+```
+
+Save plots
+
+```{r save variance plots, eval = FALSE}
+#variability across tags
+#top 10
+ggsave("lg-tag-variability-10.png", plot = var_max_10, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sm-tag-variability-10.png", plot = var_min_10, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+#top 15
+ggsave("lg-tag-variability-15.png", plot = var_max_15, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sm-tag-variability-15.png", plot = var_min_15, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+#top 20
+ggsave("lg-tag-variability-20.png", plot = var_max_20, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sm-tag-variability-20.png", plot = var_min_20, path = here("outputs", "locale analysis"),
+       width = 12, height = 8, units = "in")
+```
+
+# Models
+
+## Controlling for Race and SES  
+
+The first model uses percentage of black students, hispanic students, locale, as well as free/reduced price lunch percent, students with disabilities percent, and percent of English learners.  
+
+The plot details the top 10 absolute effects for each demographic variable listed above, as drawn from Gregor's work last year.
+
+```{r data prep}
+mod_prep <- clean_data_full %>% 
+  select(school_id, starts_with("practices_"), locale, ends_with("_percent"), self_reported_total_enrollment) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "value") %>% 
+  mutate(locale_urban = ifelse(locale=="Urban", 1, 0),
+         locale_rural = ifelse(locale=="Rural", 1, 0),
+         locale_suburban = ifelse(locale=="Suburban", 1, 0)) %>% 
+  select(-locale)
+
+##from Gregor's code:
+#first will run black percent and hispanic percent as controls
+one_vars = c("self_reported_total_enrollment", "black_percent", "hispanic_percent", "locale_urban", "locale_rural", "locale_suburban", "frpl_percent", "swd_percent", "ell_percent")
+
+logistic_one_dat = 
+  mod_prep %>%
+  select(value, tag, one_of(one_vars)) %>%
+  na.omit() %>%
+  group_by(tag) %>%
+  # scaling non-binary predictors
+  mutate_at(vars(
+    c(
+      "self_reported_total_enrollment",
+      "black_percent",
+      "hispanic_percent",
+      "frpl_percent",
+      "swd_percent",
+      "ell_percent"
+    )
+  ), scale)
+
+one_form = as.formula(paste("value", "~", paste(one_vars, collapse = "+")))
+#plot(xm, "areas", prob = 0.9, prob_outer = 1)
+
+bayes_mods = list()
+
+for(this_tag in unique(mod_prep$tag)) {
+  bayes_mods[[this_tag]] = stan_glm(
+    one_form,
+    data = filter(logistic_one_dat, tag == this_tag),
+    family = binomial(link = "logit"),
+    prior = student_t( #I'm not familiar with the functions in this loop, does df need to change within student_t()?
+      df = 7,
+      location = 0,
+      scale = 2.5
+    )
+  )
+  
+}
+
+bayes_tidy = lapply(bayes_mods, tidy) %>%
+  bind_rows(.id = "response") %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    nice_tag = label_tags(response),
+    nice_demog = factor(label_dems(term))
+  )
+
+## top 10 absolute effects per demo:
+
+bayes_facet_dat = bayes_tidy %>% group_by(nice_demog) %>%
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10)
+
+bayes_facet = 
+  ggplot(bayes_facet_dat,
+    aes(y = exp(estimate),
+        x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean),
+    )) +
+  geom_col() + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       #fill = "Demographic",
+       title = "Top 10 tags most/least related to each demographic") +
+  facet_wrap(~ nice_demog, scales = "free_y") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.0625, .125, .25, .5, 1, 2, 4, 8, 16),
+    labels = c("1/16", "1/8", "1/4", "1/2", "1", "2", "4", "8", "16"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0))
+
+bayes_facet
+```
+
+## Controlling for Aggregate BIPOC Population
+
+The second model uses the same demographic variables, but rather than drawing from black and hispanic percentages, it uses an overall BIPOC student percentage (as calculated by non-white percent). I recognize this may not be super useful for reporting, but I was interested to see if there were any significant differences between majority-majority and majority-minority schools when racial demographics are not disaggregated.
+
+```{r model 2 - bipoc}
+#also run bipoc percent (all non-white)?
+mod_prep2 <- clean_data_full %>% 
+  select(school_id, starts_with("practices_"), locale, ends_with("_percent"), self_reported_total_enrollment) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "value") %>% 
+  mutate(locale_urban = ifelse(locale=="Urban", 1, 0),
+         locale_rural = ifelse(locale=="Rural", 1, 0),
+         locale_suburban = ifelse(locale=="Suburban", 1, 0),
+         non_white_percent = 1 - white_percent) %>% 
+  select(-c(locale, aian_percent, asian_percent, black_percent, hispanic_percent, nhpi_percent, multiple_percent))
+
+##from Gregor's code:
+#first will run black percent and hispanic percent as controls
+one_vars2 = c("self_reported_total_enrollment", "non_white_percent", "locale_urban", "locale_rural", "locale_suburban", "frpl_percent", "swd_percent", "ell_percent")
+
+logistic_one_dat2 = 
+  mod_prep2 %>%
+  select(value, tag, one_of(one_vars2)) %>%
+  na.omit() %>%
+  group_by(tag) %>%
+  # scaling non-binary predictors
+  mutate_at(vars(
+    c(
+      "self_reported_total_enrollment",
+      "non_white_percent",
+      "frpl_percent",
+      "swd_percent",
+      "ell_percent"
+    )
+  ), scale)
+
+one_form2 = as.formula(paste("value", "~", paste(one_vars2, collapse = "+")))
+#plot(xm, "areas", prob = 0.9, prob_outer = 1)
+
+bayes_mods2 = list()
+
+for(this_tag in unique(mod_prep2$tag)) {
+  bayes_mods2[[this_tag]] = stan_glm(
+    one_form2,
+    data = filter(logistic_one_dat2, tag == this_tag),
+    family = binomial(link = "logit"),
+    prior = student_t(
+      df = 7,
+      location = 0,
+      scale = 2.5
+    )
+  )
+  
+}
+
+bayes_tidy2 = lapply(bayes_mods2, tidy) %>%
+  bind_rows(.id = "response") %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    nice_tag = label_tags(response),
+    nice_demog = factor(label_dems(term))
+  )
+
+## top 10 absolute effects per demo:
+
+bayes_facet_dat2 = bayes_tidy2 %>% group_by(nice_demog) %>%
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10)
+
+bayes_facet2 = 
+  ggplot(bayes_facet_dat2,
+    aes(y = exp(estimate),
+        x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean),
+    )) +
+  geom_col() + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       #fill = "Demographic",
+       title = "Top 10 tags most/least related to each demographic") +
+  facet_wrap(~ nice_demog, scales = "free_y") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.125, .25, .5, 1, 2, 4, 8),
+    labels = c("1/8", "1/4", "1/2", "1", "2", "4", "8"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0))
+
+bayes_facet2
+```
+
+
+Some of the outcomes from this method and model are coming out strange. Notice there's some columns extending beyond the plot dimensions, something which I don't see in last year's work and because I'm unfamiliar with some of these functions and somewhat new to Bayesian approaches I haven't been able to trouble shoot here. *Gregor* - Can you take a look at some of this code and see what's going on?  
+
+In the meantime, I also ran the locale models with predictors using a different logistic regression approach:
+
+## Alternate Model
+
+*also coming out weird, so ignore this*
+
+```{r glm log regression locale, eval = FALSE}
+########## ALL COMING OUT WEIRD, IGNORE ##################
+#black and hispanic percent
+glm_prep <- clean_data_full %>% 
+  select(school_id, starts_with("practices_"), locale, ends_with("_percent"), self_reported_total_enrollment) %>% 
+  mutate(non_white_percent = 1 - white_percent,
+         locale = recode(locale,
+           Urban = "_urban",
+           Suburban = "_suburban",
+           Rural = "_rural"
+         )) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "value") %>% 
+  #na.omit() %>% #kept in because it was used in previous modeling, but may reconsider
+  group_by(tag) %>% 
+  #scaling non-binary predictors
+  mutate_at(vars(c(ends_with("_percent"))), scale)
+######  model to build from ########
+glm1 <- glm(value ~ 1 + black_percent + hispanic_percent + frpl_percent, 
+            data = glm_prep, family = "binomial")
+summary(glm1)
+#vector for predictor vars
+glm1_vars = c("black_percent", "hispanic_percent", "locale", "frpl_percent")
+#use vector to build model for loop
+glm1_form = as.formula(paste("value", "~", paste(glm1_vars, collapse = "+")))
+
+glm1_mods = list()
+
+for(this_tag in unique(glm_prep$tag)) {
+  glm1_mods[[this_tag]] = glm(
+    glm1_form,
+    data = filter(glm_prep, tag == this_tag),
+    family = "binomial")
+  
+}
+
+glm1_tidy = lapply(glm1_mods, tidy) %>%
+  bind_rows(.id = "response") %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    nice_tag = label_tags(response),
+    nice_demog = factor(label_dems(term))
+  )
+
+## top 10 absolute effects per demo:
+glm1_facet_dat = glm1_tidy %>% group_by(nice_demog) %>%
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10)
+
+glm1_facet = 
+  ggplot(glm1_facet_dat,
+    aes(y = exp(estimate),
+        x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean),
+    )) +
+  geom_col() + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       #fill = "Demographic",
+       title = "Top 10 tags most/least related to each demographic") +
+  facet_wrap(~ nice_demog, scales = "free_y") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.0625, .125, .25, .5, 1, 2, 4, 8, 16),
+    labels = c("1/16", "1/8", "1/4", "1/2", "1", "2", "4", "8", "16"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0))
+
+glm1_facet
+
+#bipoc percent
+```
+
+
+```{r save model plots, eval = FALSE}
+#black and hispanic percent as variable in odds model
+ggsave("locale-odds-model-top10.png", plot = bayes_facet, path = here("outputs", "locale analysis"), 
+       width = 20, height = 12, units = "in")
+#nonwhite/bipoc percent as variable in odds model
+ggsave("locale-bipoc-odds-model-top10.png", plot = bayes_facet2, path = here("outputs", "locale analysis"), 
+       width = 20, height = 12, units = "in")
+```
+
+## Odds and ends
+
+Chart showing urban, suburban, rural school frequencies for the following tags: hiring for equity and inclusion values, culturally responsive teaching, anti-racist practices, and social justice focus (tags on x-axis, percentages (within) on y-axis)
+
+```{r tag-specific bar chart}
+sj_tags <- locale_tags_2 %>% 
+  filter(tag == "practices_hiring_equity" | 
+         tag == "practices_culturally_responsive" | 
+         tag == "practices_anti_racist" | 
+         tag == "practices_social_justice") %>% 
+  select(tag, locale, pct_locale_tag)
+
+#export(sj_tags, "sj-fig.csv")
+```
+

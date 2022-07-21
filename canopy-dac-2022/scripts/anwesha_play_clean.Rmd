@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 # Clean Play File
@@ -19,7 +19,7 @@ First, read in data & load necessary libraries.
 
 ```{r libraries}
 library(pacman)
-p_load(tidyverse, here, rio, janitor, kableExtra, psych)
+p_load(tidyverse, here, rio, janitor, kableExtra, psych, DT)
 ```
 
 ```{r read in data}
@@ -66,25 +66,81 @@ df2 <- df %>%
   select(nces_id, 134:138, -practice_frequency)
 ```
 
-## Practice count by focus group -- this is where I'm struggling!
 
-Focus group descriptives
+Focus group descriptives.
 ```{r}
 df3 <- df2 %>% 
   filter(focus_frequency >0, all_practice_count>0)
 ```
 
 ```{r}
-df3 %>% 
+focus_count <- df3 %>% 
   group_by(focus) %>% 
-  summarise(n = n())
+  summarise(n = n_distinct(nces_id))
 ```
+
+```{r}
+theme_set(theme_light())
+focus_count %>% 
+  ggplot(aes(x = reorder(focus, n), y = n)) +
+  geom_col(fill = "navy", alpha = .8) +
+  labs(x = "Focus Area Selected",
+       y = "Practices Implemented",
+       title = "Practices by Focus Area") +
+  coord_flip()
+```
+
+
+Practice count descriptives.
+```{r}
+practice_count <- df3 %>% 
+  group_by(practices) %>% 
+  summarise(n = n_distinct(nces_id)) %>% 
+  arrange(-n)
+```
+
+```{r}
+practice_count %>% 
+  datatable()
+```
+```{r}
+head(practice_count$practices, 10)
+```
+
+schools focused on practices
+unique number of practices 
+practices implemented (mean practices per school)
+
+bottom 5 practices for each focus 
+% of focus area
+reorder within level function -- sort practices within each facet
+color overlap in a different color -- color by how many groups they are in
+
+download transcend fonts
 
 Total practice count by school
 ```{r}
-df %>% 
-  group_by(nces_id, focus) %>% 
-  summarise(n = length(focus))
+practice_focus <- df3 %>% 
+  group_by(practices, focus) %>% 
+  summarise(n = sum(all_practice_count))
 ```
 
+```{r}
+practice_focus_plot <- practice_focus %>% 
+  filter(practices %in% c(head(practice_count$practices, 10)))
+
+library(colorblindr)
+library(tidytext)
+
+practice_focus %>% 
+  group_by(focus) %>% 
+  top_n(10) %>% 
+  ungroup() %>% 
+  mutate(perc = paste0(sprintf("%4.1f", n / sum(n) * 100), "%")) %>% 
+  ggplot(aes(x = n, y = fct_reorder(practices, n), fill = focus)) + 
+  geom_col(show.legend = FALSE, alpha = .8) +
+#  geom_text(aes(label = perc)) +
+  facet_wrap(~as.factor(focus), ncol = 3, scales = "free") +
+  scale_fill_viridis_d() 
+```
 

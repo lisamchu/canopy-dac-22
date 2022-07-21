@@ -1,0 +1,66 @@
+---
+title: "Demographics in Canopy Schools"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+library(here)
+library(purrr)
+library(tidyr)
+source(here("scripts/branding.R"))
+load(here("data/complete_canopy_2022.RData"))
+```
+
+```{r, echo = TRUE}
+demographic_data %>%
+  count(lead = confidential_leadership_team_diversity, staff = confidential_teaching_staff_diversity) %>%
+  ggplot(aes(x = staff, y = lead)) +
+  geom_tile(aes(fill = n)) +
+  geom_label(aes(label = n)) +
+  labs(x = "Staff", y = "Leadership", title = "Staff diversity") +
+  scale_fill_continuous(guide = "none") +
+  theme_transcend_sparse +
+  theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 1))
+```
+
+```{r, include=FALSE}
+demo = demographic_data %>%
+  mutate(across(contains("percent"), \(x) {
+    x = suppressWarnings(as.numeric(x))
+    if(max(x, na.rm = TRUE) > 1) {x = x / 100}
+    return(x)
+  }))
+
+demo_long = demo %>%
+  pivot_longer(contains("percent"), names_to = "dem", values_to = "value") %>%
+  select(school_id, dem, value) %>%
+  mutate(labels = label_dems(dem))
+```
+
+```{r, fig.height=10, echo = TRUE}
+ggplot(demo_long, aes(y = value, x = dem)) +
+  geom_violin(fill = transcend_cols["teal"]) +
+  geom_point(
+    color = transcend_cols["red"],
+    position = position_jitter(width = 0.2),
+    size = 0.2
+  ) +
+  facet_wrap(vars(labels), scales = "free_x") +
+  bar_y_scale_percent +
+  labs(
+    x = "", y = "", 
+    title = "Student diversity in Canopy schools",
+    subtitle = "Width indicates the number of Canopy schools\nwith demographics of a certain percentage"
+  ) +
+  theme(
+    axis.text.x = element_blank(),
+    strip.text = element_text(size = rel(0.5)),
+    plot.subtitle = element_text(size = rel(0.7))
+  )
+  
+```
+
+
+
+

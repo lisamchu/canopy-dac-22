@@ -1,0 +1,475 @@
+---
+title: "Data Clean"
+author: "Janette Avelar"
+date: "5/22/2022"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(here)
+library(rio)
+library(janitor)
+old_dat <- import(here("data", "dac_22_updated.csv"),
+                 setclass = "tbl_df") %>% 
+            clean_names()
+```
+
+# Locale  
+
+Created a new variable `locale` to indicate whether a school is urban, rural, or suburban. This variable merges NCES and self-reported data, with NCES data taking precedence in instances where we had information from both sources. There is 1 instance of `NA` where neither NCES or self-reported data were recorded. An additional 3 instances were coded as `NA` (Iowa Big, The Forest Schools, & Link Learning) indicating multi-coded schools which should be excluded from locale-specific analysis.
+
+*Status:* Complete
+
+```{r locale var}
+clean_locale <- old_dat %>% 
+  select(school_id, school_name, nces_locale, self_reported_locale_rural, self_reported_locale_suburban, self_reported_locale_urban) %>%     mutate(self_reported_locale_rural = ifelse(self_reported_locale_rural==1, "Rural", NA),
+       self_reported_locale_suburban = ifelse(self_reported_locale_suburban==1, "Suburban", NA),
+       self_reported_locale_urban = ifelse(self_reported_locale_urban==1, "Urban", NA),
+       nces_locale = na_if(nces_locale, "")) %>% 
+  unite("locale", c(nces_locale, self_reported_locale_rural, self_reported_locale_suburban, self_reported_locale_urban), na.rm = TRUE) %>% 
+  select(-school_name)
+#relabel multi-coded instances
+#decisions for coding in data GDrive file under "Locale" tab
+clean_locale[156,2] <- "Rural" #Community Lab
+clean_locale[157,2] <- "Urban" #Utah Schools for the Deaf
+clean_locale[123,2] <- NA #Iowa Big
+clean_locale[140,2] <- NA #The Forest Schools
+clean_locale[114,2] <- "Urban" #Unidos Homeschool Cooperative
+clean_locale[132,2] <- "Suburban" #Portal Schools
+clean_locale[133,2] <- "Suburban" #Verdi Ecoschool
+clean_locale[144,2] <- NA #Link Learning
+clean_locale[131,2] <- "Urban" #Lumen High School
+clean_locale[147,2] <- "Urban" #One Stone
+#factor variable for future analysis
+clean_locale <- clean_locale %>% 
+  mutate(locale = factor(locale, levels = c("Urban", "Suburban", "Rural"),
+                         exclude = NULL)) #exclude NAs
+```
+
+### School Leader Racial Identity
+
+School leaders filling out the survey were asked to report how they identify racially. This variable was previously coded across 9 columns, with the following values:  
+* AIAN  
+* Asian  
+* Black  
+* Hispanic  
+* NHPI  
+* White  
+* Self describe option  
+* Text for `self describe`  
+* No Response (which I assume is prefer not to respond)
+
+Values were coded as either `yes` or `no` which has been collapsed into a single column `confidential_leader_race` with a value filled in according to the list above. An additional value, `Biracial` has been added for leaders who identified as more than one race (there were no instances with more than 2 races reported).  
+
+The new values include:  
+* White  
+* Biracial  
+* Hispanic  
+* Asian  
+* No Response  
+* NA (1 missing observation)  
+* Xicana Indigena (1 observation)  
+* Middle Eastern (1 observation)  
+* AIAN  
+
+Note that NHPI was dropped because there were no coded NHPI cases. Self-reported text was used, but I can change this to "Other" or to any other value desired if needed.
+
+*Status:* Complete -- variable is a factor with previously listed values.
+
+```{r leader race}
+clean_leader_race <- old_dat %>% 
+  select(school_id, confidential_leader_race_aian, confidential_leader_race_asian, confidential_leader_race_black, confidential_leader_race_hispanic, confidential_leader_race_nhpi, confidential_leader_race_white, confidential_leader_race_no_response, confidential_leader_race_self_describe, confidential_leader_race_self_describe_text) %>% 
+  mutate(confidential_leader_race_aian = ifelse(confidential_leader_race_aian==1, "AIAN", NA),
+         confidential_leader_race_asian = ifelse(confidential_leader_race_asian==1, "Asian", NA),
+         confidential_leader_race_black = ifelse(confidential_leader_race_black==1, "Black", NA),
+         confidential_leader_race_hispanic = ifelse(confidential_leader_race_hispanic==1, "Hispanic", NA),
+         confidential_leader_race_nhpi = ifelse(confidential_leader_race_nhpi==1, "NHPI", NA),
+         confidential_leader_race_white = ifelse(confidential_leader_race_white==1, "White", NA),
+         confidential_leader_race_no_response = ifelse(confidential_leader_race_no_response==1, "No Response", NA),
+         confidential_leader_race_self_describe = na_if(confidential_leader_race_self_describe, 0),
+         confidential_leader_race_self_describe = na_if(confidential_leader_race_self_describe, 1),
+         confidential_leader_race_self_describe_text = na_if(confidential_leader_race_self_describe_text, "0"),
+         confidential_leader_race_self_describe_text = na_if(confidential_leader_race_self_describe_text, "-99"),) %>% 
+  unite("confidential_leader_race", c(confidential_leader_race_aian, confidential_leader_race_asian, confidential_leader_race_black, confidential_leader_race_hispanic, confidential_leader_race_nhpi, confidential_leader_race_white, confidential_leader_race_no_response, confidential_leader_race_self_describe, confidential_leader_race_self_describe_text), na.rm = TRUE) %>% 
+  mutate(confidential_leader_race = str_replace_all(confidential_leader_race, c("Hispanic_White" = "Biracial", "Black_White" = "Biracial", "Black_Hispanic" = "Biracial", "xicana indigena" = "Xicana Indigena")),
+         confidential_leader_race = na_if(confidential_leader_race, ""))
+```
+
+# Private School NCES Data
+
+The NCES data merged with our Canopy dataset includes counts for each grade level within private schools. Each variable (listed below) has been recoded so that any values are converted to "Yes", "No", "Not Reported", or "NA" as applicable. (Note NAs were used when cells were completely empty. NA is **not** the same as Not Reported.)  
+
+Variables of interest:  
+* `nces_grades_pre_k`  
+* `nces_grades_kindergarten`  
+* `nces_grades_1st`  
+* `nces_grades_2nd`  
+* `nces_grades_3rd`  
+* `nces_grades_4th`  
+* `nces_grades_5th`  
+* `nces_grades_6th`  
+* `nces_grades_7th`  
+* `nces_grades_8th`  
+* `nces_grades_9th`  
+* `nces_grades_10th`  
+* `nces_grades_11th`  
+* `nces_grades_12th`  
+* `nces_grades_13th`  
+
+I did not create a new variable designating grade levels offered (e.g., elementary, middle, high, mixed elementary/jr high, mixed jr/sr high, etc.) but can do so if needed.
+
+Can also recode so NA is the same as Not Reported if needed.
+
+*Status:* Complete.
+
+```{r private grade recode, eval = FALSE}
+#recode all numeric values to "Yes" and factor
+clean_private_grades <- old_dat %>% 
+  mutate_at(vars(starts_with("nces_grades_")), na_if, "") %>% 
+  mutate_at(vars(starts_with("nces_grades_")), str_replace, "[:digit:][:digit:]", "Yes") %>% 
+  mutate_at(vars(starts_with("nces_grades_")), str_replace, "[:digit:]", "Yes") %>% 
+  mutate_at(vars(starts_with("nces_grades_")), factor)
+unique(clean_private_grades$nces_grades_3rd)
+```
+
+### Convert `nces_race_*` to percentages and merge `self_reported_*` and `nces_race_*`    
+
+The following variables now represent percentages (group/`nces_total_enrollment`) rather than counts:  
+* `nces_race_aian`  
+* `nces_race_asian`  
+* `nces_race_black`  
+* `nces_race_hispanic`  
+* `nces_race_nhpi`  
+* `nces_race_white`  
+* `nces_race_multiple`
+
+Rather than calculating, I imported the updated data that had percentages in each of these columns and merged them with the dataset.  
+
+Columns with self-reported and NCES data documenting student racial demographics merged into the following single columns:  
+* `aian_percent`  
+* `asian_percent`  
+* `black_percent`  
+* `hispanic_percent`  
+* `nhpi_percent`  
+* `white_percent`  
+* `multiple_percent`  
+
+Note all columns were changed to numeric type for future analysis and percentages are in decimal form rounded to 4 digits.  
+
+The data includes 35 instances of `NA` for the following 5 schools (5 schools x 7 racial groups = 35), meaning *both* NCES and self-reported data were missing:  
+* Aspen Academy (row 3)  
+* CodeRVA Regional High School (row 9)  
+* Lead Innovation Studio (row 67)  
+* Liberty Academy (row 109)  
+* CLK Engage At CLK Elementary School (row 124)  
+
+**Status:** Complete
+
+```{r nces race percentages}
+clean_race_pct <- old_dat %>% 
+  select(school_id, nces_race_aian, nces_race_asian, nces_race_black, nces_race_hispanic, nces_race_nhpi, nces_race_white, nces_race_multiple, self_reported_race_aian, self_reported_race_asian, self_reported_race_black, self_reported_race_hispanic, self_reported_race_nhpi, self_reported_race_white, self_reported_race_multiple) %>% 
+  mutate_at(vars(starts_with("nces_race")), na_if, "") %>% 
+  unite("aian_percent", c(nces_race_aian, self_reported_race_aian), na.rm = TRUE) %>% #AIAN merge
+  unite("asian_percent", c(nces_race_asian, self_reported_race_asian), na.rm = TRUE) %>% #Asian merge
+  unite("black_percent", c(nces_race_black, self_reported_race_black), na.rm = TRUE) %>% #Black merge
+  unite("hispanic_percent", c(nces_race_hispanic, self_reported_race_hispanic), na.rm = TRUE) %>% #Hispanic merge
+  unite("nhpi_percent", c(nces_race_nhpi, self_reported_race_nhpi), na.rm = TRUE) %>% #NHPI merge
+  unite("white_percent", c(nces_race_white, self_reported_race_white), na.rm = TRUE) %>% #White merge
+  unite("multiple_percent", c(nces_race_multiple, self_reported_race_multiple), na.rm = TRUE) %>%  #multiple merge
+  mutate_at(vars(ends_with("percent")), str_remove, "_[:digit:].[:digit:][:digit:]") %>% 
+  mutate_at(vars(ends_with("percent")), str_remove, "_[:digit:].[:digit:]") %>% 
+  mutate_at(vars(ends_with("percent")), str_remove, "_[:digit:]") %>% 
+  mutate_at(vars(ends_with("percent")), na_if, "") %>% 
+  mutate_at(vars(ends_with("percent")), str_remove, "%") %>% #remove %
+  mutate_at(vars(ends_with("_percent")), as.numeric) %>% #convert to numeric type
+  mutate(aian_percent = round(aian_percent / 100, 4), 
+         asian_percent = round(asian_percent / 100, 4),
+         black_percent = round(black_percent / 100, 4),
+         hispanic_percent = round(hispanic_percent / 100, 4),
+         nhpi_percent = round(nhpi_percent / 100, 4),
+         white_percent = round(white_percent / 100, 4),
+         multiple_percent = round(multiple_percent / 100, 4))
+```
+
+### Merge grade level data
+
+Columns with self-reported and NCES grade level data were merged into the following columns:  
+* `grades_pre_k`  
+* `grades_kindergarten`  
+* `grades_1st`  
+* `grades_2nd`  
+* `grades_3rd`  
+* `grades_4th`  
+* `grades_5th`  
+* `grades_6th`  
+* `grades_7th`  
+* `grades_8th`
+* `grades_9th`  
+* `grades_10th`  
+* `grades_11th`  
+* `grades_12th`  
+* `grades_past_12th`  
+* `grades_other`  
+
+The dataset includes 4 schools that indicated `other`. `Yes`/`No` values were modified so that the text starts with "Yes_" to make manipulation easier when using `starts_with()` but I can change this if that does not make sense.  
+Schools include:  
+* Utah Schools For The Deaf (row 157)  
++ `Yes_Birth - 3 years of age`
+* One Stone (row 147)  
++ `Yes_Our high school aged students provide year round educational opportunities to Yesst-7th grade students in the region. These range from STEM camps for 3-4th graders to entrepreneur workshops for middle schoolers.`
+* Link Learning (row 144)  
++ `Yes_adults up to 22 years old`
+* The Forest Schools (row 140)  
++ `Yes_Our Institute contracts with educators and leaders`  
+
+*Status:* Complete
+
+```{r merge grades}
+clean_grades <- clean_private_grades %>% 
+  select(school_id, starts_with("nces_grades_"), starts_with("self_reported_grades_")) %>% 
+  mutate_at(vars(starts_with("self_reported_grades_")), na_if, 0) %>% 
+  mutate_all(na_if, "") %>% 
+  unite("grades_pre_k", c(nces_grades_pre_k, self_reported_grades_pre_k), na.rm = TRUE) %>% 
+  unite("grades_kindergarten", c(nces_grades_kindergarten, self_reported_grades_kindergarten), na.rm = TRUE) %>% 
+  unite("grades_1st", c(nces_grades_1st, self_reported_grades_1st), na.rm = TRUE) %>% 
+  unite("grades_2nd", c(nces_grades_2nd, self_reported_grades_2nd), na.rm = TRUE) %>% 
+  unite("grades_3rd", c(nces_grades_3rd, self_reported_grades_3rd), na.rm = TRUE) %>% 
+  unite("grades_4th", c(nces_grades_4th, self_reported_grades_4th), na.rm = TRUE) %>% 
+  unite("grades_5th", c(nces_grades_5th, self_reported_grades_5th), na.rm = TRUE) %>% 
+  unite("grades_6th", c(nces_grades_6th, self_reported_grades_6th), na.rm = TRUE) %>% 
+  unite("grades_7th", c(nces_grades_7th, self_reported_grades_7th), na.rm = TRUE) %>% 
+  unite("grades_8th", c(nces_grades_8th, self_reported_grades_8th), na.rm = TRUE) %>% 
+  unite("grades_9th", c(nces_grades_9th, self_reported_grades_9th), na.rm = TRUE) %>% 
+  unite("grades_10th", c(nces_grades_10th, self_reported_grades_10th), na.rm = TRUE) %>% 
+  unite("grades_11th", c(nces_grades_11th, self_reported_grades_11th), na.rm = TRUE) %>% 
+  unite("grades_12th", c(nces_grades_12th, self_reported_grades_12th), na.rm = TRUE) %>% 
+  unite("grades_past_12th", c(nces_grades_13th, self_reported_grades_past_12th), na.rm = TRUE) %>% 
+  mutate(grades_other = self_reported_grades_other_text) %>% 
+  select(-c(self_reported_grades_other, self_reported_grades_other_text)) %>% 
+  mutate_all(na_if, "") %>% 
+  mutate_all(str_remove, "_[:digit:]") %>% 
+  mutate_at(vars(starts_with("grades_")), na_if, "Not reported") %>% 
+  mutate_at(vars(starts_with("grades_")), str_replace, "Yes", "1") %>% 
+  mutate_at(vars(starts_with("grades_")), str_replace, "No", "0") %>% 
+  mutate(school_id = as.integer(school_id))
+```
+
+# Create new `school_grade_type` variable
+
+School grade type designated by the following:  
+
+- ANY grades 1-5 = `elementary`  
+- ANY grades 7 AND 8 = `middle`  
+- ANY grades 10-12 = `high`  
+
+```{r create grade type}
+clean_grade_type <- clean_grades %>% 
+  mutate(grades_elementary = ifelse(grades_1st == "1" &
+                             grades_2nd == "1" &
+                             grades_3rd == "1" &
+                             grades_4th == "1" &
+                             grades_5th == "1", "1", "0"),
+         grades_middle = ifelse(grades_7th == "1" &
+                         grades_8th == "1", "1", "0"),
+         grades_high = ifelse(grades_10th == "1" &
+                       grades_11th == "1" &
+                       grades_12th == "1", "1", "0"),
+         school_id = as.integer(school_id)) %>% 
+  select(school_id, grades_elementary, grades_middle, grades_high)
+```
+
+# Collapse ELL variables
+
+NCES and self-reported data for ELL students was merged, with NCES data taking precedence. Final data reflects percentages in decimal format rounded to 4 decimal points.  
+
+There is 1 instance of `NA`.  
+
+*Status:* Complete
+
+```{r merge ELL}
+clean_ell <- old_dat %>% 
+  select(school_id, self_reported_ell, nces_ell) %>% 
+  mutate_all(str_remove, "%") %>% 
+  mutate_all(na_if, "") %>% 
+  unite("ell_percent", c(nces_ell, self_reported_ell), na.rm = TRUE) %>% 
+  mutate(ell_percent = str_remove(ell_percent, "_[:digit:]"),
+         ell_percent = na_if(ell_percent, ""),
+         ell_percent = as.numeric(ell_percent),
+         ell_percent = round(ell_percent / 100, 4),
+         school_id = as.integer(school_id))
+```
+
+### Collapse FRPL variables
+
+NCES and self-reported data for ELL students was merged, with NCES data taking precedence. Final data reflects percentages in decimal format rounded to 4 decimal points.  
+
+There is 1 instance of `NA`.  
+
+*Status:* Complete
+
+```{r merge FRPL}
+clean_frpl <- old_dat %>% 
+  select(school_id, self_reported_frpl, nces_frpl) %>% 
+  mutate_all(str_remove, "%") %>% 
+  mutate_all(na_if, "") %>% 
+  unite("frpl_percent", c(nces_frpl, self_reported_frpl), na.rm = TRUE) %>% 
+  mutate(frpl_percent = na_if(frpl_percent, ""),
+         frpl_percent = as.numeric(frpl_percent),
+         frpl_percent = round(frpl_percent / 100, 4),
+         school_id = as.integer(school_id))
+```
+
+### Collapse SWD variables
+
+NCES and self-reported data for ELL students was merged, with NCES data taking precedence. Final data reflects percentages in decimal format rounded to 4 decimal points.  
+
+There is 1 instance of `NA`.  
+
+*Status:* Complete
+
+```{r merge SWD}
+clean_swd <- old_dat %>% 
+  select(school_id, self_reported_swd, nces_swd) %>% 
+  mutate_all(str_remove, "%") %>% 
+  mutate_all(na_if, "") %>% 
+  unite("swd_percent", c(nces_swd, self_reported_swd), na.rm = TRUE) %>% 
+  mutate(swd_percent = str_remove(swd_percent, "_[:digit:][:digit:]"),
+         swd_percent = na_if(swd_percent, ""),
+         swd_percent = as.numeric(swd_percent),
+         swd_percent = round(swd_percent / 100, 4),
+         school_id = as.integer(school_id))
+```
+
+# Clean up Practices
+
+Cleaned up all columns that include practices so a single observation is in each cell. In other words, each practice now consists of 3 columns:  
+* `practices_*` = Did the school select this as a practice?  
+* `core_*` = Did the school select the given practice as a core practice?  
+* `time_*` = How long has the school been implementing the core practice?
+
+*Status:* Complete  
+
+```{r expand practices}
+#subset data
+practices <- old_dat %>% 
+  select(school_id, starts_with("practices_"))
+#create core subset
+core <- practices %>% 
+  rename_all(~gsub("practices", "core", .x)) %>% 
+  mutate_at(vars(starts_with("core_")), str_replace, "1$", "0") %>% 
+  mutate_at(vars(starts_with("core_")), str_replace, "Less than a year", "1") %>% 
+  mutate_at(vars(starts_with("core_")), str_replace, "1-2 years", "1") %>% 
+  mutate_at(vars(starts_with("core_")), str_replace, "3-4 years", "1") %>% 
+  mutate_at(vars(starts_with("core_")), str_replace, "5.......", "1") %>% 
+  mutate_at(vars(starts_with("core_")), as.numeric)
+#create time subset
+time <- practices %>% 
+  rename_all(~gsub("practices", "time", .x)) %>% 
+  mutate_at(vars(starts_with("time_")), str_replace, "1$", "0")
+#remove time observations - transform to "Yes"
+prac_prep <- practices %>% 
+  mutate_at(vars(starts_with("practices_")), str_replace, "Less than a year", "1") %>% 
+  mutate_at(vars(starts_with("practices_")), str_replace, "1-2 years", "1") %>% 
+  mutate_at(vars(starts_with("practices_")), str_replace, "3-4 years", "1") %>% 
+  mutate_at(vars(starts_with("practices_")), str_replace, "5.......", "1") %>% 
+  mutate_at(vars(starts_with("practices")), as.numeric)
+#merge all subsets
+clean_practices <- left_join(prac_prep, core, by = "school_id") %>% 
+  left_join(time, by = "school_id")
+```
+
+# Update Data Dictionary  
+
+Variable names were updated with descriptions into data dictionary. New dictionary below used to restructure columns in final clean dataset.  
+
+*Status:* Complete
+
+```{r, data dictionary}
+clean_dict <- import(here("data", "clean_data_dictionary.csv")) %>% 
+  janitor::clean_names() %>% 
+  filter(!updated_variable_name_5_13_22=="") %>% 
+  mutate(updated_variable_name_5_13_22 = str_remove(updated_variable_name_5_13_22, "KEY:."))
+```
+
+# Final Reorganizing
+
+Looked through the variables created/data exported for errors and did some restructuring/moving around. Columns were rearranged according to data dictionary.  
+
+Also just generally going back through to check everything is looking how it should and will manually recode anything that was overlooked or needs relabeling.
+
+*Status:* Complete
+
+```{r restructure and save}
+#save order for cols in a vector
+col_order <- clean_dict %>% 
+  select(updated_variable_name_5_13_22)
+col_order = col_order[-1,]
+#merge datasets
+clean_merge <- clean_ell %>% 
+  left_join(clean_frpl, by = "school_id") %>% 
+  left_join(clean_grade_type, by = "school_id") %>% 
+  left_join(clean_grades, by = "school_id") %>% 
+  left_join(clean_leader_race, by = "school_id") %>% 
+  left_join(clean_locale, by = "school_id") %>% 
+  left_join(clean_practices, by = "school_id") %>% 
+  left_join(clean_race_pct, by = "school_id") %>% 
+  left_join(clean_swd, by = "school_id")
+#merge with full
+clean_data_full <- old_dat %>% 
+  select(-starts_with("practices")) %>% 
+  left_join(clean_merge, by = "school_id") %>% 
+  select(c(paste0(col_order)))
+#subsets
+#demographics
+demographic_cols <- clean_dict %>% 
+  select(updated_variable_name_5_13_22, subsetted_data_file) %>% 
+  filter(subsetted_data_file == "demographic_data")
+
+demographic_data <- clean_data_full %>% 
+  select(school_id, c(paste0(demographic_cols$updated_variable_name_5_13_22)))
+#survey
+survey_cols <- clean_dict %>% 
+  select(updated_variable_name_5_13_22, subsetted_data_file) %>% 
+  filter(subsetted_data_file == "survey_data")
+
+survey_data <- clean_data_full %>% 
+  select(school_id, c(paste0(survey_cols$updated_variable_name_5_13_22)))
+#school
+school_cols <- clean_dict %>% 
+  select(updated_variable_name_5_13_22, subsetted_data_file) %>% 
+  filter(subsetted_data_file == "school_data")
+
+school_data <- clean_data_full %>% 
+  select(school_id, c(paste0(school_cols$updated_variable_name_5_13_22)))
+#practices
+practices_cols <- clean_dict %>% 
+  select(updated_variable_name_5_13_22, subsetted_data_file) %>% 
+  filter(subsetted_data_file == "practices_data")
+
+practices_data <- clean_data_full %>% 
+  select(school_id, c(paste0(practices_cols$updated_variable_name_5_13_22)))
+#learning models
+learning_model_cols <- clean_dict %>% 
+  select(updated_variable_name_5_13_22, subsetted_data_file) %>% 
+  filter(subsetted_data_file == "learning_model_data")
+
+learning_model_data <- clean_data_full %>% 
+  select(school_id, c(paste0(learning_model_cols$updated_variable_name_5_13_22)))
+#data dictionary
+clean_data_dictionary <- import(here("data", "clean_data_dictionary.csv")) %>% 
+  janitor::clean_names() %>% 
+  filter(!updated_variable_name_5_13_22=="")
+```
+
+```{r save data object, eval = FALSE}
+save(clean_data_dictionary, survey_data, school_data, demographic_data, learning_model_data, practices_data, clean_data_full,
+     file = "complete_canopy_2022.RData")
+```
+

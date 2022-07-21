@@ -1,0 +1,1286 @@
+---
+title: "Level Analysis"
+author: "Janette Avelar"
+date: "5/23/2022"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: tango
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r library}
+library(here)
+library(rio)
+library(psych)
+library(tidyverse)
+library(ggplot2)
+library(DT)
+library(scales)
+library(rstanarm)
+library(broom.mixed)
+library(gmodels)
+source(here("scripts", "branding.R")) #, local = knitr::knit_global()
+load(here("data", "complete_canopy_2022.RData"))
+```
+
+# Cycle 5 (6.17.22)
+
+Guiding questions/tasks & format:  
+`SCHOOL TYPE`: How do tagging patterns differ among district, charter, independent, sws, virtual, microschool, homeschool, and hub schools?  
+* table of biggest differences between categories  
+* odds ratio  
+* visualization  
+
+## Analysis Notes:  
+**Independent cases**
+* district = 78  
+* charter = 57  
+* independent = 20  
+* sws = 5  
+* virtual = 9  
+* microschool = 12  
+* homeschool = 5  
+* hub = 3  
+
+**Multicoded cases**
+* district AND charter = 4  
+* district AND sws = 5  
+* district AND virtual = 7  
+* district AND microschool = 1  
+* district AND homeschool = 1  
+* charter AND sws = 1  
+* charter AND virtual = 2  
+* charter AND hub = 1  
+* independent AND virtual = 1  
+* independent AND microschool = 7  
+* independent AND hub = 1  
+* sws AND virtual = 1  
+* sws AND microschool = 1  
+* virtual AND microschool = 1  
+* virutal AND homeschool = 1  
+* virtual AND hub = 1  
+* microschool AND homeschool = 1  
+* microschool AND hub = 1
+* NONE = 5  
+    * Boston Day And Evening Academy  
+    * CodeRVA Regional High School  
+    * The Metropolitan Regional Career And Technical Center  
+    * Grant Beacon Middle School  
+    * Utah Schools For The Deaf  
+* 0 `NA` values
+* total schools = 161 (5 `NA` manually recoded)
+
+
+*Focus on odds ratio plot for levels by Tuesday--other plots by this weekend*
+
+Further cleaning needed. Multi-coded and non-coded data:
+
+```{r further cleaning, eval = FALSE}
+type_ip <- clean_data_full %>% 
+  select(school_id, school_name, starts_with("school_descriptor_")) %>% 
+  group_by(school_id) %>% 
+  mutate(multicoded = school_descriptor_district + school_descriptor_charter + school_descriptor_independent + school_descriptor_sws + school_descriptor_virtual + school_descriptor_microschool + school_descriptor_homeschool + school_descriptor_hub + school_descriptor_other,
+         multicoded = ifelse(multicoded==1, "no", "yes")) %>% 
+  filter(multicoded == "yes") %>% 
+  mutate(school_descriptor_district = ifelse(school_descriptor_district==1, "district", NA),
+         school_descriptor_charter = ifelse(school_descriptor_charter==1, "charter", NA),
+         school_descriptor_independent = ifelse(school_descriptor_independent==1, "independent", NA),
+         school_descriptor_sws = ifelse(school_descriptor_sws==1, "sws", NA),
+         school_descriptor_virtual = ifelse(school_descriptor_virtual==1, "virtual", NA),
+         school_descriptor_microschool = ifelse(school_descriptor_microschool==1, "microschool", NA),
+         school_descriptor_homeschool = ifelse(school_descriptor_homeschool==1, "homeschool", NA),
+         school_descriptor_hub = ifelse(school_descriptor_hub==1, "hub", NA),
+         school_descriptor_other = ifelse(school_descriptor_other==1, "other", NA),
+         school_descriptor_other_text = na_if(school_descriptor_other_text, 0)) %>% 
+  unite("multicoded_info", c(school_descriptor_district, school_descriptor_charter, school_descriptor_independent, school_descriptor_sws, school_descriptor_virtual, school_descriptor_microschool, school_descriptor_homeschool, school_descriptor_hub, school_descriptor_other, school_descriptor_other_text), na.rm = TRUE) %>% 
+  ungroup() %>% 
+  select(-multicoded, -school_id) %>% 
+  rename(multicoded = multicoded_info) %>% 
+  mutate(multicoded = str_replace_all(multicoded, "_", " and "))
+
+type_na <- data.frame(school_name = c("Boston Day And Evening Academy", "CodeRVA Regional High School", "The Metropolitan Regional Career And Technical Center", "Grant Beacon Middle School", "Utah Schools For The Deaf"),
+                      multicoded = rep("missing", 5))
+
+type_ip <- type_ip %>% 
+  rbind(type_ip, type_na) %>% 
+  unique()
+
+#export(type_ip, "multicoded_type.csv")
+```
+
+Paring down to district, charter, and independent  
+* charter = 58  
+* district = 77  
+* independent/other = 26  
+
+```{r data set up and clean, include = FALSE}
+#first recode manually multicoded/missing values
+type_recode <- clean_data_full %>% 
+  select(school_id, school_name, starts_with("school_descriptor_")) %>% 
+  mutate(type = ifelse(school_descriptor_district == 1, "district",
+                       ifelse(school_descriptor_charter == 1, "charter",
+                              ifelse(school_descriptor_independent == 1 | school_descriptor_sws == 1 | school_descriptor_virtual == 1 | school_descriptor_microschool == 1 | school_descriptor_homeschool == 1 | school_descriptor_hub == 1, "independent", "recode")))) %>% 
+  select(-c(school_name, starts_with("school_descriptor_")))
+#manual recodes (see Google Drive for designation)
+type_recode$type[2] <- "independent" #Anastasis Academy
+type_recode$type[12] <- "charter" #Community Lab School
+type_recode$type[34] <- "district" #Mission Vista High School
+type_recode$type[36] <- "charter" #New Legacy Charter School
+type_recode$type[41] <- "independent" #One Stone
+type_recode$type[52] <- "charter" #Virtual Learning Academy
+type_recode$type[57] <- "independent" #Blessed Sacrament Catholic School
+type_recode$type[58] <- "district" #Blue Valley Center for Advanced Professional Studies
+type_recode$type[60] <- "independent" #Embark Education
+type_recode$type[82] <- "independent" #Verdi Ecoschool
+type_recode$type[83] <- "district" #Washtenaw Alliance for Virtual Education
+type_recode$type[84] <- "district" #Southeast Area Technical High School
+type_recode$type[85] <- "district" #Next Step High
+type_recode$type[86] <- "district" #Oxford Virtual Academy
+type_recode$type[87] <- "district" #Gull Lake Virtual Partnership
+type_recode$type[91] <- "district" #Kepner Beacon Middle School
+type_recode$type[101] <- "independent" #The Forest Schools
+type_recode$type[102] <- "district" #Link Learning
+type_recode$type[109] <- "district" #Liberty Academy
+type_recode$type[112] <- "independent" #Long-View Micro School
+type_recode$type[124] <- "district" #CLK Engage at CLK Elementary School
+type_recode$type[126] <- "district" #Enosburg Falls Jr/Sr High School
+type_recode$type[127] <- "independent" #The Delta School
+type_recode$type[131] <- "independent" #Acton Academy Venice Beach
+type_recode$type[136] <- "independent" #Springhouse Community School
+type_recode$type[140] <- "independent" #Southern Nevada Urban Micro Academy
+type_recode$type[142] <- "charter" #Chautauqua Charter School
+type_recode$type[145] <- "charter" #Asu Preparatory Academy Digital
+type_recode$type[146] <- "district" #Texas Tech University K-12
+type_recode$type[152] <- "independent" #Unidos Homeschool Cooperative
+type_recode$type[153] <- "independent" #Oceti Sakowin Educational Learning Center
+type_recode$type[159] <- "charter" #Rainier Valley Leadership Academy
+type_recode$type[6] <- "charter" #Boston Day and Evening
+type_recode$type[9] <- "district" #CodeRVA Regional High School
+type_recode$type[48] <- "district" #The Metropolitan Regional Career and Technical Center
+type_recode$type[90] <- "district" #Grant Beacon Middle School
+type_recode$type[138] <- "independent" #Utah Schools for the Deaf
+#data cleaning with tags
+type_tags <- clean_data_full %>% 
+  select(school_id, school_name, starts_with("practices")) %>% 
+  left_join(type_recode, by = "school_id") %>% 
+  group_by(type) %>% 
+  mutate(n_type = length(school_name)) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "n") %>% 
+  select(-school_id, -school_name) %>% 
+  group_by(type, tag) %>% 
+  mutate(n = sum(n, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  unique() %>% #216 = 72 tags x 3 levels
+#percents for each practice by level
+  group_by(type) %>% 
+  mutate(total_tags_type = sum(n),
+         pct_across = n/161, #161 total schools in the analysis
+         pct_within = n/n_type) %>%
+  select(-c(n_type, total_tags_type)) %>% 
+  pivot_wider(names_from = "type",
+              values_from = c("n", "pct_across", "pct_within")) %>% #only pct_within used for differences
+  #create difference columns
+  mutate(dis_char_diff = abs(100*(pct_within_district - pct_within_charter)),
+         char_ind_diff = abs(100*(pct_within_charter - pct_within_independent)),
+         ind_dis_diff = abs(100*(pct_within_independent - pct_within_district)))
+```
+
+## Table of Differences
+
+```{r prep and tbl}
+#create table with nicer labels
+type_tbl <- type_tags %>% 
+  map_at(c(5:10), ~round((100*.x), 2)) %>% 
+  as.data.frame() %>% 
+  mutate_at(vars(ends_with("_diff")), round, 2) %>% 
+  mutate(pct_across_charter = paste0(pct_across_charter, "%"),
+         pct_across_independent = paste0(pct_across_independent, "%"),
+         pct_across_district = paste0(pct_across_district, "%"),
+         pct_within_charter = paste0(pct_within_charter, "%"),
+         pct_within_independent = paste0(pct_within_independent, "%"),
+         pct_within_district = paste0(pct_within_district, "%"),
+         dis_char_diff = paste0(dis_char_diff, "%"),
+         char_ind_diff = paste0(char_ind_diff, "%"),
+         ind_dis_diff = paste0(ind_dis_diff, "%")) %>% 
+  left_join(tag_labels, by = "tag") %>% 
+  mutate(tag = label) %>% 
+  select(tag, dis_char_diff, char_ind_diff, ind_dis_diff,
+         pct_within_district, pct_within_charter, pct_within_independent,
+         pct_across_district, pct_across_charter, pct_across_independent,
+         n_district, n_charter, n_independent) %>% 
+  rename(`Tag` = tag,
+         `N Tags (Charter)` = n_charter,
+         `N Tags (District)` = n_district,
+         `N Tags (Independent)` = n_independent,
+         `Pct. Tags Across (Charter)` = pct_across_charter,
+         `Pct. Tags Across (District)` = pct_across_district,
+         `Pct. Tags Across (Independent)` = pct_across_independent,
+         `Pct. Tags Within (Charter)` = pct_within_charter,
+         `Pct. Tags Within (District)` = pct_within_district,
+         `Pct. Tags Within (Independent)` = pct_within_independent,
+         `District vs. Charter Difference` = dis_char_diff,
+         `Charter vs. Independent Difference` = char_ind_diff,
+         `Independent vs. District Difference` = ind_dis_diff)
+#table
+datatable(type_tbl)
+```
+
+# Largest Differences
+
+## District vs. Charter Barchart
+
+```{r dis v char, fig.dim = c(9, 9)}
+dis_char_diff <- type_tags %>% 
+  select(tag, pct_within_district, pct_within_charter, dis_char_diff) %>% 
+  slice_max(dis_char_diff, n = 10, with_ties = FALSE) %>% 
+  pivot_longer(cols = c("pct_within_district", "pct_within_charter"),
+               names_to = "type",
+               names_prefix = "pct_within_",
+               values_to = "pct") %>% 
+  mutate(pct = pct*100)
+#pct labels
+dis_char_labs <- data.frame(x = c(dis_char_diff$tag),
+                             y = c(2 + dis_char_diff$pct),
+                             lab = c("", "38%", "", "30%", "", "24%", "", "24%", "", "22%", "", "20%", "18%", "", "", "18%", "18%", "", "", "18%"))
+#reorder 
+dis_char_diff$tag <- factor(dis_char_diff$tag,
+                            levels = c(unique(paste0(dis_char_diff$tag))))
+#side-side bar chart
+dis_char_viz <- dis_char_diff %>% 
+  ggplot(aes(reorder(tag, dis_char_diff), pct, fill = type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = tag, y = dis_char_labs$y, label = dis_char_labs$lab),
+            color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences between District and Charter Schools",
+       subtitle = "Comparison within school types - denominator = schools within type")
+
+dis_char_viz
+```
+
+## Charter vs. Independent
+
+```{r char v ind, fig.dim = c(9, 9)}
+char_ind_diff <- type_tags %>% 
+  select(tag, pct_within_charter, pct_within_independent, char_ind_diff) %>% 
+  slice_max(char_ind_diff, n = 10, with_ties = FALSE) %>% 
+  pivot_longer(cols = c("pct_within_charter", "pct_within_independent"),
+               names_to = "type",
+               names_prefix = "pct_within_",
+               values_to = "pct") %>% 
+  mutate(pct = pct*100)
+#pct labels
+dis_char_labs <- data.frame(x = c(char_ind_diff$tag),
+                             y = c(2 + char_ind_diff$pct),
+                             lab = c("", "45%", "39%", "", "", "34%", "", "33%", "28%", "", "26%", "", "", "25%", "", "24%", "23%", "", "23%", ""))
+#reorder 
+char_ind_diff$tag <- factor(char_ind_diff$tag,
+                            levels = c(unique(paste0(char_ind_diff$tag))))
+#side-side bar chart
+char_ind_viz <- char_ind_diff %>% 
+  ggplot(aes(reorder(tag, char_ind_diff), pct, fill = type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = tag, y = dis_char_labs$y, label = dis_char_labs$lab),
+            color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences between Charter and Independent Schools",
+       subtitle = "Comparison within school types - denominator = schools within type")
+
+char_ind_viz
+```
+
+## Independent vs. District Barchart
+
+```{r char v dis, fig.dim = c(9, 9)}
+ind_dis_diff <- type_tags %>% 
+  select(tag, pct_within_independent, pct_within_district, ind_dis_diff) %>% 
+  slice_max(ind_dis_diff, n = 10, with_ties = FALSE) %>% 
+  pivot_longer(cols = c("pct_within_independent", "pct_within_district"),
+               names_to = "type",
+               names_prefix = "pct_within_",
+               values_to = "pct") %>% 
+  mutate(pct = pct*100)
+#pct labels
+dis_char_labs <- data.frame(x = c(ind_dis_diff$tag),
+                             y = c(2 + ind_dis_diff$pct),
+                             lab = c("42%", "", "41%", "", "38%", "", "", "35%", "33%", "", "", "30%", "27%", "", "26%", "", "26%", "", "", "26%"))
+#reorder 
+ind_dis_diff$tag <- factor(ind_dis_diff$tag,
+                            levels = c(unique(paste0(ind_dis_diff$tag))))
+#side-side bar chart
+ind_dis_viz <- ind_dis_diff %>% 
+  ggplot(aes(reorder(tag, ind_dis_diff), pct, fill = type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = tag, y = dis_char_labs$y, label = dis_char_labs$lab),
+            color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences between Independent and District Schools",
+       subtitle = "Comparison within school types - denominator = schools within type")
+
+ind_dis_viz
+```
+
+# Smallest Differences
+
+# Individual Type Analysis
+
+## Charter vs. non-Charter Bar Chart
+
+```{r char v not, fig.dim = c(9, 9)}
+#reprep data for all
+type_base <- clean_data_full %>% 
+  select(school_id, school_name, starts_with("school_descriptor_")) %>% 
+  mutate(type = ifelse(school_descriptor_district == 1, "district",
+                       ifelse(school_descriptor_charter == 1, "charter",
+                              ifelse(school_descriptor_independent == 1 | school_descriptor_sws == 1 | school_descriptor_virtual == 1 | school_descriptor_microschool == 1 | school_descriptor_homeschool == 1 | school_descriptor_hub == 1, "independent", "recode")))) %>% 
+  select(-c(school_name, starts_with("school_descriptor_")))
+#manual recodes (see Google Drive for designation)
+type_base$type[2] <- "independent" #Anastasis Academy
+type_base$type[12] <- "charter" #Community Lab School
+type_base$type[34] <- "district" #Mission Vista High School
+type_base$type[36] <- "charter" #New Legacy Charter School
+type_base$type[41] <- "independent" #One Stone
+type_base$type[52] <- "charter" #Virtual Learning Academy
+type_base$type[57] <- "independent" #Blessed Sacrament Catholic School
+type_base$type[58] <- "district" #Blue Valley Center for Advanced Professional Studies
+type_base$type[60] <- "independent" #Embark Education
+type_base$type[82] <- "independent" #Verdi Ecoschool
+type_base$type[83] <- "district" #Washtenaw Alliance for Virtual Education
+type_base$type[84] <- "district" #Southeast Area Technical High School
+type_base$type[85] <- "district" #Next Step High
+type_base$type[86] <- "district" #Oxford Virtual Academy
+type_base$type[87] <- "district" #Gull Lake Virtual Partnership
+type_base$type[91] <- "district" #Kepner Beacon Middle School
+type_base$type[101] <- "independent" #The Forest Schools
+type_base$type[102] <- "district" #Link Learning
+type_base$type[109] <- "district" #Liberty Academy
+type_base$type[112] <- "independent" #Long-View Micro School
+type_base$type[124] <- "district" #CLK Engage at CLK Elementary School
+type_base$type[126] <- "district" #Enosburg Falls Jr/Sr High School
+type_base$type[127] <- "independent" #The Delta School
+type_base$type[131] <- "independent" #Acton Academy Venice Beach
+type_base$type[136] <- "independent" #Springhouse Community School
+type_base$type[140] <- "independent" #Southern Nevada Urban Micro Academy
+type_base$type[142] <- "charter" #Chautauqua Charter School
+type_base$type[145] <- "charter" #Asu Preparatory Academy Digital
+type_base$type[146] <- "district" #Texas Tech University K-12
+type_base$type[152] <- "independent" #Unidos Homeschool Cooperative
+type_base$type[153] <- "independent" #Oceti Sakowin Educational Learning Center
+type_base$type[159] <- "charter" #Rainier Valley Leadership Academy
+type_base$type[6] <- "charter" #Boston Day and Evening
+type_base$type[9] <- "district" #CodeRVA Regional High School
+type_base$type[48] <- "district" #The Metropolitan Regional Career and Technical Center
+type_base$type[90] <- "district" #Grant Beacon Middle School
+type_base$type[138] <- "independent" #Utah Schools for the Deaf
+#data cleaning with tags for charter schools only
+charter_tags <- clean_data_full %>% 
+  select(school_id, school_name, starts_with("practices")) %>% 
+  left_join(type_base, by = "school_id") %>% 
+  mutate(type = ifelse(type == "charter", "charter", "other")) %>% 
+  group_by(type) %>% 
+  mutate(n_type = length(school_name)) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "n") %>% 
+  select(-school_id, -school_name) %>% 
+  group_by(type, tag) %>% 
+  mutate(n = sum(n, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  unique() %>% #144 = 72 tags x 2 levels
+#percents for each practice by level
+  group_by(type) %>% 
+  mutate(pct_within = n/n_type) %>%
+  select(-c(n_type)) %>% 
+  pivot_wider(names_from = "type",
+              values_from = c("n", "pct_within")) %>% #only pct_within used for differences
+  #create difference columns
+  mutate(char_other_diff = abs(100*(pct_within_charter - pct_within_other))) %>% 
+#create plot
+  select(tag, pct_within_charter, pct_within_other, char_other_diff) %>% 
+  slice_max(char_other_diff, n = 10, with_ties = FALSE) %>% 
+  pivot_longer(cols = c("pct_within_charter", "pct_within_other"),
+               names_to = "type",
+               names_prefix = "pct_within_",
+               values_to = "pct") %>% 
+  mutate(pct = pct*100)
+#pct labels
+charter_labs <- data.frame(x = c(charter_tags$tag),
+                             y = c(2 + charter_tags$pct),
+                             lab = c("34%", "", "23%", "", "22%", "", "", "21%", "20%", "", "19%", "", "19%", "", "19%", "", "", "18%", "18%", ""))
+#reorder 
+charter_tags$tag <- factor(charter_tags$tag,
+                            levels = c(unique(paste0(charter_tags$tag))))
+#side-side bar chart
+charter_tags_viz <- charter_tags %>% 
+  ggplot(aes(reorder(tag, char_other_diff), pct, fill = type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = tag, y = charter_labs$y, label = charter_labs$lab),
+            color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences for Charter vs non-Charter Schools",
+       subtitle = "Comparison within school types - denominator = schools within type")
+
+charter_tags_viz
+```
+
+## District vs. non-District Barchart
+
+```{r district vs not, fig.dim = c(9, 9)}
+#data cleaning with tags for charter schools only
+district_tags <- clean_data_full %>% 
+  select(school_id, school_name, starts_with("practices")) %>% 
+  left_join(type_base, by = "school_id") %>% 
+  mutate(type = ifelse(type == "district", "district", "other")) %>% 
+  group_by(type) %>% 
+  mutate(n_type = length(school_name)) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "n") %>% 
+  select(-school_id, -school_name) %>% 
+  group_by(type, tag) %>% 
+  mutate(n = sum(n, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  unique() %>% #144 = 72 tags x 2 levels
+#percents for each practice by level
+  group_by(type) %>% 
+  mutate(pct_within = n/n_type) %>%
+  select(-c(n_type)) %>% 
+  pivot_wider(names_from = "type",
+              values_from = c("n", "pct_within")) %>% #only pct_within used for differences
+  #create difference columns
+  mutate(dis_other_diff = abs(100*(pct_within_district - pct_within_other))) %>% 
+#create plot
+  select(tag, pct_within_district, pct_within_other, dis_other_diff) %>% 
+  slice_max(dis_other_diff, n = 10, with_ties = FALSE) %>% 
+  pivot_longer(cols = c("pct_within_district", "pct_within_other"),
+               names_to = "type",
+               names_prefix = "pct_within_",
+               values_to = "pct") %>% 
+  mutate(pct = pct*100)
+#pct labels
+district_labs <- data.frame(x = c(district_tags$tag),
+                             y = c(2 + district_tags$pct),
+                             lab = c("", "31%", "", "29%", "", "25%", "", "25%", "22%", "", "", "21%", "", "18%", "", "18%", "", "18%", "18%", ""))
+#reorder 
+district_tags$tag <- factor(district_tags$tag,
+                            levels = c(unique(paste0(district_tags$tag))))
+#side-side bar chart
+district_tags_viz <- district_tags %>% 
+  ggplot(aes(reorder(tag, dis_other_diff), pct, fill = type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = tag, y = district_labs$y, label = district_labs$lab),
+            color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences for District and non-District Schools",
+       subtitle = "Comparison within school types - denominator = schools within type")
+
+district_tags_viz
+```
+
+## Independent vs. non-Independent Barchart
+
+```{r independent vs not, fig.dim = c(9, 9)}
+#data cleaning with tags for charter schools only
+ind_tags <- clean_data_full %>% 
+  select(school_id, school_name, starts_with("practices")) %>% 
+  left_join(type_base, by = "school_id") %>% 
+  mutate(type = ifelse(type == "independent", "independent", "other")) %>% 
+  group_by(type) %>% 
+  mutate(n_type = length(school_name)) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "n") %>% 
+  select(-school_id, -school_name) %>% 
+  group_by(type, tag) %>% 
+  mutate(n = sum(n, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  unique() %>% #144 = 72 tags x 2 levels
+#percents for each practice by level
+  group_by(type) %>% 
+  mutate(pct_within = n/n_type) %>%
+  select(-c(n_type)) %>% 
+  pivot_wider(names_from = "type",
+              values_from = c("n", "pct_within")) %>% #only pct_within used for differences
+  #create difference columns
+  mutate(ind_other_diff = abs(100*(pct_within_independent - pct_within_other))) %>% 
+#create plot
+  select(tag, pct_within_independent, pct_within_other, ind_other_diff) %>% 
+  slice_max(ind_other_diff, n = 10, with_ties = FALSE) %>% 
+  pivot_longer(cols = c("pct_within_independent", "pct_within_other"),
+               names_to = "type",
+               names_prefix = "pct_within_",
+               values_to = "pct") %>% 
+  mutate(pct = pct*100)
+#pct labels
+ind_labs <- data.frame(x = c(ind_tags$tag),
+                             y = c(2 + ind_tags$pct),
+                             lab = c("43%", "", "36%", "", "33%", "", "", "32%", "30%", "", "", "29%", "", "27%", "25%", "", "23%", "", "22%", ""))
+#reorder 
+ind_tags$tag <- factor(ind_tags$tag,
+                            levels = c(unique(paste0(ind_tags$tag))))
+#side-side bar chart
+ind_tags_viz <- ind_tags %>% 
+  ggplot(aes(reorder(tag, ind_other_diff), pct, fill = type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+            color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Percent of Schools Selecting Tag",
+       title = "Top 10 Tags with Largest Differences for Independent and non-Independent Schools",
+       subtitle = "Comparison within school types - denominator = schools within type")
+
+ind_tags_viz
+```
+
+# Variation Across All Types
+
+## Variability Between All School Types
+
+```{r all variability, fig.dim = c(9, 9)}
+#data prep
+#variance calculated as standard deviation within tag groups
+var_all <- type_tags %>% 
+  select(tag, starts_with("pct_within_")) %>% 
+  pivot_longer(cols = c("pct_within_charter", "pct_within_independent", "pct_within_district"),
+               names_to = "type",
+               names_prefix = "pct_within_",
+               values_to = "proportion") %>% 
+  ungroup() %>% 
+  group_by(tag) %>% 
+  mutate(variance = sd(proportion))
+
+#max variability plot - top 10
+var_max_10 <- var_all %>% 
+  group_by(type) %>% 
+  slice_max(variance, n = 10, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = type)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 10 Tags with Largest Variability for Charter, District, and Independent Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_10
+
+##save data for Figure H
+# var_max_10_dat <- var_all %>% 
+#   group_by(type) %>% 
+#   slice_max(variance, n = 10, with_ties = FALSE)
+# export(var_max_10_dat, "fig_h_data.csv")
+
+## more fixing up for readability
+
+var_max_10_edit <- var_all %>% 
+  group_by(type) %>% 
+  slice_max(variance, n = 10, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = type)) + 
+  geom_bar(stat = "identity", position = "identity") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  coord_flip() +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 10 Tags with Largest Variability for Charter, District, and Independent Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_10_edit
+
+#min variability plot - top 10
+var_min_10 <- var_all %>% 
+  group_by(type) %>% 
+  slice_min(variance, n = 10, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = type)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Least Variability",
+       title = "Lowest 10 Tags with Largest Variability for Charter, District, and Independent Schools",
+       subtitle = "In order of increasing variability")
+
+var_min_10
+
+#max variability plot - top 15
+var_max_15 <- var_all %>% 
+  group_by(type) %>% 
+  slice_max(variance, n = 15, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = type)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 15 Tags with Largest Variability for Charter, District, and Independent Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_15
+
+#min variability plot - top 15
+var_min_15 <- var_all %>% 
+  group_by(type) %>% 
+  slice_min(variance, n = 15, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = type)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Least Variability",
+       title = "Lowest 15 Tags with Largest Variability for Charter, District, and Independent Schools",
+       subtitle = "In order of increasing variability")
+
+var_min_15
+
+#max variability plot - top 20
+var_max_20 <- var_all %>% 
+  group_by(type) %>% 
+  slice_max(variance, n = 20, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = type)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Most Variability",
+       title = "Top 20 Tags with Largest Variability for Charter, District, and Independent Schools",
+       subtitle = "In order of increasing variability")
+
+var_max_20
+
+#min variability plot - top 20
+var_min_20 <- var_all %>% 
+  group_by(type) %>% 
+  slice_min(variance, n = 20, with_ties = FALSE) %>% 
+  ggplot(aes(tag, proportion, fill = type)) + 
+    geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = paste(transcend_cols)) +
+  theme_transcend_sparse +
+  #geom_text(aes(x = tag, y = ind_labs$y, label = ind_labs$lab),
+  #          color = "#EF464B", size = 5, family = "Bebas Neue") +
+  theme(axis.text.x = element_text(angle = -55, hjust = 0)) +
+  #scale_y_continuous(limits = c(0, 100)) +
+  scale_x_tag() +
+  labs(x = "",
+       y = "Tags with Least Variability",
+       title = "Lowest 20 Tags with Largest Variability for Charter, District, and Independent Schools",
+       subtitle = "In order of increasing variability")
+
+var_min_20
+```
+
+Save plots:
+```{r, eval = FALSE}
+#largest diffs
+ggsave("district-charter_lg-diff.png", plot = dis_char_viz, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("charter-independent_lg-diff.png", plot = char_ind_viz, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("independent-district_lg-diff.png", plot = ind_dis_viz, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+
+#independent type analysis
+ggsave("charter-not_lg-diff.png", plot = charter_tags_viz, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("district-not_lg-diff.png", plot = district_tags_viz, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("independent-not_lg-diff.png", plot = ind_tags_viz, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+
+#variability across tags
+#top 10
+ggsave("lg-tag-variability-10.png", plot = var_max_10, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sm-tag-variability-10.png", plot = var_min_10, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+#top 15
+ggsave("lg-tag-variability-15.png", plot = var_max_15, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sm-tag-variability-15.png", plot = var_min_15, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+#top 20
+ggsave("lg-tag-variability-20.png", plot = var_max_20, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+ggsave("sm-tag-variability-20.png", plot = var_min_20, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+```
+
+# Models
+
+## Race and SES  
+
+Predictors: number of students, black percent, hispanic percent, school type, FRPL percent, SWD percent, ELL percent  
+
+Plot found in `outputs` > `type analysis` > `model-race-ses.png`. Code takes a long time to run, so I don't recommend pulling from this document.
+
+```{r data prep, eval = FALSE}
+# mod_prep <- clean_data_full %>% 
+#   select(school_id, starts_with("practices_"), grades_elementary, grades_middle, grades_high)
+
+mod_prep <- clean_data_full %>% 
+  select(school_id, starts_with("practices_"), ends_with("_percent"), self_reported_total_enrollment, nces_total_enrollment) %>% 
+  left_join(type_recode, by = "school_id") %>% 
+  mutate(school_descriptor_charter = ifelse(type == "charter", 1, 0),
+         school_descriptor_district = ifelse(type == "district", 1, 0),
+         school_descriptor_independent = ifelse(type == "independent", 1, 0)) %>% 
+  unite("n_student", c(nces_total_enrollment, self_reported_total_enrollment), na.rm = TRUE) %>% 
+  mutate(n_student = na_if(n_student, ""),
+         n_student = str_remove_all(n_student, "_..."),
+         n_student = as.integer(n_student)) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "value") %>% 
+  select(-type)
+
+
+##from Gregor's code:
+#first will run black percent and hispanic percent as controls
+one_vars = c("n_student", "black_percent", "hispanic_percent", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "frpl_percent", "swd_percent", "ell_percent")
+
+
+logistic_one_dat = 
+  mod_prep %>%
+  select(value, tag, one_of(one_vars)) %>%
+  na.omit() %>%
+  group_by(tag) %>%
+  # scaling non-binary predictors
+  mutate_at(vars(
+    c(
+      "n_student",
+      "black_percent",
+      "hispanic_percent",
+      "frpl_percent",
+      "swd_percent",
+      "ell_percent"
+    )
+  ), scale)
+
+one_form = as.formula(paste("value", "~", paste(one_vars, collapse = "+")))
+#plot(xm, "areas", prob = 0.9, prob_outer = 1)
+
+bayes_mods = list()
+
+for(this_tag in unique(mod_prep$tag)) {
+  bayes_mods[[this_tag]] = stan_glm(
+    one_form,
+    data = filter(logistic_one_dat, tag == this_tag),
+    family = binomial(link = "logit"),
+    prior = student_t( #I'm not familiar with the functions in this loop, does df need to change within student_t()?
+      df = 7,
+      location = 0,
+      scale = 2.5
+    )
+  )
+  
+}
+
+bayes_tidy = lapply(bayes_mods, tidy) %>%
+  bind_rows(.id = "response") %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    nice_tag = label_tags(response),
+    nice_demog = factor(label_dems(term))
+  )
+
+## top 10 absolute effects per demo:
+
+bayes_facet_dat = bayes_tidy %>% group_by(nice_demog) %>%
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10)
+
+bayes_facet = 
+  ggplot(bayes_facet_dat,
+    aes(y = exp(estimate),
+        x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean),
+    )) +
+  geom_col() + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       #fill = "Demographic",
+       title = "Top 10 tags most/least related to each demographic") +
+  facet_wrap(~ nice_demog, scales = "free_y") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.0625, .125, .25, .5, 1, 2, 4, 8, 16),
+    labels = c("1/16", "1/8", "1/4", "1/2", "1", "2", "4", "8", "16"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0)) +
+  geom_hline(yintercept = 1) +
+  expand_limits(y = c(1/4, 4))
+
+bayes_facet
+```
+
+## Controlling for Aggregate BIPOC Population
+
+The second model uses the same demographic variables, but rather than drawing from black and hispanic percentages, it uses an overall BIPOC student percentage (as calculated by non-white percent). I recognize this may not be super useful for reporting, but I was interested to see if there were any significant differences between majority-majority and majority-minority schools when racial demographics are not disaggregated.  
+
+Predictors: bipoc percent, school type, FRPL percent, SWD percent, ELL percent, number of students  
+
+Plot found in `outputs` > `type analysis` > `model-bipoc-ses.png`. Code takes a long time to run, so I don't recommend pulling from this document.
+
+```{r model 2 - bipoc, eval = FALSE}
+#also run bipoc percent (all non-white)?
+mod_prep2 <- mod_prep %>% 
+  mutate(non_white_percent = 1 - white_percent)
+
+##from Gregor's code:
+#first will run black percent and hispanic percent as controls
+one_vars2 = c("non_white_percent", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "frpl_percent", "swd_percent", "ell_percent", "n_student")
+
+logistic_one_dat2 = 
+  mod_prep2 %>%
+  select(value, tag, one_of(one_vars2)) %>%
+  na.omit() %>%
+  group_by(tag) %>%
+  # scaling non-binary predictors
+  mutate_at(vars(
+    c(
+      "n_student",
+      "non_white_percent",
+      "frpl_percent",
+      "swd_percent",
+      "ell_percent"
+    )
+  ), scale)
+
+one_form2 = as.formula(paste("value", "~", paste(one_vars2, collapse = "+")))
+#plot(xm, "areas", prob = 0.9, prob_outer = 1)
+
+bayes_mods2 = list()
+
+for(this_tag in unique(mod_prep2$tag)) {
+  bayes_mods2[[this_tag]] = stan_glm(
+    one_form2,
+    data = filter(logistic_one_dat2, tag == this_tag),
+    family = binomial(link = "logit"),
+    prior = student_t(
+      df = 7,
+      location = 0,
+      scale = 2.5
+    )
+  )
+  
+}
+
+bayes_tidy2 = lapply(bayes_mods2, tidy) %>%
+  bind_rows(.id = "response") %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    nice_tag = label_tags(response),
+    nice_demog = factor(label_dems(term))
+  )
+
+## top 10 absolute effects per demo:
+
+bayes_facet_dat2 = bayes_tidy2 %>% group_by(nice_demog) %>%
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10)
+
+bayes_facet2 = 
+  ggplot(bayes_facet_dat2,
+    aes(y = exp(estimate),
+        x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean),
+    )) +
+  geom_col() + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       #fill = "Demographic",
+       title = "Top 10 tags most/least related to each demographic") +
+  facet_wrap(~ nice_demog, scales = "free_y") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.125, .25, .5, 1, 2, 4, 8),
+    labels = c("1/8", "1/4", "1/2", "1", "2", "4", "8"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0)) +
+  geom_hline(yintercept = 1) +
+  expand_limits(y = c(1/4, 4))
+
+bayes_facet2
+```
+
+## Controlling for Locale  
+
+Predictors: bipoc percent, number of students, school type, school locale, FRPL percent  
+
+Plot found in `outputs` > `type analysis` > `model-type-locale.png`. Code takes a long time to run, so I don't recommend pulling from this document.
+
+```{r model 3 - locale, eval = FALSE}
+#also run bipoc percent?
+mod_prep3 <- clean_data_full %>% 
+  select(school_id, starts_with("practices_"), ends_with("_percent"), locale, nces_total_enrollment, self_reported_total_enrollment) %>% 
+  mutate(locale_urban = ifelse(locale == "Urban", 1, 0),
+         locale_rural = ifelse(locale == "Rural", 1, 0),
+         locale_suburban = ifelse(locale == "Suburban", 1, 0)) %>% 
+  left_join(type_recode, by = "school_id") %>% 
+  mutate(school_descriptor_charter = ifelse(type == "charter", 1, 0),
+         school_descriptor_district = ifelse(type == "district", 1, 0),
+         school_descriptor_independent = ifelse(type == "independent", 1, 0)) %>% 
+  unite("n_student", c(nces_total_enrollment, self_reported_total_enrollment), na.rm = TRUE) %>% 
+  mutate(n_student = na_if(n_student, ""),
+         n_student = str_remove_all(n_student, "_..."),
+         n_student = as.integer(n_student)) %>% 
+  pivot_longer(cols = starts_with("practices"),
+               names_to = "tag",
+               values_to = "value") %>% 
+  select(-c(type, locale)) %>% 
+  mutate(non_white_percent = 1 - white_percent)
+
+##from Gregor's code:
+#use all 3 racial categories
+one_vars3 = c("non_white_percent", "n_student", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "locale_urban", "locale_suburban", "locale_rural", "frpl_percent")
+
+logistic_one_dat3 = 
+  mod_prep3 %>%
+  select(value, tag, one_of(one_vars3)) %>%
+  na.omit() %>%
+  group_by(tag) %>%
+  # scaling non-binary predictors
+  mutate_at(vars(
+    c(ends_with("_percent"), n_student)), scale)
+
+one_form3 = as.formula(paste("value", "~", paste(one_vars3, collapse = "+")))
+#plot(xm, "areas", prob = 0.9, prob_outer = 1)
+
+bayes_mods3 = list()
+
+for(this_tag in unique(mod_prep3$tag)) {
+  bayes_mods3[[this_tag]] = stan_glm(
+    one_form3,
+    data = filter(logistic_one_dat3, tag == this_tag),
+    family = binomial(link = "logit"),
+    prior = student_t(
+      df = 7,
+      location = 0,
+      scale = 2.5
+    )
+  )
+  
+}
+
+bayes_tidy3 = lapply(bayes_mods3, tidy) %>%
+  bind_rows(.id = "response") %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    nice_tag = label_tags(response),
+    nice_demog = factor(label_dems(term))
+  )
+
+## top 10 absolute effects per demo:
+
+bayes_facet_dat3 = bayes_tidy3 %>% group_by(nice_demog) %>%
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10)
+
+bayes_facet3 = 
+  ggplot(bayes_facet_dat3,
+    aes(y = exp(estimate),
+        x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean),
+    )) +
+  geom_col() + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       #fill = "Demographic",
+       title = "Top 10 tags most/least related to each demographic") +
+  facet_wrap(~ nice_demog, scales = "free_y") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.125, .25, .5, 1, 2, 4, 8),
+    labels = c("1/8", "1/4", "1/2", "1", "2", "4", "8"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0)) +
+  geom_hline(yintercept = 1) +
+  expand_limits(y = c(1/9, 4))
+
+bayes_facet3
+```
+
+## TO DO: *redo model 3 including ELL % and SWD %*
+
+```{r}
+
+```
+
+
+## TO DO: Model using cluster weights as outcomes  
+* remember weights need to be standardized -- may want to double check if Gregor's document included a standardized variable for cluster weights or not
+
+```{r}
+
+```
+
+
+```{r save model plots, eval = FALSE}
+#black and hispanic percent as variable in odds model
+ggsave("model-race-ses.png", plot = bayes_facet, path = here("outputs", "type analysis"), 
+       width = 20, height = 12, units = "in")
+#nonwhite/bipoc percent as variable in odds model
+ggsave("model-bipoc-ses.png", plot = bayes_facet2, path = here("outputs", "type analysis"), 
+       width = 20, height = 12, units = "in")
+#racial vars + locale
+ggsave("model-type-locale.png", plot = bayes_facet3, path = here("outputs", "type analysis"), 
+       width = 20, height = 12, units = "in")
+```
+
+# Odds and Ends (7.6.22)
+
+Outstanding questions to help build this out:
+How big are independent schools (enrollment) compared to charters & districts?  
+* would you rather have this reported as averages within each type or using bins?*
+What proportion of district schools are high schools? What proportion of charters are HS? What proportion of independent schools are HS?
+What proportion of charter schools are urban/suburban/rural, vs. district and independent schools?
+
+
+```{r odds and ends prep}
+type_desc <- school_data %>% 
+  select(school_id, school_name, locale, grades_elementary, grades_middle, grades_high) %>% 
+  left_join(type_recode, by = "school_id")
+
+size <- demographic_data %>% 
+  select(school_id, nces_total_enrollment, self_reported_total_enrollment)
+
+type_desc <- type_desc %>% 
+  left_join(size, by = "school_id") %>% 
+  unite("student_tot", c(nces_total_enrollment, self_reported_total_enrollment), na.rm = TRUE)
+
+type_desc <- type_desc %>%
+  mutate(student_tot = str_remove(student_tot, "_..."))
+type_desc[12,3] <- "Rural" #Community Lab
+type_desc[138,3] <- "Urban" #Utah Schools for the Deaf
+type_desc[152,3] <- "Urban" #Unidos Homeschool Cooperative
+type_desc[151,3] <- "Suburban" #Portal Schools
+type_desc[82,3] <- "Suburban" #Verdi Ecoschool
+type_desc[157,3] <- "Urban" #Lumen High School
+type_desc[41,3] <- "Urban" #One Stone
+type_desc[121,3] <- "Urban" #KIPP Philadelphia Preparatory Academy
+type_desc[123,3] <- "Rural" #Cabot School
+# type_desc[124,3] <- "" #CLK Engage At CLK Elementary School
+type_desc[140,3] <- "Urban" #Southern Nevada Urban Micro Academy
+```
+
+## How big are independent schools (enrollment) compared to charters & districts? 
+
+```{r size by type, fig.dim = c(9, 9)}
+#table with mean and median for each group
+type_size <- type_desc %>% 
+  group_by(type) %>% 
+  mutate(student_tot = as.integer(student_tot),
+         mean = round(mean(student_tot, na.rm = TRUE), 2),
+         median = median(student_tot, na.rm = TRUE)) %>% 
+  select(type, mean, median) %>% 
+  unique()
+datatable(type_size)
+
+#viz for type - violin plot
+type_size_viz <- type_size <- type_desc %>% 
+  group_by(type) %>% 
+  mutate(student_tot = as.integer(student_tot),
+         mean = round(mean(student_tot, na.rm = TRUE), 2)) %>% 
+  ggplot(aes(y = student_tot, x = type, fill)) +
+  geom_violin(fill = transcend_cols["teal"]) +
+  geom_point(color = transcend_cols["red"],
+             position = position_jitter(width = .2),
+             size = 0.5) +
+  labs(x = "",
+       y = "number of students",
+       title = "Student Population across School Type",
+       subtitle = "Wider areas indicate more schools with given student population") +
+    # theme(axis.text.x = element_blank(),
+    #       strip.text = element_text(size = rel(0.5)),
+    #       plot.subtitle = element_text(size = rel(0.7)))
+  scale_y_continuous(expand=c(0,0)) +
+  scale_x_discrete(labels=c("charter" = "Charter Schools \nmean = 299.5", 
+                            "district" = "District Schools \nmean = 458",
+                            "independent" = "Independent Schools \nmean = 95.88"))
+
+type_size_viz
+
+```
+
+I'd love to put a horizontal line in the violin plots indicating where the average is for each group so we can see the distribution relative to that, but I'm not sure how to do that with categorical data in this type of plot. Will do some digging if it seems worth it.
+
+Curious about the size outliers in district schools, are these P-12 or not?
+
+```{r big district dig}
+
+```
+
+
+```{r save type size plot}
+#racial vars + locale
+ggsave("type-school-size.png", plot = type_size_viz, path = here("outputs", "type analysis"), 
+       width = 12, height = 8, units = "in")
+```
+
+
+## What proportion of district/charter/independent schools are high schools?
+
+```{r high schools by type}
+hs_prop <- type_desc %>% 
+  group_by(type) %>% 
+  mutate(hs_n = sum(as.numeric(grades_high), na.rm = TRUE),
+         type_n = length(school_id),
+         hs_prop = hs_n/type_n,
+         hs_prop = paste0(round(hs_prop*100, 2), "%")) %>% 
+  select(type, hs_n, type_n, hs_prop) %>% 
+  unique() %>% 
+  rename(`Type of School` = type,
+         `Number of High Schools` = hs_n,
+         `Total Schools Within Type` = type_n,
+         `Proportion of High Schools` = hs_prop)
+datatable(hs_prop)
+```
+
+## What proportion of *charter* schools are urban/suburban/rural?  
+
+```{r locale props for charter}
+# Charter schools
+charter_locale_prop <- type_desc %>% 
+  filter(type == "charter") %>% 
+  group_by(locale) %>% 
+  mutate(locale_n = length(locale)) %>% 
+  ungroup() %>% 
+  mutate(school_n = length(school_id),
+         locale_prop = paste0(round(100*(locale_n/school_n), 2), "%")) %>% 
+  select(locale, locale_n, school_n, locale_prop) %>% 
+  unique() %>% 
+  rename(`Locale` = locale,
+         `Schools Within Locale` = locale_n,
+         `Total Number of Charter Schools` = school_n,
+         `Proportion of Charter Schools within Locale` = locale_prop)
+datatable(charter_locale_prop)
+```
+
+## What proportion of *district* schools are urban/suburban/rural?  
+
+```{r locale props for district}
+# District schools
+district_locale_prop <- type_desc %>% 
+  filter(type == "district") %>% 
+  group_by(locale) %>% 
+  mutate(locale_n = length(locale)) %>% 
+  ungroup() %>% 
+  mutate(school_n = length(school_id),
+         locale_prop = paste0(round(100*(locale_n/school_n), 2), "%")) %>% 
+  select(locale, locale_n, school_n, locale_prop) %>% 
+  unique() %>% 
+  rename(`Locale` = locale,
+         `Schools Within Locale` = locale_n,
+         `Total Number of District Schools` = school_n,
+         `Proportion of District Schools within Locale` = locale_prop)
+datatable(district_locale_prop)
+```
+
+## What proportion of *independent* schools are urban/suburban/rural?  
+
+```{r locale props for independent}
+# Independent schools
+independent_locale_prop <- type_desc %>% 
+  filter(type == "independent") %>% 
+  group_by(locale) %>% 
+  mutate(locale_n = length(locale)) %>% 
+  ungroup() %>% 
+  mutate(school_n = length(school_id),
+         locale_prop = paste0(round(100*(locale_n/school_n), 2), "%")) %>% 
+  select(locale, locale_n, school_n, locale_prop) %>% 
+  unique() %>% 
+  rename(`Locale` = locale,
+         `Schools Within Locale` = locale_n,
+         `Total Number of Independent Schools` = school_n,
+         `Proportion of Independent Schools within Locale` = locale_prop)
+datatable(independent_locale_prop)
+```

@@ -1,0 +1,13 @@
+tag,locale,pct_locale_tag
+practices_anti_racist,Rural,0.206896551724138
+practices_culturally_responsive,Rural,0.448275862068966
+practices_hiring_equity,Rural,0.241379310344828
+practices_social_justice,Rural,0.241379310344828
+practices_anti_racist,Suburban,0.5
+practices_culturally_responsive,Suburban,0.766666666666667
+practices_hiring_equity,Suburban,0.566666666666667
+practices_social_justice,Suburban,0.433333333333333
+practices_anti_racist,Urban,0.693181818181818
+practices_culturally_responsive,Urban,0.863636363636364
+practices_hiring_equity,Urban,0.715909090909091
+practices_social_justice,Urban,0.625
