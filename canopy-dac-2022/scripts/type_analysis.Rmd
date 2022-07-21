@@ -989,7 +989,7 @@ bayes_facet2
 
 ## Controlling for Locale  
 
-Predictors: bipoc percent, number of students, school type, school locale, FRPL percent  
+Predictors: bipoc percent, number of students, school type, school locale, FRPL percent, ELL percent, and SWD percent  
 
 Plot found in `outputs` > `type analysis` > `model-type-locale.png`. Code takes a long time to run, so I don't recommend pulling from this document.
 
@@ -1016,7 +1016,7 @@ mod_prep3 <- clean_data_full %>%
 
 ##from Gregor's code:
 #use all 3 racial categories
-one_vars3 = c("non_white_percent", "n_student", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "locale_urban", "locale_suburban", "locale_rural", "frpl_percent")
+one_vars3 = c("non_white_percent", "n_student", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "locale_urban", "locale_suburban", "locale_rural", "frpl_percent") #, "ell_percent", "swd_percent"
 
 logistic_one_dat3 = 
   mod_prep3 %>%
@@ -1083,24 +1083,119 @@ bayes_facet3 =
   theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
         panel.grid.major.y = element_blank(),
         axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0)) +
-  geom_hline(yintercept = 1) +
-  expand_limits(y = c(1/9, 4))
+  geom_hline(yintercept = 1) #+
+  #expand_limits(y = c(1/9, 4))
 
 bayes_facet3
 ```
 
 ## TO DO: *redo model 3 including ELL % and SWD %*
-
-```{r}
-
-```
+Considerations:  
+* number of variables makes facet wrap difficult  
+* how to expand facet plot so all 12 plots show?  
+* alternately print separately?  
 
 
 ## TO DO: Model using cluster weights as outcomes  
 * remember weights need to be standardized -- may want to double check if Gregor's document included a standardized variable for cluster weights or not
 
-```{r}
+```{r cluster model}
+#pulled from `cluster_correlations.rmd`
+# source(here("scripts/branding.R"))
+# load(here("data/complete_canopy_2022.RData"))
+c5 = read_tsv(here("outputs/EFA 2022 Results All.txt"))
+c5 %>% rename(all_of(clust_details_r)) %>%
+  select(-Complexity, -Uniqueness) %>%
+  pivot_longer(cols = -Variable, names_to = "cluster", values_to = "weight") %>%
+  rename(practice = Variable) -> cweights
+names(c5)[1] <- "tag"
+#might be better to just read in tsv file created after joining with practices and schools
+# need to decide which will be better to incorporate into the model
+# and then how to merge it with existing modeling data
+cluster_mod_prep <- mod_prep3 %>% 
+  left_join(c5, by = "tag") %>% 
 
+#Cluster Model 1 - MR1: Blended Learning
+```
+
+## TO DO: other questions
+
+DEMOGRAPHICS: How do tagging patterns differ by student demographics (%white, %Black, %Hispanic/Latino, %Asian, %Native)?
+
+```{r racial demo only mod}
+##from Gregor's code:
+#use all 3 racial categories
+vars4 = c("aian_percent", "asian_percent", "black_percent", "hispanic_percent", "nhpi_percent", "multiple_percent", "white_percent")
+
+logistic_one_dat4 = 
+  mod_prep3 %>%
+  select(value, tag, one_of(vars4)) %>%
+  na.omit() %>%
+  group_by(tag) %>%
+  # scaling non-binary predictors
+  mutate_at(vars(
+    c(ends_with("_percent"))), scale)
+
+one_form4 = as.formula(paste("value", "~", paste(vars4, collapse = "+")))
+#plot(xm, "areas", prob = 0.9, prob_outer = 1)
+
+bayes_mods4 = list()
+
+for(this_tag in unique(mod_prep3$tag)) {
+  bayes_mods4[[this_tag]] = stan_glm(
+    one_form4,
+    data = filter(logistic_one_dat4, tag == this_tag),
+    family = binomial(link = "logit"),
+    prior = student_t(
+      df = 7,
+      location = 0,
+      scale = 2.5
+    )
+  )
+  
+}
+
+bayes_tidy4 = lapply(bayes_mods4, tidy) %>%
+  bind_rows(.id = "response") %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    nice_tag = label_tags(response),
+    nice_demog = factor(label_dems(term))
+  )
+
+## top 10 absolute effects per demo:
+
+bayes_facet_dat4 = bayes_tidy4 %>% group_by(nice_demog) %>%
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10)
+
+bayes_facet4 = 
+  ggplot(bayes_facet_dat4,
+    aes(y = exp(estimate),
+        x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean),
+    )) +
+  geom_col() + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       #fill = "Demographic",
+       title = "Top 10 tags most/least related to each demographic") +
+  facet_wrap(~ nice_demog, scales = "free_y") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.125, .25, .5, 1, 2, 4, 8),
+    labels = c("1/8", "1/4", "1/2", "1", "2", "4", "8"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0)) +
+  geom_hline(yintercept = 1) #+
+  #expand_limits(y = c(1/9, 4))
+
+bayes_facet4
 ```
 
 
@@ -1284,3 +1379,33 @@ independent_locale_prop <- type_desc %>%
          `Proportion of Independent Schools within Locale` = locale_prop)
 datatable(independent_locale_prop)
 ```
+
+## How many practices did schools typically select?
+
+```{r n practices hist, fig.dim = c(12, 9)}
+avg_prac <- clean_data_full %>% 
+  select(school_name, starts_with("practices_")) %>% 
+  mutate(n_practices = rowSums(across(where(is.numeric))),
+         avg_practices = mean(n_practices,)) %>% 
+#hist
+ggplot(., aes(n_practices)) +
+  geom_bar() +
+  theme_transcend +
+  geom_vline(xintercept = 38.77019, #average number of tags `$avg_practices`
+             color = "#EF464B", size = 1, linetype = "dashed") +
+  scale_y_continuous(expand = expansion(add = c(0, 1))) +
+  annotate("text", x = 39, y = 9.5, 
+          label = "— average practices selected = 39", color = "#EF464B",
+          size = 4, fontface="bold", hjust = 0) + #angle=45
+  labs(x = "Number of Practices Selected",
+       y = "Number of Schools",
+       title = "How many practices did schools typically select?",
+       subtitle = "dashed line indicates average number of practices selected")
+```
+
+```{r save n practices hist, eval = FALSE}
+#how many practices did schools typically select?
+ggsave("n-practices.png", plot = avg_prac, path = here("outputs", "misc"), 
+       width = 12, height = 9, units = "in")
+```
+
