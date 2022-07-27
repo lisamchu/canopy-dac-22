@@ -902,16 +902,16 @@ Plot found in `outputs` > `type analysis` > `model-bipoc-ses.png`. Code takes a 
 
 ```{r model 2 - bipoc, eval = FALSE}
 #also run bipoc percent (all non-white)?
-mod_prep2 <- mod_prep %>% 
+mod2_prep <- mod_prep %>% 
   mutate(non_white_percent = 1 - white_percent)
 
 ##from Gregor's code:
 #first will run black percent and hispanic percent as controls
-one_vars2 = c("non_white_percent", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "frpl_percent", "swd_percent", "ell_percent", "n_student")
+mod2_vars = c("non_white_percent", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "frpl_percent", "swd_percent", "ell_percent", "n_student")
 
-logistic_one_dat2 = 
-  mod_prep2 %>%
-  select(value, tag, one_of(one_vars2)) %>%
+logistic_dat2 = 
+  mod2_prep %>%
+  select(value, tag, one_of(mod2_vars)) %>%
   na.omit() %>%
   group_by(tag) %>%
   # scaling non-binary predictors
@@ -925,15 +925,15 @@ logistic_one_dat2 =
     )
   ), scale)
 
-one_form2 = as.formula(paste("value", "~", paste(one_vars2, collapse = "+")))
+mod2_form = as.formula(paste("value", "~", paste(mod2_vars, collapse = "+")))
 #plot(xm, "areas", prob = 0.9, prob_outer = 1)
 
 bayes_mods2 = list()
 
-for(this_tag in unique(mod_prep2$tag)) {
+for(this_tag in unique(mod2_prep$tag)) {
   bayes_mods2[[this_tag]] = stan_glm(
-    one_form2,
-    data = filter(logistic_one_dat2, tag == this_tag),
+    mod2_form,
+    data = filter(logistic_dat2, tag == this_tag),
     family = binomial(link = "logit"),
     prior = student_t(
       df = 7,
@@ -987,6 +987,128 @@ bayes_facet2 =
 bayes_facet2
 ```
 
+
+## Follow up Model 2  
+
+Re-create plots for SWD, ELL, BIPOC %, and FRPL eligible using Transcend colors (each one can use a different color).
+
+```{r model 2 mini plots, fig.dim = c(9, 9)}
+# SWD plot
+swd_plot <- bayes_facet_dat2 %>% 
+  filter(term == "swd_percent") %>% 
+  ggplot(aes(y = exp(estimate), 
+             x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean))) +
+  geom_col(fill = "#EF464B") + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       title = "",
+       subtitle = "% Students with Disabilities") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.125, .25, .5, 1, 2, 4, 8),
+    labels = c("1/8", "1/4", "1/2", "1", "2", "4", "8"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0)) +
+  geom_hline(yintercept = 1) +
+  expand_limits(y = c(1/4, 4))
+
+# ELL plot
+ell_plot <- bayes_facet_dat2 %>% 
+  filter(term == "ell_percent") %>% 
+  ggplot(aes(y = exp(estimate), 
+             x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean))) +
+  geom_col(fill = "#1A4C81") + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       title = "",
+       subtitle = "% English Language Learner") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.125, .25, .5, 1, 2, 4, 8),
+    labels = c("1/8", "1/4", "1/2", "1", "2", "4", "8"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0)) +
+  geom_hline(yintercept = 1) +
+  expand_limits(y = c(1/4, 4))
+
+# BIPOC plot
+bipoc_plot <- bayes_facet_dat2 %>% 
+  filter(term == "non_white_percent") %>% 
+  ggplot(aes(y = exp(estimate), 
+             x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean))) +
+  geom_col(fill = "#59C3B4") + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       title = "",
+       subtitle = "% students of color") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.125, .25, .5, 1, 2, 4, 8),
+    labels = c("1/8", "1/4", "1/2", "1", "2", "4", "8"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0)) +
+  geom_hline(yintercept = 1) +
+  expand_limits(y = c(1/4, 4))
+
+# FRPL plot
+frpl_plot <- bayes_facet_dat2 %>% 
+  filter(term == "frpl_percent") %>% 
+  ggplot(aes(y = exp(estimate), 
+             x = reorder_within(nice_tag, estimate, within = nice_demog, fun = mean))) +
+  geom_col(fill = "#ADE0EE") + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       title = "",
+       subtitle = "% FRPL eligible") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.125, .25, .5, 1, 2, 4, 8),
+    labels = c("1/8", "1/4", "1/2", "1", "2", "4", "8"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0)) +
+  geom_hline(yintercept = 1) +
+  expand_limits(y = c(1/4, 4))
+
+# save plots
+# SWD
+ggsave("swd-mod2-mini-plot.png", plot = swd_plot, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+# ELL
+ggsave("ell-mod2-mini-plot.png", plot = ell_plot, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+# BIPOC %
+ggsave("bipoc-mod2-mini-plot.png", plot = bipoc_plot, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+# FRPL
+ggsave("frpl-mod2-mini-plot.png", plot = frpl_plot, path = here("outputs", "type analysis"),
+       width = 12, height = 8, units = "in")
+```
+
+
 ## Controlling for Locale  
 
 Predictors: bipoc percent, number of students, school type, school locale, FRPL percent, ELL percent, and SWD percent  
@@ -994,16 +1116,11 @@ Predictors: bipoc percent, number of students, school type, school locale, FRPL 
 Plot found in `outputs` > `type analysis` > `model-type-locale.png`. Code takes a long time to run, so I don't recommend pulling from this document.
 
 ```{r model 3 - locale, eval = FALSE}
-#also run bipoc percent?
-mod_prep3 <- clean_data_full %>% 
+#data prep
+mod3_prep <- clean_data_full %>% 
   select(school_id, starts_with("practices_"), ends_with("_percent"), locale, nces_total_enrollment, self_reported_total_enrollment) %>% 
-  mutate(locale_urban = ifelse(locale == "Urban", 1, 0),
-         locale_rural = ifelse(locale == "Rural", 1, 0),
-         locale_suburban = ifelse(locale == "Suburban", 1, 0)) %>% 
   left_join(type_recode, by = "school_id") %>% 
-  mutate(school_descriptor_charter = ifelse(type == "charter", 1, 0),
-         school_descriptor_district = ifelse(type == "district", 1, 0),
-         school_descriptor_independent = ifelse(type == "independent", 1, 0)) %>% 
+  mutate(type = factor(.$type, levels = c("charter", "district", "independent"), labels = c("Charter", "District", "Independent"))) %>% 
   unite("n_student", c(nces_total_enrollment, self_reported_total_enrollment), na.rm = TRUE) %>% 
   mutate(n_student = na_if(n_student, ""),
          n_student = str_remove_all(n_student, "_..."),
@@ -1011,31 +1128,30 @@ mod_prep3 <- clean_data_full %>%
   pivot_longer(cols = starts_with("practices"),
                names_to = "tag",
                values_to = "value") %>% 
-  select(-c(type, locale)) %>% 
   mutate(non_white_percent = 1 - white_percent)
 
 ##from Gregor's code:
-#use all 3 racial categories
-one_vars3 = c("non_white_percent", "n_student", "school_descriptor_charter", "school_descriptor_district", "school_descriptor_independent", "locale_urban", "locale_suburban", "locale_rural", "frpl_percent") #, "ell_percent", "swd_percent"
+#use non-white percent (mainly to limit vars - can change)
+mod3_vars = c("non_white_percent", "n_student", "locale", "type", "frpl_percent", "locale:type") # "ell_percent", "swd_percent",
 
-logistic_one_dat3 = 
-  mod_prep3 %>%
-  select(value, tag, one_of(one_vars3)) %>%
+logistic_dat3 = 
+  mod3_prep %>%
+  select(value, tag, one_of(mod3_vars)) %>%
   na.omit() %>%
   group_by(tag) %>%
   # scaling non-binary predictors
   mutate_at(vars(
     c(ends_with("_percent"), n_student)), scale)
 
-one_form3 = as.formula(paste("value", "~", paste(one_vars3, collapse = "+")))
+mod3_form = as.formula(paste("value", "~", paste(mod3_vars, collapse = "+")))
 #plot(xm, "areas", prob = 0.9, prob_outer = 1)
 
 bayes_mods3 = list()
 
-for(this_tag in unique(mod_prep3$tag)) {
+for(this_tag in unique(mod3_prep$tag)) {
   bayes_mods3[[this_tag]] = stan_glm(
-    one_form3,
-    data = filter(logistic_one_dat3, tag == this_tag),
+    mod3_form,
+    data = filter(logistic_dat3, tag == this_tag),
     family = binomial(link = "logit"),
     prior = student_t(
       df = 7,
@@ -1069,7 +1185,8 @@ bayes_facet3 =
   labs(y = "Odds multiplier",
        x = "", 
        #fill = "Demographic",
-       title = "Top 10 tags most/least related to each demographic") +
+       title = "Top 10 tags most/least related to each demographic",
+       subtitle = "as compared to urban charter schools") +
   facet_wrap(~ nice_demog, scales = "free_y") +
   scale_y_continuous(
     trans = "log",
@@ -1094,6 +1211,8 @@ Considerations:
 * number of variables makes facet wrap difficult  
 * how to expand facet plot so all 12 plots show?  
 * alternately print separately?  
+ALTERNATE: *redo model 3 using an interaction term b/w type & locale*
+* need to figure out how to modify the titles on the facet plots, but otherwise probs ready to go
 
 
 ## TO DO: Model using cluster weights as outcomes  
@@ -1113,9 +1232,9 @@ names(c5)[1] <- "tag"
 # need to decide which will be better to incorporate into the model
 # and then how to merge it with existing modeling data
 cluster_mod_prep <- mod_prep3 %>% 
-  left_join(c5, by = "tag") %>% 
+  left_join(c5, by = "tag") %>% #ignore this - you do not need to merge with practices, your DV is the clusters
 
-#Cluster Model 1 - MR1: Blended Learning
+
 ```
 
 ## TO DO: other questions
