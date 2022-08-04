@@ -177,7 +177,8 @@ theme_transcend = theme_gdocs(base_size = 16, base_family = "Open Sans") +
     axis.text = element_text(colour = "black"),
     axis.title = element_text(colour = "black"),
     panel.border = element_rect(colour = transcend_grays[1]),
-    strip.text = element_text(size = rel(0.8))
+    strip.text = element_text(size = rel(0.8)),
+    plot.margin = margin(10, 24, 10, 10, "pt")
   )
 
 theme_transcend_sparse = theme_few(base_size = 16, base_family = "Open Sans") +
@@ -235,6 +236,14 @@ bar_x_scale_percent =
     labels = scales::percent_format(accuracy = 1),
     expand = expansion(mult = c(0, 0))
   ) 
+
+bar_x_scale_count = 
+  scale_x_continuous(
+    labels = scales::comma_format(accuracy = 1),
+    expand = expansion(mult = c(0, 0.1)),
+    breaks = scales::breaks_extended(Q = c(1, 5, 2, 4, 3))
+  ) 
+
 
 bar_theme = theme(panel.grid.major.x = element_blank())
 
