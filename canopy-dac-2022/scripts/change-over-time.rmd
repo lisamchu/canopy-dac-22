@@ -19,11 +19,15 @@ xwalk = read_csv(here("data/Tags-SY2021-22 Tags.csv"), show_col_types = FALSE) %
   select(tag = `Variable name`, tag_20_21 = `2020-21 equivalent`, tag_18_19 = `2018-19 equivalent`)
 ```
 
+## All Schools
+
+First, a look at all the Canopy schools in all years.
+
 ```{r}
 ## Notes 5 May 2022:
 ## DONE: make sure 2020 schools are not duplicated--they were not duplicated
 ## DONE: re-run with only schools that participated in last 2 years--added new section
-## TODO: within schools that participated multiple years, look at tag additions and subtractions
+## DONE: within schools that participated multiple years, look at tag additions and subtractions
 all_tags = unique(na.omit(unlist(xwalk)))
 
 canopy_old = canopy_old %>%
@@ -80,7 +84,7 @@ over_time %>%
 ```
 
 
-```{r, echo = TRUE}
+```{r, echo = FALSE}
 ggplot(long, aes(x = sy, y = pct_practicing, group = tag)) +
   geom_line(alpha = 0.6, color = transcend_cols["teal"], size = 0.3) +
   geom_point(alpha = 0.9, color = transcend_cols["teal"], size = 1.2) +
@@ -93,7 +97,7 @@ ggplot(long, aes(x = sy, y = pct_practicing, group = tag)) +
   )
 ```
 
-```{r, fig.height=10, fig.width = 9, echo = TRUE}
+```{r, fig.height=10, fig.width = 9, echo = FALSE}
 long %>% 
   group_by(tag) %>%
   nest() %>%
@@ -112,7 +116,9 @@ coefs %>%
   mutate(rank = rank((-estimate))) %>%
   arrange(rank) %>%
   mutate(tag = reorder(factor(tag), estimate)) -> coefs
+```
 
+```{r, fig.height=10, fig.width = 9, echo = FALSE}
 ggplot(coefs, aes(y = tag, x = estimate)) +
   geom_point(aes(color = rank), size = 3) +
   scale_color_continuous(guide = "none", trans = "reverse") +
@@ -126,7 +132,7 @@ ggplot(coefs, aes(y = tag, x = estimate)) +
   theme(axis.text.y = element_text(size = rel(0.5)))
 ```
 
-```{r slice_top, fig.width = 9}
+```{r slice_top, fig.width = 9, include = FALSE}
 coefs %>% slice(1:15) %>%
   ggplot(aes(y = tag, x = estimate)) +
   geom_point(aes(color = rank), size = 3) +
@@ -139,11 +145,10 @@ coefs %>% slice(1:15) %>%
     title = "Average change in tagging patterns"
   ) +
   theme(axis.text.y = element_text(size = rel(0.5)))
-
 ```
 
 
-```{r}
+```{r, include = FALSE}
 coefs %>% 
   arrange(rank) %>%
   slice(1:20) %>%
@@ -158,8 +163,8 @@ coefs %>%
 
 ## Repeat Schools
 
-Repeating the analysis above, limited to schools that responded in multiple years.
-TODO Decide if it's any multiple years or 21-22 and multiple years.
+Now looking at only schools that responded in 2022 as well as in a previous 
+survey round.
 
 ```{r repeat_schools, fig.height=11, fig.width= 9}
 repeat_schools = over_time %>%
@@ -227,7 +232,7 @@ coefs_rpt %>%
     limits = c(0, 0.25), expand = expansion()
   ) +
   labs(
-    x = "Average annual percentage point change in schools selecting practices",
+    x = "Average annual percentage point change\nin schools selecting practices",
     y = "",
     title = "Top 20 tags by average annual growth",
     subtitle = "For schools in Canopy 2022 as well as a previous year"
@@ -326,6 +331,8 @@ ggplot(hilight_data,
     plot.margin = margin(.35, 8, .35, .35, "cm")
   )
 ```
+
+It would be easy to make versions of this graph with other selected practices.
 
 ## Tags added and subtracted by schools over time
 
