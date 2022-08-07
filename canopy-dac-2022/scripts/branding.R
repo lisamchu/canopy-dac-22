@@ -170,9 +170,10 @@ transcend_grays = c(
 na_col = transcend_grays[2]
 
 ## ggplot themes ####
-theme_transcend = theme_gdocs(base_size = 16, base_family = "Open Sans") +
+theme_transcend = theme_gdocs(base_size = 14, base_family = "Open Sans") +
   theme(
     plot.title = element_text(family = "Bebas Neue", color = "black"),
+    #plot.subtitle = element_text(family = "Open Sans", size = rel(0.8)),
     plot.background = element_blank(),
     axis.text = element_text(colour = "black"),
     axis.title = element_text(colour = "black"),
@@ -181,7 +182,7 @@ theme_transcend = theme_gdocs(base_size = 16, base_family = "Open Sans") +
     plot.margin = margin(10, 24, 10, 10, "pt")
   )
 
-theme_transcend_sparse = theme_few(base_size = 16, base_family = "Open Sans") +
+theme_transcend_sparse = theme_few(base_size = 12, base_family = "Open Sans") +
   theme(
     plot.title = element_text(family = "Bebas Neue", colour = "black"),
     axis.text = element_text(colour = "black")

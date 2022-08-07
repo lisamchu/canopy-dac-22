@@ -10,6 +10,7 @@ library(purrr)
 library(tidyr)
 library(broom)
 library(DT)
+library(ggrepel)
 source(here("scripts/branding.R"))
 load(here("data/complete_canopy_2022.RData"))
 canopy_old = readRDS(here("data/canopy-2019-2021.rds"))
@@ -49,12 +50,30 @@ over_time = practices_data %>%
   mutate(across(everything(), as.character)) %>%
   bind_rows(canopy_old)
 
+sy_all = c("18-19", "19-20", "20-21", "21-22")
+over_time %>%
+  mutate(
+    sy = case_when(
+      year == "2019" ~ "18-19",
+      year %in% c("2020", "2021") ~ "20-21",
+      year == "2022" ~ "21-22"
+    ),
+    sy = factor(sy, levels = sy_all),
+    sy_i = as.integer(sy) - 1
+    # setting levels here accounts for the missing school year in the spacing.
+  ) -> over_time
+
+if((over_time %>% 
+  group_by(school_id, sy) %>%
+  filter(n() > 1) %>%
+  nrow) > 0) stop("duplicates introduced!")
+
 over_time %>%
   pivot_longer(cols = starts_with("practice"), names_to = "tag") %>%
   mutate(flag = case_when(is.na(value) | value == "0" ~ 0L, TRUE ~ 1L)) %>%
-  group_by(year) %>%
+  group_by(sy) %>%
   mutate(n_sch_year = n_distinct(school_id)) %>%
-  group_by(year, tag) %>%
+  group_by(sy, sy_i, tag) %>%
   summarize(pct_practicing = mean(flag), n_sch_year = first(n_sch_year), .groups = "drop") %>%
   filter(pct_practicing > 0) ->
   long
@@ -62,35 +81,35 @@ over_time %>%
 
 
 ```{r, echo = TRUE}
-ggplot(long, aes(x = year, y = pct_practicing, group = tag)) +
-  geom_line(alpha = 0.7, color = transcend_cols["teal"]) +
-  geom_point(alpha = 0.9, color = transcend_cols["teal"]) +
+ggplot(long, aes(x = sy, y = pct_practicing, group = tag)) +
+  geom_line(alpha = 0.6, color = transcend_cols["teal"], size = 0.3) +
+  geom_point(alpha = 0.9, color = transcend_cols["teal"], size = 1.2) +
   bar_y_scale_percent +
+  scale_x_discrete(drop = FALSE) +
   labs(
     y = "Percent of schools identifying practice",
-    x = "Canopy survey year",
+    x = "Canopy survey school year",
     title = "Changes in practices over time"
   )
 ```
 
 ```{r, fig.height=10, fig.width = 9, echo = TRUE}
 long %>% 
-  mutate(year_i = as.integer(year) - 2019) %>%
   group_by(tag) %>%
   nest() %>%
   mutate(
-    models = lapply(data, \(df) tidy(lm(pct_practicing ~ year_i, data = df)))
+    models = lapply(data, \(df) tidy(lm(pct_practicing ~ sy_i, data = df, weights = n_sch_year)))
   ) -> mods 
 
 mods %>%
   unnest(models) %>%
-  filter(term == "year_i") ->
+  filter(term == "sy_i") ->
   coefs
 
 coefs %>%
   ungroup %>%
   filter(!is.na(estimate)) %>%
-  mutate(rank = rank(-abs(estimate))) %>%
+  mutate(rank = rank((-estimate))) %>%
   arrange(rank) %>%
   mutate(tag = reorder(factor(tag), estimate)) -> coefs
 
@@ -113,9 +132,9 @@ coefs %>% slice(1:15) %>%
   geom_point(aes(color = rank), size = 3) +
   scale_color_continuous(guide = "none", trans = "reverse") +
   scale_y_discrete(labels = label_tags) +
-  scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0, .1), expand = expansion()) +
+  scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0, .25), expand = expansion()) +
   labs(
-    x = "Percentage point change\nin schools selecting practices",
+    x = "Average Annual Percentage point change\nin schools selecting practices",
     y = "",
     title = "Average change in tagging patterns"
   ) +
@@ -129,7 +148,7 @@ coefs %>%
   arrange(rank) %>%
   slice(1:20) %>%
   unnest(data) %>%
-  select(-year_i, -term, -statistic) %>%
+  select(-sy_i, -term, -statistic) %>%
   datatable(
     caption = "Percentage change in practice representation among all Canopy schools"
   ) %>%
@@ -140,35 +159,36 @@ coefs %>%
 ## Repeat Schools
 
 Repeating the analysis above, limited to schools that responded in multiple years.
+TODO Decide if it's any multiple years or 21-22 and multiple years.
 
 ```{r repeat_schools, fig.height=11, fig.width= 9}
 repeat_schools = over_time %>%
   group_by(school_id) %>%
-  filter(n_distinct(year) > 1 & "2022" %in% year) %>%
+  filter(n_distinct(sy) > 1 & "21-22" %in% sy) %>%
   pull(school_id)
 
 over_time %>%
   filter(school_id %in% repeat_schools) %>%
   pivot_longer(cols = starts_with("practice"), names_to = "tag") %>%
   mutate(flag = case_when(is.na(value) | value == "0" ~ 0L, TRUE ~ 1L)) %>%
-  group_by(year) %>%
+  group_by(sy) %>%
   mutate(n_sch_year = n_distinct(school_id)) %>%
-  group_by(year, tag) %>%
+  group_by(sy, sy_i, tag) %>%
   summarize(pct_practicing = mean(flag), n_sch_year = first(n_sch_year), .groups = "drop") %>%
   filter(pct_practicing > 0) ->
   long_rpt
 
 long_rpt %>% 
-  mutate(year_i = as.integer(year) - 2021) %>%
   group_by(tag) %>%
   nest() %>%
   mutate(
-    models = lapply(data, \(df) tidy(lm(pct_practicing ~ year_i, data = df)))
+    models = lapply(data, \(df) tidy(lm(pct_practicing ~ sy_i, data = df, weights = n_sch_year)))
   ) -> mods_rpt
-
+## TODO redo model weighting by n_sch_yr
+## Also 2019 is 2018-2019, 2020 and 2021 are 2020-2021, and 2022 is 2021-2022
 mods_rpt %>%
   unnest(models) %>%
-  filter(term == "year_i") ->
+  filter(term == "sy_i") ->
   coefs_rpt
 
 coefs_rpt %>%
@@ -186,30 +206,35 @@ ggplot(coefs_rpt, aes(y = tag, x = estimate)) +
   labs(
     x = "Percentage point change\nin schools selecting practices",
     y = "",
-    title = "Average change in tagging patterns\nfor schools with repeated measures"
+    title = "Average annual change in tagging patterns",
+    subtitle = "For schools in Canopy 2022 as well as a previous year"
   ) +
-  theme(axis.text.y = element_text(size = rel(0.5)))
+  theme(
+    axis.text.y = element_text(size = rel(0.5)),
+    plot.subtitle = element_text(size = rel(0.8))
+  )
 
 ```
-```{r, fig.width = 9}
+```{r, fig.width = 9, fig.height = 8}
 coefs_rpt %>% 
-    slice_min(rank, n = 15) %>%
+    slice_max(estimate, n = 20) %>%
   ggplot(aes(y = tag, x = estimate)) +
   geom_point(aes(color = rank), size = 3) +
   scale_color_continuous(guide = "none", trans = "reverse") +
   scale_y_discrete(labels = label_tags) +
   scale_x_continuous(
     labels = scales::label_percent(accuracy = 1),
-    limits = c(0, 0.1), expand = expansion()
+    limits = c(0, 0.25), expand = expansion()
   ) +
   labs(
-    x = "Average annual percentage point change\nin schools selecting practices",
+    x = "Average annual percentage point change in schools selecting practices",
     y = "",
-    title = "Top 15 most added tags",
-    subtitle = "For repeat Canopy schools"
+    title = "Top 20 tags by average annual growth",
+    subtitle = "For schools in Canopy 2022 as well as a previous year"
   ) +
   theme(
-    axis.text.y = element_text(size = rel(0.7))
+    axis.text.y = element_text(size = rel(0.7)),
+    plot.subtitle = element_text(size = rel(0.8))
   )
 ```
 
@@ -218,16 +243,92 @@ coefs_rpt %>%
   arrange(rank) %>%
   #slice(1:20) %>%
   unnest(data) %>%
-  select(-year_i, -term, -statistic) %>%
+  select(-sy_i, -term, -statistic) %>%
   datatable(
-    caption = "Percentage change in practice representation among repeat measure Canopy schools"
+    caption = "Percentage change in practice representation among 2022 Canopy schools with previous responses"
   ) %>%
-  formatRound(digits = 3,columns = c("estimate", "std.error", "p.value")) %>%
-  formatPercentage(columns = "pct_practicing", digits = 1)
+  formatRound(digits = 3,columns = c("p.value")) %>%
+  formatPercentage(columns = c("pct_practicing", "estimate", "std.error"), digits = 1)
 ```
 
+### Call-out practices
+
+```{r, fig.width=10, fig.height = 7}
+hilight = paste0(
+  "practices_", 
+  c("trauma_informed",
+    "culturally_responsive",
+    "sel_integrated",
+    "sel_curriculum",
+    "competency_framework", 
+    "competency_education"
+    ))
+coefs_rpt %>% 
+  filter(
+    tag %in% hilight
+  ) %>%
+  unnest(data) -> hilight_data
+
+hilight_data |>
+  filter(sy_i == 3) -> hilight_labs
+
+ggplot(hilight_data, 
+       aes(x = sy, y = pct_practicing, color = tag, group = tag)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_line(
+    stat = "smooth", 
+    method = "lm", 
+    se = FALSE, 
+    formula = y ~ x,
+    size = 1,
+    alpha = 0.7
+  ) +
+  geom_text_repel(
+    data = hilight_labs, 
+    aes(
+      label = paste(
+        label_tags(tag),
+        "\nslope =", 
+        scales::percent_format(accuracy = 0.1)(estimate),
+        "points per year"
+      )
+    ),
+    hjust = 0,
+    nudge_x = 0.11,
+    size = 3.5,
+    direction = "y",
+    xlim = c(-100, 100)
+  ) + 
+  coord_cartesian(clip = "off") + 
+  scale_color_manual(
+    labels = label_tags, 
+    values = c(transcend_cols[1:3] |> unname(), transcend_cols2[c(1, 2, 4)])
+  ) +
+  scale_y_continuous(
+    labels = scales::label_percent(accuracy = 1),
+    limits = c(0, 1), expand = expansion()
+  ) +
+  scale_x_discrete(
+    expand = expansion(add = c(0.05)),
+    drop = FALSE
+  ) +
+  guides(color = "none") +
+  labs(
+    x = "School year",
+    y = "Schools indicating practice",
+    color = "",
+    title = "Increasing adoption of selected practices",
+    subtitle = "For schools in Canopy 2022 as well as a previous year"
+  ) +
+  theme(
+   # axis.text.y = element_text(size = rel(0.7))
+    panel.grid.major.x = element_blank(),
+    plot.margin = margin(.35, 8, .35, .35, "cm")
+  )
+```
 
 ## Tags added and subtracted by schools over time
+
 
 ```{r, fig.height= 18, fig.width = 22}
 over_time %>%
@@ -287,4 +388,5 @@ compared to their previous Canopy response.",
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
   
 ```
+
 
