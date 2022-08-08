@@ -217,7 +217,14 @@ ggplot(coefs_rpt, aes(y = tag, x = estimate)) +
   theme(
     axis.text.y = element_text(size = rel(0.5)),
     plot.subtitle = element_text(size = rel(0.8))
-  )
+  ) -> rpt_schools_all
+
+ggsave_transcend(
+  rpt_schools_all,
+  file = "over-time-repeat-schools-all",
+  fig_height = 11,
+  fig_width = 9
+)
 
 ```
 ```{r, fig.width = 9, fig.height = 8}
@@ -240,7 +247,14 @@ coefs_rpt %>%
   theme(
     axis.text.y = element_text(size = rel(0.7)),
     plot.subtitle = element_text(size = rel(0.8))
-  )
+  ) -> rpt_schools_top20
+
+ggsave_transcend(
+  rpt_schools_top20,
+  file = "over-time-repeat-schools-top20",
+  fig_height = 5,
+  fig_width = 9
+)
 ```
 
 ```{r}
@@ -329,7 +343,14 @@ ggplot(hilight_data,
    # axis.text.y = element_text(size = rel(0.7))
     panel.grid.major.x = element_blank(),
     plot.margin = margin(.35, 8, .35, .35, "cm")
-  )
+  ) -> rpt_hilights
+
+ggsave_transcend(
+  rpt_hilights,
+  file = "over-time-repeat-schools-highlights",
+  fig_height = 6.5,
+  fig_width = 10
+)
 ```
 
 It would be easy to make versions of this graph with other selected practices.

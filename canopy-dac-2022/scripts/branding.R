@@ -273,8 +273,12 @@ geom_col = function(..., width = 0.6) ggplot2::geom_col(..., width = width)
 #' @param fig_height height in inches, default 7
 #' @param write_data boolean indicating whether or not to write a CSV with data,
 #' default is TRUE.
-ggsave_transcend = function(plot, file, dir, fig_width = 9, fig_height = 7, write_data = TRUE) {
-  for (ext in c("png", "svg")) {
+ggsave_transcend = function(
+    plot, file, dir = here("images"),
+    fig_width = 9, fig_height = 7, write_data = TRUE,
+    exts = c("png", "svg")
+) {
+  for (ext in exts) {
     ggsave(filename = sprintf("%s/%s.%s", dir, file, ext),
            plot = plot,
            width = fig_width, height = fig_height)
