@@ -1093,6 +1093,51 @@ frpl_plot <- bayes_facet_dat2 %>%
   geom_hline(yintercept = 1) +
   expand_limits(y = c(1/4, 4))
 
+# all plots in one
+mini_facet = bayes_tidy2 %>% 
+  group_by(nice_demog) %>%
+  filter(term == c("swd_percent", "ell_percent", "frpl_percent", "non_white_percent")) %>% 
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10) %>% 
+  mutate(plot_labs = case_when(nice_demog == "% English Language Learner" ~ "Schools with higher-than-average % English learners",
+                               nice_demog == "% FRPL eligible" ~ "Schools with higher-than-average % students eligible for free/reduced-price lunch",
+                               nice_demog == "% students of color" ~ "Schools with higher-than-average % BIPOC students",
+                               nice_demog == "% Students with Disabilities" ~ "Schools with higher-than-average % students with disabilities"))
+
+mini_plots = 
+  ggplot(mini_facet,
+    aes(y = exp(estimate),
+        x = reorder_within(nice_tag, estimate, within = plot_labs, fun = mean),
+    )) +
+  geom_col(aes(fill = term), fill = c(paste(rep("#EF464B", 10)),
+                                      paste(rep("#1A4C81", 10)),
+                                      paste(rep("#59C3B4", 10)),
+                                      paste(rep("#ADE0EE", 10)))) + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       title = "Top 10 practices with the strongest relationship to\nfour student demographic groups",
+       caption = "Note: An odds multiplier over 1 indicates that schools were more likely than others to report the practice (e.g.,schools\nwith higher-than-average BIPOC student populations were over twice as likely to report culturally-responsive practices).\nAn odds multiplier under 1 indicates that schools were less likely than others to report the practice.") +
+  facet_wrap(~ plot_labs, scales = "free_y",
+             labeller = labeller(plot_labs = label_wrap_gen(width = 25))) +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.125, .25, .5, 1, 2, 4, 8),
+    labels = c("1/8", "1/4", "1/2", "1", "2", "4", "8"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 10), strip.text = element_text(size = rel(.8)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0),
+        plot.caption = element_text(hjust = 0, size = 11)) +
+  # scale_x_discrete(labels = scales::label_wrap(15)) +
+  geom_hline(yintercept = 1) +
+  expand_limits(y = c(1/3, 3))
+
+mini_plots
+
 # save plots
 # SWD
 ggsave("swd-mod2-mini-plot.png", plot = swd_plot, path = here("outputs", "type analysis"),
@@ -1106,6 +1151,8 @@ ggsave("bipoc-mod2-mini-plot.png", plot = bipoc_plot, path = here("outputs", "ty
 # FRPL
 ggsave("frpl-mod2-mini-plot.png", plot = frpl_plot, path = here("outputs", "type analysis"),
        width = 12, height = 8, units = "in")
+# facet minis
+ggsave_transcend(mini_plots, file = "figure 9", fig_height = 9, fig_width = 12)
 ```
 
 
@@ -1526,5 +1573,24 @@ ggplot(., aes(n_practices)) +
 #how many practices did schools typically select?
 ggsave("n-practices.png", plot = avg_prac, path = here("outputs", "misc"), 
        width = 12, height = 9, units = "in")
+```
+
+## Were more students co-leading in public schools than in independent schools?
+
+The following table shows combined student enrollment total by type for schools that selected the tag `students as co-leaders`.
+
+```{r co-lead totals}
+colead <- type_recode %>% 
+  left_join(practices_data, by = "school_id") %>% 
+  select(school_id, type, practices_students_leaders) %>% 
+  left_join(type_desc, by = c("school_id", "type")) %>% 
+  select(school_id, type, practices_students_leaders, student_tot) %>% 
+  filter(practices_students_leaders == 1) %>% 
+  mutate(student_tot = as.integer(student_tot)) %>% 
+  group_by(type) %>% 
+  summarize(grand_tot = sum(student_tot)) %>% 
+  rename(`School Type` = type,
+         `Total Student Enrollment` = grand_tot)
+datatable(colead)
 ```
 
