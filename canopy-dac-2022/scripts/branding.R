@@ -33,7 +33,7 @@ tag_labels = read_csv(here("data/Tags-SY2021-22 Tags.csv")) %>%
   select(tag = `Variable name`, label = `short name`) #%>%
   #mutate(across(everything(), fix_accent_a))
 
-label_tags = function(x, capitalize = "none") {
+label_tags = function(x, capitalize = "none", wrap) {
   if(any(!x %in% tag_labels$tag)) warning("Missing tag label")
   labels = tag_labels$label[match(x, tag_labels$tag)]
   labels[is.na(labels)] = x[is.na(labels)]
@@ -42,6 +42,9 @@ label_tags = function(x, capitalize = "none") {
   }
   if(capitalize == "first") {
     labels = str_to_sentence(labels)
+  }
+  if(!missing(wrap)) {
+    labels = str_wrap(labels, width = wrap)
   }
   return(labels)
 }
