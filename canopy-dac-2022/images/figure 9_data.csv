@@ -1,14 +1,14 @@
 response,term,estimate,std.error,nice_tag,nice_demog,plot_labs,.group
-practices_dual_language,ell_percent,0.6457964845067274,0.2512534657281827,dual language programming,% English Language Learner,Schools with higher-than-average % English learners,1
-practices_dual_credit,ell_percent,-0.6216860810758071,0.27662635511729755,dual credit,% English Language Learner,Schools with higher-than-average % English learners,1
-practices_mentoring,ell_percent,-0.499086202623077,0.22237235691956295,1:1 mentoring,% English Language Learner,Schools with higher-than-average % English learners,1
-practices_portfolios_exhibitions,ell_percent,-0.44586163760312586,0.2139580677483393,portfolios and public exhibitions,% English Language Learner,Schools with higher-than-average % English learners,1
-practices_students_leaders,ell_percent,-0.3393007588277609,0.223426382231117,students as co-leaders,% English Language Learner,Schools with higher-than-average % English learners,1
-practices_student_goals,ell_percent,-0.3340300161700219,0.2309080136430031,student-led goal setting,% English Language Learner,Schools with higher-than-average % English learners,1
-practices_interdisciplinary,ell_percent,-0.3338346108175846,0.21135344026751882,interdisciplinary,% English Language Learner,Schools with higher-than-average % English learners,1
-practices_hiring_equity,ell_percent,-0.26224133287544515,0.20483439401052309,hiring for equity and inclusion values,% English Language Learner,Schools with higher-than-average % English learners,1
-practices_student_pace,ell_percent,-0.23095438826542425,0.20905753836162794,students progress at own pace,% English Language Learner,Schools with higher-than-average % English learners,1
-practices_trauma_informed,ell_percent,-0.2290547495028353,0.21167074219987983,trauma-informed practices,% English Language Learner,Schools with higher-than-average % English learners,1
+practices_dual_language,ell_percent,0.6457964845067274,0.2512534657281827,dual language programming,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_dual_credit,ell_percent,-0.6216860810758071,0.27662635511729755,dual credit,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_mentoring,ell_percent,-0.499086202623077,0.22237235691956295,1:1 mentoring,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_portfolios_exhibitions,ell_percent,-0.44586163760312586,0.2139580677483393,portfolios and public exhibitions,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_students_leaders,ell_percent,-0.3393007588277609,0.223426382231117,students as co-leaders,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_student_goals,ell_percent,-0.3340300161700219,0.2309080136430031,student-led goal setting,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_interdisciplinary,ell_percent,-0.3338346108175846,0.21135344026751882,interdisciplinary,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_hiring_equity,ell_percent,-0.26224133287544515,0.20483439401052309,hiring for equity and inclusion values,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_student_pace,ell_percent,-0.23095438826542425,0.20905753836162794,students progress at own pace,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_trauma_informed,ell_percent,-0.2290547495028353,0.21167074219987983,trauma-informed practices,% English Language Learner,Schools with higher-than-average % English language learners,1
 practices_mental_health,frpl_percent,0.5460660683484888,0.2397883352518172,mental health services,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
 practices_flex,frpl_percent,0.42902520726890536,0.22347276032934008,flex model,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
 practices_teachers_leaders,frpl_percent,0.41629771935277615,0.24300856638710866,teachers as co-leaders,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2

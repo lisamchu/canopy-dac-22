@@ -28,6 +28,8 @@ library(scales)
 library(rstanarm)
 library(broom.mixed)
 library(gmodels)
+library(lemon)
+library(stringr)
 source(here("scripts", "branding.R")) #, local = knitr::knit_global()
 load(here("data", "complete_canopy_2022.RData"))
 ```
@@ -1099,7 +1101,7 @@ mini_facet = bayes_tidy2 %>%
   filter(term == c("swd_percent", "ell_percent", "frpl_percent", "non_white_percent")) %>% 
   arrange(desc(abs(estimate))) %>%
   slice(1:10) %>% 
-  mutate(plot_labs = case_when(nice_demog == "% English Language Learner" ~ "Schools with higher-than-average % English learners",
+  mutate(plot_labs = case_when(nice_demog == "% English Language Learner" ~ "Schools with higher-than-average % English language learners",
                                nice_demog == "% FRPL eligible" ~ "Schools with higher-than-average % students eligible for free/reduced-price lunch",
                                nice_demog == "% students of color" ~ "Schools with higher-than-average % BIPOC students",
                                nice_demog == "% Students with Disabilities" ~ "Schools with higher-than-average % students with disabilities"))
@@ -1115,22 +1117,23 @@ mini_plots =
                                       paste(rep("#ADE0EE", 10)))) + 
   labs(y = "Odds multiplier",
        x = "", 
-       title = "Top 10 practices with the strongest relationship to\nfour student demographic groups",
-       caption = "Note: An odds multiplier over 1 indicates that schools were more likely than others to report the practice (e.g.,schools\nwith higher-than-average BIPOC student populations were over twice as likely to report culturally-responsive practices).\nAn odds multiplier under 1 indicates that schools were less likely than others to report the practice.") +
-  facet_wrap(~ plot_labs, scales = "free_y",
-             labeller = labeller(plot_labs = label_wrap_gen(width = 25))) +
+       title = "Top 10 practices with the strongest relationship to four student demographic groups") +
+       # caption = "Note: An odds multiplier over 1 indicates that schools were more likely than others to report the practice (e.g.,schools\nwith higher-than-average BIPOC student populations were over twice as likely to report culturally-responsive practices).\nAn odds multiplier under 1 indicates that schools were less likely than others to report the practice.") +
+  facet_rep_wrap(~ plot_labs, scales = "free_y",
+                 repeat.tick.labels = "bottom",
+             labeller = labeller(plot_labs = label_wrap_gen(width = 33))) +
   scale_y_continuous(
     trans = "log",
     breaks = c(.125, .25, .5, 1, 2, 4, 8),
-    labels = c("1/8", "1/4", "1/2", "1", "2", "4", "8"),
+    labels = c("1/8", "1/4", "1/2 as likely", "", "2x more likely", "4", "8"),
     expand = expansion(0, 0)
   ) +
   scale_x_reordered() + 
   coord_flip() +
   guides(fill = "none") +
-  theme(axis.text = element_text(size = 10), strip.text = element_text(size = rel(.8)),
+  theme(axis.text = element_text(size = 9), strip.text = element_text(size = rel(.8)),
         panel.grid.major.y = element_blank(),
-        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0),
+        axis.text.x = element_text(angle = 0, vjust = 0.5, hjust = 0.5), #hjust center align at 0.5 (0 before)
         plot.caption = element_text(hjust = 0, size = 11)) +
   # scale_x_discrete(labels = scales::label_wrap(15)) +
   geom_hline(yintercept = 1) +
@@ -1152,7 +1155,7 @@ ggsave("bipoc-mod2-mini-plot.png", plot = bipoc_plot, path = here("outputs", "ty
 ggsave("frpl-mod2-mini-plot.png", plot = frpl_plot, path = here("outputs", "type analysis"),
        width = 12, height = 8, units = "in")
 # facet minis
-ggsave_transcend(mini_plots, file = "figure 9", fig_height = 9, fig_width = 12)
+ggsave_transcend(mini_plots, file = "figure 9", fig_height = 9, fig_width = 14)
 ```
 
 
