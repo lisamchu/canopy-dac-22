@@ -1,6 +1,8 @@
 ---
 title: "Demographics in Canopy Schools"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -44,7 +46,7 @@ demo_long = demo %>%
       "% Native Hawaiian and\nPacific Islander students", 
       "% Multiracial students", 
       "% White students",
-      "% English Language Learner", 
+      "% English Language Learners", 
       "% FRPL eligible",
       "% Students with Disabilities"
     ))
@@ -79,7 +81,23 @@ ggplot(demo_long, aes(y = value, x = factor(1))) +
 
 
 ```{r, fig.height = 6, fig.width = 7, echo = TRUE}
-ggplot(demo_long, aes(x = value, y = labels)) +
+#NOTE: modified by Janette 8/15 for Fig 3 final version
+fig3 <- demo_long %>% 
+  mutate(labels = recode_factor(labels,
+                    "% Native American and\nAlaskan Native students" = "American and\nAlaska Native students",
+                    "% Asian students" = "Asian students",
+                    "% Black students" = "Black students",
+                    "% Hispanic students" = "Hispanic or Latina/o/x students",
+                    "% Native Hawaiian and\nPacific Islander students" = "Native Hawaiian and\nPacific Islander students",
+                    "% Multiracial students" = "Multiracial students",
+                    "% White students" = "White students",
+                    "% English Language Learners" = "English language learners",
+                    "% FRPL eligible" = "Students eligible for\nfree/reduced-price lunch",
+                    "% Students with Disabilities" = "Students with Disabilities"),
+         labels = replace_na(labels, "English language learners"))
+
+fig3_plot <-
+ggplot(fig3, aes(x = value, y = labels)) +
   # geom_violin(
   #   fill = transcend_cols["teal"],
   #   scale = "area",
@@ -91,11 +109,12 @@ ggplot(demo_long, aes(x = value, y = labels)) +
     size = 0.8
   ) +
   bar_x_scale_percent +
-  scale_y_discrete(breaks = (levels(demo_long$labels))) +
+  scale_y_discrete(breaks = (levels(fig3$labels))) +
   labs(
-    x = "", y = "", 
-    title = "Student diversity in Canopy schools",
-    subtitle = "Each dot shows a student demographic for a school"
+    x = "Percentage of students in each school", 
+    y = "", 
+    title = "Distribution of Canopy schools\nby student demographic categories",
+    subtitle = "A dot represents one Canopy learning environment in each demographic category"
   ) +
   theme(
     axis.text.y = element_text(size = rel(0.7)),
@@ -103,7 +122,8 @@ ggplot(demo_long, aes(x = value, y = labels)) +
     #strip.text = element_text(size = rel(0.5)),
     plot.subtitle = element_text(size = rel(0.7))
   )
-  
+# save plot
+ggsave_transcend(fig3_plot, file = "figure 3", fig_height = 9, fig_width = 9)  
 ```
 
 ```{r, fig.height=9, fig.width = 12, echo = TRUE}

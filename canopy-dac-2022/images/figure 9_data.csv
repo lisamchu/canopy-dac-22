@@ -1,41 +1,41 @@
 response,term,estimate,std.error,nice_tag,nice_demog,plot_labs,.group
+practices_community_partnerships,ell_percent,-0.8749185473346783,0.2651493947323643,community & business partnerships,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_real_world,ell_percent,-0.7940159918559311,0.24963396644780772,real-world problem solving,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_elimination_tracking,ell_percent,-0.7576395443416373,0.27766413241109333,elimination of tracked classes,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_early_college,ell_percent,-0.6782214170494598,0.3725063872321555,early college high school,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_student_projects,ell_percent,-0.6546466020959336,0.23719689357901394,students develop projects,% English Language Learner,Schools with higher-than-average % English language learners,1
 practices_dual_language,ell_percent,0.6457964845067274,0.2512534657281827,dual language programming,% English Language Learner,Schools with higher-than-average % English language learners,1
 practices_dual_credit,ell_percent,-0.6216860810758071,0.27662635511729755,dual credit,% English Language Learner,Schools with higher-than-average % English language learners,1
 practices_mentoring,ell_percent,-0.499086202623077,0.22237235691956295,1:1 mentoring,% English Language Learner,Schools with higher-than-average % English language learners,1
 practices_portfolios_exhibitions,ell_percent,-0.44586163760312586,0.2139580677483393,portfolios and public exhibitions,% English Language Learner,Schools with higher-than-average % English language learners,1
-practices_students_leaders,ell_percent,-0.3393007588277609,0.223426382231117,students as co-leaders,% English Language Learner,Schools with higher-than-average % English language learners,1
-practices_student_goals,ell_percent,-0.3340300161700219,0.2309080136430031,student-led goal setting,% English Language Learner,Schools with higher-than-average % English language learners,1
-practices_interdisciplinary,ell_percent,-0.3338346108175846,0.21135344026751882,interdisciplinary,% English Language Learner,Schools with higher-than-average % English language learners,1
-practices_hiring_equity,ell_percent,-0.26224133287544515,0.20483439401052309,hiring for equity and inclusion values,% English Language Learner,Schools with higher-than-average % English language learners,1
-practices_student_pace,ell_percent,-0.23095438826542425,0.20905753836162794,students progress at own pace,% English Language Learner,Schools with higher-than-average % English language learners,1
-practices_trauma_informed,ell_percent,-0.2290547495028353,0.21167074219987983,trauma-informed practices,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_expanded_success,ell_percent,-0.43100164527975326,0.21630679071670864,expanded measures of success,% English Language Learner,Schools with higher-than-average % English language learners,1
+practices_trauma_informed,frpl_percent,0.7755707144782586,0.24449346293469507,trauma-informed practices,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
+practices_student_goals,frpl_percent,0.6642476962964996,0.261270267700438,student-led goal setting,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
+practices_physical_well_being,frpl_percent,0.5987797052846798,0.23217707407301824,physical well being services,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
 practices_mental_health,frpl_percent,0.5460660683484888,0.2397883352518172,mental health services,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
+practices_design_marginalized,frpl_percent,0.5459039440533892,0.2786106662782898,design to meet needs of students who have been marginalized,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
+practices_expanded_open_hours,frpl_percent,0.5453899935710126,0.23471044488582668,expanded open hours,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
+practices_grading_mastery,frpl_percent,-0.4345284323375226,0.2288952122140631,grading policies focus on mastery,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
 practices_flex,frpl_percent,0.42902520726890536,0.22347276032934008,flex model,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
 practices_teachers_leaders,frpl_percent,0.41629771935277615,0.24300856638710866,teachers as co-leaders,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
-practices_virtual_pathway,frpl_percent,-0.3870615616470218,0.34034163053036764,all virtual pathway,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
-practices_udl,frpl_percent,-0.2981339558490805,0.2157978032586717,universal design for learning,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
-practices_reallocation_resources,frpl_percent,0.2587131708328328,0.21310250383245904,reallocation of resources for those most in need,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
-practices_families_leaders,frpl_percent,0.24744324236285709,0.2456386508890912,families as co-leaders,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
-practices_student_conferences,frpl_percent,-0.23191882677606887,0.2074700323237161,student-led conferences,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
-practices_real_world,frpl_percent,-0.18480964904738537,0.2685731302541565,real-world problem solving,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
-practices_advancement_mastery,frpl_percent,0.1776616317908031,0.2163704632872762,advancement on mastery,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
+practices_culturally_responsive,frpl_percent,0.4133028024393328,0.2750392831777746,culturally responsive practices,% FRPL eligible,Schools with higher-than-average % students eligible for free/reduced-price lunch,2
+practices_virtual_pathway,non_white_percent,-0.7872827234486285,0.31823926459905477,all virtual pathway,% students of color,Schools with higher-than-average % BIPOC students,3
 practices_culturally_responsive,non_white_percent,0.7414367974478406,0.27567122527859855,culturally responsive practices,% students of color,Schools with higher-than-average % BIPOC students,3
+practices_real_world,non_white_percent,0.5845734506251752,0.27484966071906025,real-world problem solving,% students of color,Schools with higher-than-average % BIPOC students,3
+practices_social_justice,non_white_percent,0.5118841303208836,0.2170112296584972,social justice focus,% students of color,Schools with higher-than-average % BIPOC students,3
+practices_anti_racist,non_white_percent,0.4746425863624114,0.20721906643167967,anti-racist practices,% students of color,Schools with higher-than-average % BIPOC students,3
+practices_hiring_equity,non_white_percent,0.4418501026593489,0.2223777598807245,hiring for equity and inclusion values,% students of color,Schools with higher-than-average % BIPOC students,3
+practices_dual_language,non_white_percent,0.4311607806998564,0.3774083872828129,dual language programming,% students of color,Schools with higher-than-average % BIPOC students,3
+practices_interdisciplinary,non_white_percent,-0.4222168723877708,0.2630624252721717,interdisciplinary,% students of color,Schools with higher-than-average % BIPOC students,3
 practices_assessments_career,non_white_percent,0.4193485983734986,0.22611644366607506,career readiness assessments,% students of color,Schools with higher-than-average % BIPOC students,3
-practices_restorative,non_white_percent,0.3617331821344109,0.2557717080194098,restorative practices,% students of color,Schools with higher-than-average % BIPOC students,3
-practices_competency_framework,non_white_percent,-0.320928904297939,0.2177056493349292,competency framework,% students of color,Schools with higher-than-average % BIPOC students,3
-practices_early_college,non_white_percent,-0.3172191179895859,0.2481254999821578,early college high school,% students of color,Schools with higher-than-average % BIPOC students,3
-practices_assessments_deeper,non_white_percent,0.2591023667730244,0.24952449508193694,deeper learning assessments,% students of color,Schools with higher-than-average % BIPOC students,3
-practices_industry_credentials,non_white_percent,0.2544251616424942,0.24075042312772027,industry credentials,% students of color,Schools with higher-than-average % BIPOC students,3
-practices_interoperability,non_white_percent,0.2534214811700719,0.26875931277063453,interoperability,% students of color,Schools with higher-than-average % BIPOC students,3
-practices_mtss_academics,non_white_percent,-0.2353355607213263,0.20763349513209692,multi-tiered system of support in academics,% students of color,Schools with higher-than-average % BIPOC students,3
-practices_student_projects,non_white_percent,0.21314295818030596,0.24830998493743103,students develop projects,% students of color,Schools with higher-than-average % BIPOC students,3
+practices_a_la_carte,non_white_percent,-0.3881347860736786,0.25772847296123647,à la carte model,% students of color,Schools with higher-than-average % BIPOC students,3
+practices_dual_language,swd_percent,0.7938029586356595,0.2573594998118103,dual language programming,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
 practices_design_marginalized,swd_percent,0.6043825627185505,0.3339265651520285,design to meet needs of students who have been marginalized,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
+practices_accommodations,swd_percent,0.4917819185998433,0.27061939572584076,accommodations for all students,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
+practices_restorative,swd_percent,-0.42647474601136803,0.22829609214890548,restorative practices,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
+practices_industry_credentials,swd_percent,-0.3314014796199558,0.25957960614360015,industry credentials,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
+practices_portfolios_exhibitions,swd_percent,-0.3018995075415336,0.1973866727210238,portfolios and public exhibitions,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
 practices_elimination_tracking,swd_percent,-0.28064449553526977,0.2030676637461514,elimination of tracked classes,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
-practices_a_la_carte,swd_percent,0.23834250186658562,0.21083268805030747,à la carte model,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
-practices_assessments_sel,swd_percent,0.19707274747526232,0.2340676244468672,social-emotional skills assessments,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
-practices_social_justice,swd_percent,0.1810187636941623,0.1888924297332667,social justice focus,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
-practices_student_data,swd_percent,-0.17593725195038135,0.19581513463459682,students access their own data,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
-practices_tutoring,swd_percent,0.1753563619085333,0.19016712273657774,tutoring,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
-practices_grading_mastery,swd_percent,0.17355005329093542,0.20786673964988753,grading policies focus on mastery,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
-practices_service_learning,swd_percent,0.1597638146639765,0.19639687466573738,service learning,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
-practices_station_rotation,swd_percent,0.14392822181022374,0.1912326837793643,station rotation,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
+practices_student_pace,swd_percent,0.27949761655365424,0.21422948633233388,students progress at own pace,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
+practices_assessments_career,swd_percent,0.2789192107341445,0.19022985638628084,career readiness assessments,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4
+practices_early_college,swd_percent,-0.27277015369944113,0.26730904409615247,early college high school,% Students with Disabilities,Schools with higher-than-average % students with disabilities,4

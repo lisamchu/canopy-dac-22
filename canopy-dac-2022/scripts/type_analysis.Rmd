@@ -950,7 +950,8 @@ bayes_tidy2 = lapply(bayes_mods2, tidy) %>%
   bind_rows(.id = "response") %>%
   filter(term != "(Intercept)") %>%
   mutate(
-    nice_tag = label_tags(response),
+    nice_tag = label_tags(response, width = 30),
+    #nice_tag = label_tags(response),
     nice_demog = factor(label_dems(term))
   )
 
@@ -1095,12 +1096,19 @@ frpl_plot <- bayes_facet_dat2 %>%
   geom_hline(yintercept = 1) +
   expand_limits(y = c(1/4, 4))
 
+bayes_facet_dat2 = bayes_tidy2 %>% group_by(nice_demog) %>%
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10)
+
 # all plots in one
 mini_facet = bayes_tidy2 %>% 
   group_by(nice_demog) %>%
-  filter(term == c("swd_percent", "ell_percent", "frpl_percent", "non_white_percent")) %>% 
   arrange(desc(abs(estimate))) %>%
   slice(1:10) %>% 
+  filter(term == "swd_percent" |
+         term == "ell_percent" |
+         term == "frpl_percent" |
+         term == "non_white_percent") %>% 
   mutate(plot_labs = case_when(nice_demog == "% English Language Learner" ~ "Schools with higher-than-average % English language learners",
                                nice_demog == "% FRPL eligible" ~ "Schools with higher-than-average % students eligible for free/reduced-price lunch",
                                nice_demog == "% students of color" ~ "Schools with higher-than-average % BIPOC students",
@@ -1115,20 +1123,20 @@ mini_plots =
                                       paste(rep("#1A4C81", 10)),
                                       paste(rep("#59C3B4", 10)),
                                       paste(rep("#ADE0EE", 10)))) + 
-  labs(y = "Odds multiplier",
+  labs(y = "Likelihood to report",
        x = "", 
        title = "Top 10 practices with the strongest relationship to four student demographic groups") +
        # caption = "Note: An odds multiplier over 1 indicates that schools were more likely than others to report the practice (e.g.,schools\nwith higher-than-average BIPOC student populations were over twice as likely to report culturally-responsive practices).\nAn odds multiplier under 1 indicates that schools were less likely than others to report the practice.") +
   facet_rep_wrap(~ plot_labs, scales = "free_y",
                  repeat.tick.labels = "bottom",
-             labeller = labeller(plot_labs = label_wrap_gen(width = 33))) +
+                 labeller = labeller(plot_labs = label_wrap_gen(width = 33))) +
   scale_y_continuous(
     trans = "log",
     breaks = c(.125, .25, .5, 1, 2, 4, 8),
     labels = c("1/8", "1/4", "1/2 as likely", "", "2x more likely", "4", "8"),
     expand = expansion(0, 0)
   ) +
-  scale_x_reordered() + 
+  scale_x_reordered(breaks = ) + 
   coord_flip() +
   guides(fill = "none") +
   theme(axis.text = element_text(size = 9), strip.text = element_text(size = rel(.8)),

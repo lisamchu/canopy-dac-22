@@ -23,206 +23,206 @@
 <g clip-path='url(#cpMC4wMHwxMDA4LjAwfDAuMDB8NjQ4LjAw)'>
 </g>
 <defs>
-  <clipPath id='cpMjM0LjQ1fDQ3MS4zOHw4MC44MXwzMDkuNjQ='>
-    <rect x='234.45' y='80.81' width='236.93' height='228.82' />
+  <clipPath id='cpMjk1LjYxfDUwMS45Nnw4MC44MXwzMDkuNjQ='>
+    <rect x='295.61' y='80.81' width='206.35' height='228.82' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpMjM0LjQ1fDQ3MS4zOHw4MC44MXwzMDkuNjQ=)'>
-<rect x='234.45' y='80.81' width='236.93' height='228.82' style='stroke-width: 1.36; stroke: none;' />
-<polyline points='278.17,309.64 278.17,80.81 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<polyline points='352.92,309.64 352.92,80.81 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<polyline points='427.66,309.64 427.66,80.81 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<rect x='352.92' y='87.54' width='79.95' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
-<rect x='352.92' y='109.98' width='45.22' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
-<rect x='352.92' y='132.41' width='39.01' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
-<rect x='318.31' y='289.45' width='34.61' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
-<rect x='318.71' y='267.01' width='34.21' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
-<rect x='352.92' y='154.84' width='27.94' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
-<rect x='352.92' y='177.28' width='27.44' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
-<rect x='352.92' y='199.71' width='27.33' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
-<rect x='327.54' y='244.58' width='25.38' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
-<rect x='352.92' y='222.15' width='22.98' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
-<line x1='352.92' y1='309.64' x2='352.92' y2='80.81' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<rect x='234.45' y='80.81' width='236.93' height='228.82' style='stroke-width: 1.36; stroke: #4D4D4F;' />
+<g clip-path='url(#cpMjk1LjYxfDUwMS45Nnw4MC44MXwzMDkuNjQ=)'>
+<rect x='295.61' y='80.81' width='206.35' height='228.82' style='stroke-width: 1.36; stroke: none;' />
+<polyline points='333.69,309.64 333.69,80.81 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
+<polyline points='398.78,309.64 398.78,80.81 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
+<polyline points='463.88,309.64 463.88,80.81 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
+<rect x='324.85' y='289.45' width='73.94' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
+<rect x='398.78' y='87.54' width='69.63' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
+<rect x='398.78' y='109.98' width='54.90' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
+<rect x='398.78' y='132.41' width='48.07' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
+<rect x='398.78' y='154.84' width='44.58' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
+<rect x='398.78' y='177.28' width='41.50' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
+<rect x='398.78' y='199.71' width='40.49' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
+<rect x='359.13' y='267.01' width='39.65' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
+<rect x='398.78' y='222.15' width='39.38' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
+<rect x='362.33' y='244.58' width='36.45' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #EF464B;' />
+<line x1='398.78' y1='309.64' x2='398.78' y2='80.81' style='stroke-width: 1.07; stroke-linecap: butt;' />
+<rect x='295.61' y='80.81' width='206.35' height='228.82' style='stroke-width: 1.36; stroke: #4D4D4F;' />
 </g>
 <g clip-path='url(#cpMC4wMHwxMDA4LjAwfDAuMDB8NjQ4LjAw)'>
 </g>
 <defs>
-  <clipPath id='cpMjM0LjQ1fDQ3MS4zOHwzNzcuNTB8NjA2LjMz'>
-    <rect x='234.45' y='377.50' width='236.93' height='228.82' />
+  <clipPath id='cpMjk1LjYxfDUwMS45NnwzNzcuNTB8NjA2LjMz'>
+    <rect x='295.61' y='377.50' width='206.35' height='228.82' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpMjM0LjQ1fDQ3MS4zOHwzNzcuNTB8NjA2LjMz)'>
-<rect x='234.45' y='377.50' width='236.93' height='228.82' style='stroke-width: 1.36; stroke: none;' />
-<polyline points='278.17,606.33 278.17,377.50 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<polyline points='352.92,606.33 352.92,377.50 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<polyline points='427.66,606.33 427.66,377.50 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<rect x='352.92' y='384.23' width='58.88' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
-<rect x='352.92' y='406.67' width='46.26' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
-<rect x='352.92' y='429.10' width='44.89' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
-<rect x='311.18' y='586.14' width='41.74' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
-<rect x='320.77' y='563.70' width='32.15' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
-<rect x='352.92' y='451.54' width='27.90' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
-<rect x='352.92' y='473.97' width='26.68' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
-<rect x='327.91' y='541.27' width='25.01' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
-<rect x='332.99' y='518.84' width='19.93' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
-<rect x='352.92' y='496.40' width='19.16' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
-<line x1='352.92' y1='606.33' x2='352.92' y2='377.50' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<rect x='234.45' y='377.50' width='236.93' height='228.82' style='stroke-width: 1.36; stroke: #4D4D4F;' />
+<g clip-path='url(#cpMjk1LjYxfDUwMS45NnwzNzcuNTB8NjA2LjMz)'>
+<rect x='295.61' y='377.50' width='206.35' height='228.82' style='stroke-width: 1.36; stroke: none;' />
+<polyline points='333.69,606.33 333.69,377.50 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
+<polyline points='398.78,606.33 398.78,377.50 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
+<polyline points='463.88,606.33 463.88,377.50 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
+<rect x='398.78' y='384.23' width='72.84' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
+<rect x='398.78' y='406.67' width='62.38' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
+<rect x='398.78' y='429.10' width='56.23' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
+<rect x='398.78' y='451.54' width='51.28' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
+<rect x='398.78' y='473.97' width='51.27' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
+<rect x='398.78' y='496.40' width='51.22' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
+<rect x='357.98' y='586.14' width='40.81' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
+<rect x='398.78' y='518.84' width='40.29' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
+<rect x='398.78' y='541.27' width='39.10' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
+<rect x='398.78' y='563.70' width='38.82' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #59C3B4;' />
+<line x1='398.78' y1='606.33' x2='398.78' y2='377.50' style='stroke-width: 1.07; stroke-linecap: butt;' />
+<rect x='295.61' y='377.50' width='206.35' height='228.82' style='stroke-width: 1.36; stroke: #4D4D4F;' />
 </g>
 <g clip-path='url(#cpMC4wMHwxMDA4LjAwfDAuMDB8NjQ4LjAw)'>
 </g>
 <defs>
-  <clipPath id='cpNzQ3LjE2fDk4NC4wOXw4MC44MXwzMDkuNjQ='>
-    <rect x='747.16' y='80.81' width='236.93' height='228.82' />
+  <clipPath id='cpNzc3Ljc0fDk4NC4wOXw4MC44MXwzMDkuNjQ='>
+    <rect x='777.74' y='80.81' width='206.35' height='228.82' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpNzQ3LjE2fDk4NC4wOXw4MC44MXwzMDkuNjQ=)'>
-<rect x='747.16' y='80.81' width='236.93' height='228.82' style='stroke-width: 1.36; stroke: none;' />
-<polyline points='790.88,309.64 790.88,80.81 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<polyline points='865.62,309.64 865.62,80.81 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<polyline points='940.37,309.64 940.37,80.81 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<rect x='865.62' y='87.54' width='69.64' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
-<rect x='798.59' y='289.45' width='67.04' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
-<rect x='811.81' y='267.01' width='53.82' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
-<rect x='817.55' y='244.58' width='48.08' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
-<rect x='829.04' y='222.15' width='36.59' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
-<rect x='829.61' y='199.71' width='36.02' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
-<rect x='829.63' y='177.28' width='36.00' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
-<rect x='837.35' y='154.84' width='28.28' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
-<rect x='840.72' y='132.41' width='24.90' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
-<rect x='840.92' y='109.98' width='24.70' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
-<line x1='865.62' y1='309.64' x2='865.62' y2='80.81' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<rect x='747.16' y='80.81' width='236.93' height='228.82' style='stroke-width: 1.36; stroke: #4D4D4F;' />
+<g clip-path='url(#cpNzc3Ljc0fDk4NC4wOXw4MC44MXwzMDkuNjQ=)'>
+<rect x='777.74' y='80.81' width='206.35' height='228.82' style='stroke-width: 1.36; stroke: none;' />
+<polyline points='815.82,309.64 815.82,80.81 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
+<polyline points='880.91,309.64 880.91,80.81 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
+<polyline points='946.01,309.64 946.01,80.81 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
+<rect x='798.75' y='289.45' width='82.17' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
+<rect x='806.34' y='267.01' width='74.57' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
+<rect x='809.76' y='244.58' width='71.15' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
+<rect x='817.22' y='222.15' width='63.70' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
+<rect x='819.43' y='199.71' width='61.48' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
+<rect x='880.91' y='87.54' width='60.65' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
+<rect x='822.53' y='177.28' width='58.39' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
+<rect x='834.04' y='154.84' width='46.87' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
+<rect x='839.04' y='132.41' width='41.87' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
+<rect x='840.44' y='109.98' width='40.48' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #1A4C81;' />
+<line x1='880.91' y1='309.64' x2='880.91' y2='80.81' style='stroke-width: 1.07; stroke-linecap: butt;' />
+<rect x='777.74' y='80.81' width='206.35' height='228.82' style='stroke-width: 1.36; stroke: #4D4D4F;' />
 </g>
 <g clip-path='url(#cpMC4wMHwxMDA4LjAwfDAuMDB8NjQ4LjAw)'>
 </g>
 <defs>
-  <clipPath id='cpNzQ3LjE2fDk4NC4wOXwzNzcuNTB8NjA2LjMz'>
-    <rect x='747.16' y='377.50' width='236.93' height='228.82' />
+  <clipPath id='cpNzc3Ljc0fDk4NC4wOXwzNzcuNTB8NjA2LjMz'>
+    <rect x='777.74' y='377.50' width='206.35' height='228.82' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpNzQ3LjE2fDk4NC4wOXwzNzcuNTB8NjA2LjMz)'>
-<rect x='747.16' y='377.50' width='236.93' height='228.82' style='stroke-width: 1.36; stroke: none;' />
-<polyline points='790.88,606.33 790.88,377.50 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<polyline points='865.62,606.33 865.62,377.50 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<polyline points='940.37,606.33 940.37,377.50 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<rect x='865.62' y='384.23' width='65.17' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
-<rect x='835.36' y='586.14' width='30.26' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
-<rect x='865.62' y='406.67' width='25.70' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
-<rect x='865.62' y='429.10' width='21.25' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
-<rect x='865.62' y='451.54' width='19.52' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
-<rect x='846.65' y='563.70' width='18.97' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
-<rect x='865.62' y='473.97' width='18.91' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
-<rect x='865.62' y='496.40' width='18.71' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
-<rect x='865.62' y='518.84' width='17.23' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
-<rect x='865.62' y='541.27' width='15.52' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
-<line x1='865.62' y1='606.33' x2='865.62' y2='377.50' style='stroke-width: 1.07; stroke-linecap: butt;' />
-<rect x='747.16' y='377.50' width='236.93' height='228.82' style='stroke-width: 1.36; stroke: #4D4D4F;' />
+<g clip-path='url(#cpNzc3Ljc0fDk4NC4wOXwzNzcuNTB8NjA2LjMz)'>
+<rect x='777.74' y='377.50' width='206.35' height='228.82' style='stroke-width: 1.36; stroke: none;' />
+<polyline points='815.82,606.33 815.82,377.50 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
+<polyline points='880.91,606.33 880.91,377.50 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
+<polyline points='946.01,606.33 946.01,377.50 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
+<rect x='880.91' y='384.23' width='74.55' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
+<rect x='880.91' y='406.67' width='56.76' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
+<rect x='880.91' y='429.10' width='46.19' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
+<rect x='840.86' y='586.14' width='40.05' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
+<rect x='849.79' y='563.70' width='31.12' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
+<rect x='852.56' y='541.27' width='28.35' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
+<rect x='854.56' y='518.84' width='26.36' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
+<rect x='880.91' y='451.54' width='26.25' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
+<rect x='880.91' y='473.97' width='26.19' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
+<rect x='855.30' y='496.40' width='25.62' height='13.46' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #ADE0EE;' />
+<line x1='880.91' y1='606.33' x2='880.91' y2='377.50' style='stroke-width: 1.07; stroke-linecap: butt;' />
+<rect x='777.74' y='377.50' width='206.35' height='228.82' style='stroke-width: 1.36; stroke: #4D4D4F;' />
 </g>
 <g clip-path='url(#cpMC4wMHwxMDA4LjAwfDAuMDB8NjQ4LjAw)'>
 </g>
 <defs>
-  <clipPath id='cpMjM0LjQ1fDQ3MS4zOHwzMzEuNDh8Mzc3LjUw'>
-    <rect x='234.45' y='331.48' width='236.93' height='46.03' />
+  <clipPath id='cpMjk1LjYxfDUwMS45NnwzMzEuNDh8Mzc3LjUw'>
+    <rect x='295.61' y='331.48' width='206.35' height='46.03' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpMjM0LjQ1fDQ3MS4zOHwzMzEuNDh8Mzc3LjUw)'>
-<rect x='234.45' y='331.48' width='236.93' height='46.03' style='stroke-width: 1.36; stroke: none;' />
-<text x='240.03' y='346.39' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='174.00px' lengthAdjust='spacingAndGlyphs'>Schools with higher-than-average</text>
-<text x='240.03' y='358.48' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='115.34px' lengthAdjust='spacingAndGlyphs'>% students eligible for</text>
-<text x='240.03' y='370.58' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='129.23px' lengthAdjust='spacingAndGlyphs'>free/reduced-price lunch</text>
+<g clip-path='url(#cpMjk1LjYxfDUwMS45NnwzMzEuNDh8Mzc3LjUw)'>
+<rect x='295.61' y='331.48' width='206.35' height='46.03' style='stroke-width: 1.36; stroke: none;' />
+<text x='301.19' y='346.39' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='174.00px' lengthAdjust='spacingAndGlyphs'>Schools with higher-than-average</text>
+<text x='301.19' y='358.48' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='115.34px' lengthAdjust='spacingAndGlyphs'>% students eligible for</text>
+<text x='301.19' y='370.58' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='129.23px' lengthAdjust='spacingAndGlyphs'>free/reduced-price lunch</text>
 </g>
 <g clip-path='url(#cpMC4wMHwxMDA4LjAwfDAuMDB8NjQ4LjAw)'>
 </g>
 <defs>
-  <clipPath id='cpNzQ3LjE2fDk4NC4wOXwzMzEuNDh8Mzc3LjUw'>
-    <rect x='747.16' y='331.48' width='236.93' height='46.03' />
+  <clipPath id='cpNzc3Ljc0fDk4NC4wOXwzMzEuNDh8Mzc3LjUw'>
+    <rect x='777.74' y='331.48' width='206.35' height='46.03' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpNzQ3LjE2fDk4NC4wOXwzMzEuNDh8Mzc3LjUw)'>
-<rect x='747.16' y='331.48' width='236.93' height='46.03' style='stroke-width: 1.36; stroke: none;' />
-<text x='752.74' y='352.44' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='174.00px' lengthAdjust='spacingAndGlyphs'>Schools with higher-than-average</text>
-<text x='752.74' y='364.53' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='140.80px' lengthAdjust='spacingAndGlyphs'>% students with disabilities</text>
+<g clip-path='url(#cpNzc3Ljc0fDk4NC4wOXwzMzEuNDh8Mzc3LjUw)'>
+<rect x='777.74' y='331.48' width='206.35' height='46.03' style='stroke-width: 1.36; stroke: none;' />
+<text x='783.32' y='352.44' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='174.00px' lengthAdjust='spacingAndGlyphs'>Schools with higher-than-average</text>
+<text x='783.32' y='364.53' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='140.80px' lengthAdjust='spacingAndGlyphs'>% students with disabilities</text>
 </g>
 <g clip-path='url(#cpMC4wMHwxMDA4LjAwfDAuMDB8NjQ4LjAw)'>
 </g>
 <defs>
-  <clipPath id='cpMjM0LjQ1fDQ3MS4zOHwzNC43OXw4MC44MQ=='>
-    <rect x='234.45' y='34.79' width='236.93' height='46.03' />
+  <clipPath id='cpMjk1LjYxfDUwMS45NnwzNC43OXw4MC44MQ=='>
+    <rect x='295.61' y='34.79' width='206.35' height='46.03' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpMjM0LjQ1fDQ3MS4zOHwzNC43OXw4MC44MQ==)'>
-<rect x='234.45' y='34.79' width='236.93' height='46.03' style='stroke-width: 1.36; stroke: none;' />
-<text x='240.03' y='55.74' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='174.00px' lengthAdjust='spacingAndGlyphs'>Schools with higher-than-average</text>
-<text x='240.03' y='67.84' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='93.41px' lengthAdjust='spacingAndGlyphs'>% BIPOC students</text>
+<g clip-path='url(#cpMjk1LjYxfDUwMS45NnwzNC43OXw4MC44MQ==)'>
+<rect x='295.61' y='34.79' width='206.35' height='46.03' style='stroke-width: 1.36; stroke: none;' />
+<text x='301.19' y='55.74' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='174.00px' lengthAdjust='spacingAndGlyphs'>Schools with higher-than-average</text>
+<text x='301.19' y='67.84' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='93.41px' lengthAdjust='spacingAndGlyphs'>% BIPOC students</text>
 </g>
 <g clip-path='url(#cpMC4wMHwxMDA4LjAwfDAuMDB8NjQ4LjAw)'>
 </g>
 <defs>
-  <clipPath id='cpNzQ3LjE2fDk4NC4wOXwzNC43OXw4MC44MQ=='>
-    <rect x='747.16' y='34.79' width='236.93' height='46.03' />
+  <clipPath id='cpNzc3Ljc0fDk4NC4wOXwzNC43OXw4MC44MQ=='>
+    <rect x='777.74' y='34.79' width='206.35' height='46.03' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpNzQ3LjE2fDk4NC4wOXwzNC43OXw4MC44MQ==)'>
-<rect x='747.16' y='34.79' width='236.93' height='46.03' style='stroke-width: 1.36; stroke: none;' />
-<text x='752.74' y='55.74' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='174.00px' lengthAdjust='spacingAndGlyphs'>Schools with higher-than-average</text>
-<text x='752.74' y='67.84' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='145.36px' lengthAdjust='spacingAndGlyphs'>% English language learners</text>
+<g clip-path='url(#cpNzc3Ljc0fDk4NC4wOXwzNC43OXw4MC44MQ==)'>
+<rect x='777.74' y='34.79' width='206.35' height='46.03' style='stroke-width: 1.36; stroke: none;' />
+<text x='783.32' y='55.74' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='174.00px' lengthAdjust='spacingAndGlyphs'>Schools with higher-than-average</text>
+<text x='783.32' y='67.84' style='font-size: 11.20px;fill: #666666; font-family: "Open Sans";' textLength='145.36px' lengthAdjust='spacingAndGlyphs'>% English language learners</text>
 </g>
 <g clip-path='url(#cpMC4wMHwxMDA4LjAwfDAuMDB8NjQ4LjAw)'>
-<polyline points='234.45,606.33 471.38,606.33 ' style='stroke-width: 1.36; stroke-linecap: butt;' />
-<text x='278.17' y='620.11' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='48.69px' lengthAdjust='spacingAndGlyphs'>1/2 as likely</text>
-<text x='427.66' y='620.11' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='58.13px' lengthAdjust='spacingAndGlyphs'>2x more likely</text>
-<polyline points='747.16,606.33 984.09,606.33 ' style='stroke-width: 1.36; stroke-linecap: butt;' />
-<text x='790.88' y='620.11' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='48.69px' lengthAdjust='spacingAndGlyphs'>1/2 as likely</text>
-<text x='940.37' y='620.11' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='58.13px' lengthAdjust='spacingAndGlyphs'>2x more likely</text>
-<polyline points='234.45,309.64 471.38,309.64 ' style='stroke-width: 1.36; stroke-linecap: butt;' />
-<text x='278.17' y='323.42' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='48.69px' lengthAdjust='spacingAndGlyphs'>1/2 as likely</text>
-<text x='427.66' y='323.42' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='58.13px' lengthAdjust='spacingAndGlyphs'>2x more likely</text>
-<polyline points='747.16,309.64 984.09,309.64 ' style='stroke-width: 1.36; stroke-linecap: butt;' />
-<text x='790.88' y='323.42' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='48.69px' lengthAdjust='spacingAndGlyphs'>1/2 as likely</text>
-<text x='940.37' y='323.42' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='58.13px' lengthAdjust='spacingAndGlyphs'>2x more likely</text>
-<text x='740.88' y='299.39' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='44.69px' lengthAdjust='spacingAndGlyphs'>dual credit</text>
-<text x='740.88' y='276.95' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='58.90px' lengthAdjust='spacingAndGlyphs'>1:1 mentoring</text>
-<text x='740.88' y='254.52' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='135.03px' lengthAdjust='spacingAndGlyphs'>portfolios and public exhibitions</text>
-<text x='740.88' y='232.09' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='94.08px' lengthAdjust='spacingAndGlyphs'>students as co-leaders</text>
-<text x='740.88' y='209.65' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='98.77px' lengthAdjust='spacingAndGlyphs'>student-led goal setting</text>
-<text x='740.88' y='187.22' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='67.18px' lengthAdjust='spacingAndGlyphs'>interdisciplinary</text>
-<text x='740.88' y='164.79' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='154.15px' lengthAdjust='spacingAndGlyphs'>hiring for equity and inclusion values</text>
-<text x='740.88' y='142.35' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='128.79px' lengthAdjust='spacingAndGlyphs'>students progress at own pace</text>
-<text x='740.88' y='119.92' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='112.45px' lengthAdjust='spacingAndGlyphs'>trauma-informed practices</text>
-<text x='740.88' y='97.48' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='118.67px' lengthAdjust='spacingAndGlyphs'>dual language programming</text>
-<text x='740.88' y='596.08' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='123.65px' lengthAdjust='spacingAndGlyphs'>elimination of tracked classes</text>
-<text x='740.88' y='573.65' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='129.62px' lengthAdjust='spacingAndGlyphs'>students access their own data</text>
-<text x='740.88' y='551.21' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='65.00px' lengthAdjust='spacingAndGlyphs'>station rotation</text>
-<text x='740.88' y='528.78' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='65.72px' lengthAdjust='spacingAndGlyphs'>service learning</text>
-<text x='740.88' y='506.34' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='140.12px' lengthAdjust='spacingAndGlyphs'>grading policies focus on mastery</text>
-<text x='740.88' y='483.91' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='33.72px' lengthAdjust='spacingAndGlyphs'>tutoring</text>
-<text x='740.88' y='461.48' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='77.77px' lengthAdjust='spacingAndGlyphs'>social justice focus</text>
-<text x='740.88' y='439.04' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='147.42px' lengthAdjust='spacingAndGlyphs'>social-emotional skills assessments</text>
-<text x='740.88' y='416.61' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='67.15px' lengthAdjust='spacingAndGlyphs'>à la carte model</text>
-<text x='740.88' y='394.18' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='262.53px' lengthAdjust='spacingAndGlyphs'>design to meet needs of students who have been marginalized</text>
-<text x='228.18' y='299.39' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='99.47px' lengthAdjust='spacingAndGlyphs'>competency framework</text>
-<text x='228.18' y='276.95' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='102.25px' lengthAdjust='spacingAndGlyphs'>early college high school</text>
-<text x='228.18' y='254.52' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='184.15px' lengthAdjust='spacingAndGlyphs'>multi-tiered system of support in academics</text>
-<text x='228.18' y='232.09' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='108.35px' lengthAdjust='spacingAndGlyphs'>students develop projects</text>
-<text x='228.18' y='209.65' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='64.45px' lengthAdjust='spacingAndGlyphs'>interoperability</text>
-<text x='228.18' y='187.22' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='83.04px' lengthAdjust='spacingAndGlyphs'>industry credentials</text>
-<text x='228.18' y='164.79' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='122.39px' lengthAdjust='spacingAndGlyphs'>deeper learning assessments</text>
-<text x='228.18' y='142.35' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='85.36px' lengthAdjust='spacingAndGlyphs'>restorative practices</text>
-<text x='228.18' y='119.92' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='125.78px' lengthAdjust='spacingAndGlyphs'>career readiness assessments</text>
-<text x='228.18' y='97.48' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='126.50px' lengthAdjust='spacingAndGlyphs'>culturally responsive practices</text>
-<text x='228.18' y='596.08' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='76.43px' lengthAdjust='spacingAndGlyphs'>all virtual pathway</text>
-<text x='228.18' y='573.65' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='119.02px' lengthAdjust='spacingAndGlyphs'>universal design for learning</text>
-<text x='228.18' y='551.21' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='101.64px' lengthAdjust='spacingAndGlyphs'>student-led conferences</text>
-<text x='228.18' y='528.78' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='112.37px' lengthAdjust='spacingAndGlyphs'>real-world problem solving</text>
-<text x='228.18' y='506.34' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='106.71px' lengthAdjust='spacingAndGlyphs'>advancement on mastery</text>
-<text x='228.18' y='483.91' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='90.00px' lengthAdjust='spacingAndGlyphs'>families as co-leaders</text>
-<text x='228.18' y='461.48' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='201.37px' lengthAdjust='spacingAndGlyphs'>reallocation of resources for those most in need</text>
-<text x='228.18' y='439.04' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='93.59px' lengthAdjust='spacingAndGlyphs'>teachers as co-leaders</text>
-<text x='228.18' y='416.61' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='43.99px' lengthAdjust='spacingAndGlyphs'>flex model</text>
-<text x='228.18' y='394.18' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='94.12px' lengthAdjust='spacingAndGlyphs'>mental health services</text>
-<text x='609.27' y='634.67' text-anchor='middle' style='font-size: 14.00px; font-family: "Open Sans";' textLength='101.13px' lengthAdjust='spacingAndGlyphs'>Odds multiplier</text>
-<text x='234.45' y='26.29' style='font-size: 23.33px; font-family: "Bebas Neue";' textLength='676.56px' lengthAdjust='spacingAndGlyphs'>Top 10 practices with the strongest relationship to four student demographic groups</text>
+<polyline points='295.61,606.33 501.96,606.33 ' style='stroke-width: 1.36; stroke-linecap: butt;' />
+<text x='333.69' y='620.11' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='48.69px' lengthAdjust='spacingAndGlyphs'>1/2 as likely</text>
+<text x='463.88' y='620.11' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='58.13px' lengthAdjust='spacingAndGlyphs'>2x more likely</text>
+<polyline points='777.74,606.33 984.09,606.33 ' style='stroke-width: 1.36; stroke-linecap: butt;' />
+<text x='815.82' y='620.11' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='48.69px' lengthAdjust='spacingAndGlyphs'>1/2 as likely</text>
+<text x='946.01' y='620.11' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='58.13px' lengthAdjust='spacingAndGlyphs'>2x more likely</text>
+<polyline points='295.61,309.64 501.96,309.64 ' style='stroke-width: 1.36; stroke-linecap: butt;' />
+<text x='333.69' y='323.42' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='48.69px' lengthAdjust='spacingAndGlyphs'>1/2 as likely</text>
+<text x='463.88' y='323.42' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='58.13px' lengthAdjust='spacingAndGlyphs'>2x more likely</text>
+<polyline points='777.74,309.64 984.09,309.64 ' style='stroke-width: 1.36; stroke-linecap: butt;' />
+<text x='815.82' y='323.42' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='48.69px' lengthAdjust='spacingAndGlyphs'>1/2 as likely</text>
+<text x='946.01' y='323.42' text-anchor='middle' style='font-size: 9.00px; font-family: "Open Sans";' textLength='58.13px' lengthAdjust='spacingAndGlyphs'>2x more likely</text>
+<text x='771.46' y='299.39' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='151.31px' lengthAdjust='spacingAndGlyphs'>community &amp; business partnerships</text>
+<text x='771.46' y='276.95' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='112.37px' lengthAdjust='spacingAndGlyphs'>real-world problem solving</text>
+<text x='771.46' y='254.52' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='123.65px' lengthAdjust='spacingAndGlyphs'>elimination of tracked classes</text>
+<text x='771.46' y='232.09' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='102.25px' lengthAdjust='spacingAndGlyphs'>early college high school</text>
+<text x='771.46' y='209.65' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='108.35px' lengthAdjust='spacingAndGlyphs'>students develop projects</text>
+<text x='771.46' y='187.22' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='44.69px' lengthAdjust='spacingAndGlyphs'>dual credit</text>
+<text x='771.46' y='164.79' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='58.90px' lengthAdjust='spacingAndGlyphs'>1:1 mentoring</text>
+<text x='771.46' y='142.35' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='135.03px' lengthAdjust='spacingAndGlyphs'>portfolios and public exhibitions</text>
+<text x='771.46' y='119.92' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='130.64px' lengthAdjust='spacingAndGlyphs'>expanded measures of success</text>
+<text x='771.46' y='97.48' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='118.67px' lengthAdjust='spacingAndGlyphs'>dual language programming</text>
+<text x='771.46' y='596.08' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='85.36px' lengthAdjust='spacingAndGlyphs'>restorative practices</text>
+<text x='771.46' y='573.65' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='83.04px' lengthAdjust='spacingAndGlyphs'>industry credentials</text>
+<text x='771.46' y='551.21' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='135.03px' lengthAdjust='spacingAndGlyphs'>portfolios and public exhibitions</text>
+<text x='771.46' y='528.78' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='123.65px' lengthAdjust='spacingAndGlyphs'>elimination of tracked classes</text>
+<text x='771.46' y='506.34' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='102.25px' lengthAdjust='spacingAndGlyphs'>early college high school</text>
+<text x='771.46' y='483.91' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='125.78px' lengthAdjust='spacingAndGlyphs'>career readiness assessments</text>
+<text x='771.46' y='461.48' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='128.79px' lengthAdjust='spacingAndGlyphs'>students progress at own pace</text>
+<text x='771.46' y='439.04' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='137.66px' lengthAdjust='spacingAndGlyphs'>accommodations for all students</text>
+<text x='771.46' y='416.61' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='262.53px' lengthAdjust='spacingAndGlyphs'>design to meet needs of students who have been marginalized</text>
+<text x='771.46' y='394.18' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='118.67px' lengthAdjust='spacingAndGlyphs'>dual language programming</text>
+<text x='289.33' y='299.39' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='76.43px' lengthAdjust='spacingAndGlyphs'>all virtual pathway</text>
+<text x='289.33' y='276.95' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='67.18px' lengthAdjust='spacingAndGlyphs'>interdisciplinary</text>
+<text x='289.33' y='254.52' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='67.15px' lengthAdjust='spacingAndGlyphs'>à la carte model</text>
+<text x='289.33' y='232.09' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='125.78px' lengthAdjust='spacingAndGlyphs'>career readiness assessments</text>
+<text x='289.33' y='209.65' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='118.67px' lengthAdjust='spacingAndGlyphs'>dual language programming</text>
+<text x='289.33' y='187.22' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='154.15px' lengthAdjust='spacingAndGlyphs'>hiring for equity and inclusion values</text>
+<text x='289.33' y='164.79' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='81.67px' lengthAdjust='spacingAndGlyphs'>anti-racist practices</text>
+<text x='289.33' y='142.35' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='77.77px' lengthAdjust='spacingAndGlyphs'>social justice focus</text>
+<text x='289.33' y='119.92' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='112.37px' lengthAdjust='spacingAndGlyphs'>real-world problem solving</text>
+<text x='289.33' y='97.48' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='126.50px' lengthAdjust='spacingAndGlyphs'>culturally responsive practices</text>
+<text x='289.33' y='596.08' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='140.12px' lengthAdjust='spacingAndGlyphs'>grading policies focus on mastery</text>
+<text x='289.33' y='573.65' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='126.50px' lengthAdjust='spacingAndGlyphs'>culturally responsive practices</text>
+<text x='289.33' y='551.21' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='93.59px' lengthAdjust='spacingAndGlyphs'>teachers as co-leaders</text>
+<text x='289.33' y='528.78' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='43.99px' lengthAdjust='spacingAndGlyphs'>flex model</text>
+<text x='289.33' y='506.34' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='92.48px' lengthAdjust='spacingAndGlyphs'>expanded open hours</text>
+<text x='289.33' y='483.91' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='262.53px' lengthAdjust='spacingAndGlyphs'>design to meet needs of students who have been marginalized</text>
+<text x='289.33' y='461.48' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='94.12px' lengthAdjust='spacingAndGlyphs'>mental health services</text>
+<text x='289.33' y='439.04' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='114.00px' lengthAdjust='spacingAndGlyphs'>physical well being services</text>
+<text x='289.33' y='416.61' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='98.77px' lengthAdjust='spacingAndGlyphs'>student-led goal setting</text>
+<text x='289.33' y='394.18' text-anchor='end' style='font-size: 9.00px; font-family: "Open Sans";' textLength='112.45px' lengthAdjust='spacingAndGlyphs'>trauma-informed practices</text>
+<text x='639.85' y='634.67' text-anchor='middle' style='font-size: 14.00px; font-family: "Open Sans";' textLength='129.06px' lengthAdjust='spacingAndGlyphs'>Likelihood to report</text>
+<text x='295.61' y='26.29' style='font-size: 23.33px; font-family: "Bebas Neue";' textLength='676.56px' lengthAdjust='spacingAndGlyphs'>Top 10 practices with the strongest relationship to four student demographic groups</text>
 </g>
 </svg>
