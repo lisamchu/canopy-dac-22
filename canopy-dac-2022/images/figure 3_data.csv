@@ -8,7 +8,8 @@ Alaska Native students"
 Pacific Islander students"
 7,multiple_percent,0.0466,Multiracial students
 7,white_percent,0.7745,White students
-7,ell_percent,0,English language learners
+7,ell_percent,0,"Students classified as
+English language learners"
 7,frpl_percent,0.2411,"Students eligible for
 free/reduced-price lunch"
 7,swd_percent,0.1534,Students with Disabilities
@@ -21,7 +22,8 @@ Alaska Native students"
 Pacific Islander students"
 8,multiple_percent,0,Multiracial students
 8,white_percent,0.8276,White students
-8,ell_percent,0.09,English language learners
+8,ell_percent,0.09,"Students classified as
+English language learners"
 8,frpl_percent,0.1,"Students eligible for
 free/reduced-price lunch"
 8,swd_percent,0.1,Students with Disabilities
@@ -34,7 +36,8 @@ Alaska Native students"
 Pacific Islander students"
 11,multiple_percent,NA,Multiracial students
 11,white_percent,NA,White students
-11,ell_percent,0,English language learners
+11,ell_percent,0,"Students classified as
+English language learners"
 11,frpl_percent,0,"Students eligible for
 free/reduced-price lunch"
 11,swd_percent,0.15,Students with Disabilities
@@ -47,7 +50,8 @@ Alaska Native students"
 Pacific Islander students"
 16,multiple_percent,0.0725,Multiracial students
 16,white_percent,0.7826,White students
-16,ell_percent,0,English language learners
+16,ell_percent,0,"Students classified as
+English language learners"
 16,frpl_percent,0.3061,"Students eligible for
 free/reduced-price lunch"
 16,swd_percent,0.1088,Students with Disabilities
@@ -60,7 +64,8 @@ Alaska Native students"
 Pacific Islander students"
 21,multiple_percent,0.1226,Multiracial students
 21,white_percent,0.8129,White students
-21,ell_percent,0,English language learners
+21,ell_percent,0,"Students classified as
+English language learners"
 21,frpl_percent,0.3793,"Students eligible for
 free/reduced-price lunch"
 21,swd_percent,0,Students with Disabilities
@@ -73,7 +78,8 @@ Alaska Native students"
 Pacific Islander students"
 24,multiple_percent,0.0149,Multiracial students
 24,white_percent,0.0347,White students
-24,ell_percent,0.15,English language learners
+24,ell_percent,0.15,"Students classified as
+English language learners"
 24,frpl_percent,0.71,"Students eligible for
 free/reduced-price lunch"
 24,swd_percent,0.36,Students with Disabilities
@@ -86,7 +92,8 @@ Alaska Native students"
 Pacific Islander students"
 26,multiple_percent,0.0273,Multiracial students
 26,white_percent,0.7788,White students
-26,ell_percent,0.013,English language learners
+26,ell_percent,0.013,"Students classified as
+English language learners"
 26,frpl_percent,0.4903,"Students eligible for
 free/reduced-price lunch"
 26,swd_percent,0.0871,Students with Disabilities
@@ -99,7 +106,8 @@ Alaska Native students"
 Pacific Islander students"
 27,multiple_percent,0.0372,Multiracial students
 27,white_percent,0.5931,White students
-27,ell_percent,0.1318,English language learners
+27,ell_percent,0.1318,"Students classified as
+English language learners"
 27,frpl_percent,0.4513,"Students eligible for
 free/reduced-price lunch"
 27,swd_percent,0.2119,Students with Disabilities
@@ -112,7 +120,8 @@ Alaska Native students"
 Pacific Islander students"
 41,multiple_percent,NA,Multiracial students
 41,white_percent,NA,White students
-41,ell_percent,0,English language learners
+41,ell_percent,0,"Students classified as
+English language learners"
 41,frpl_percent,0.4,"Students eligible for
 free/reduced-price lunch"
 41,swd_percent,0.1099,Students with Disabilities
@@ -125,7 +134,8 @@ Alaska Native students"
 Pacific Islander students"
 42,multiple_percent,0.0128,Multiracial students
 42,white_percent,0.0115,White students
-42,ell_percent,0.3935,English language learners
+42,ell_percent,0.3935,"Students classified as
+English language learners"
 42,frpl_percent,0.4841,"Students eligible for
 free/reduced-price lunch"
 42,swd_percent,0.1,Students with Disabilities
@@ -138,7 +148,8 @@ Alaska Native students"
 Pacific Islander students"
 44,multiple_percent,0.0302,Multiracial students
 44,white_percent,0.2241,White students
-44,ell_percent,0.0347,English language learners
+44,ell_percent,0.0347,"Students classified as
+English language learners"
 44,frpl_percent,0.6351,"Students eligible for
 free/reduced-price lunch"
 44,swd_percent,0.1782,Students with Disabilities
@@ -151,7 +162,8 @@ Alaska Native students"
 Pacific Islander students"
 45,multiple_percent,0.12,Multiracial students
 45,white_percent,0.71,White students
-45,ell_percent,0.03,English language learners
+45,ell_percent,0.03,"Students classified as
+English language learners"
 45,frpl_percent,0.24,"Students eligible for
 free/reduced-price lunch"
 45,swd_percent,0.21,Students with Disabilities
@@ -164,7 +176,8 @@ Alaska Native students"
 Pacific Islander students"
 47,multiple_percent,0,Multiracial students
 47,white_percent,0.0119,White students
-47,ell_percent,0.28,English language learners
+47,ell_percent,0.28,"Students classified as
+English language learners"
 47,frpl_percent,0.8512,"Students eligible for
 free/reduced-price lunch"
 47,swd_percent,0.21,Students with Disabilities
@@ -177,7 +190,8 @@ Alaska Native students"
 Pacific Islander students"
 52,multiple_percent,0,Multiracial students
 52,white_percent,0,White students
-52,ell_percent,0,English language learners
+52,ell_percent,0,"Students classified as
+English language learners"
 52,frpl_percent,0,"Students eligible for
 free/reduced-price lunch"
 52,swd_percent,0,Students with Disabilities
@@ -190,7 +204,8 @@ Alaska Native students"
 Pacific Islander students"
 67,multiple_percent,0.1017,Multiracial students
 67,white_percent,0.1441,White students
-67,ell_percent,0.11,English language learners
+67,ell_percent,0.11,"Students classified as
+English language learners"
 67,frpl_percent,0.7833,"Students eligible for
 free/reduced-price lunch"
 67,swd_percent,0.33,Students with Disabilities
@@ -203,7 +218,8 @@ Alaska Native students"
 Pacific Islander students"
 69,multiple_percent,0.0605,Multiracial students
 69,white_percent,0.847,White students
-69,ell_percent,0.0034,English language learners
+69,ell_percent,0.0034,"Students classified as
+English language learners"
 69,frpl_percent,0.0512,"Students eligible for
 free/reduced-price lunch"
 69,swd_percent,0.0712,Students with Disabilities
@@ -216,7 +232,8 @@ Alaska Native students"
 Pacific Islander students"
 70,multiple_percent,0.0395,Multiracial students
 70,white_percent,0.9209,White students
-70,ell_percent,0.0023,English language learners
+70,ell_percent,0.0023,"Students classified as
+English language learners"
 70,frpl_percent,0.28,"Students eligible for
 free/reduced-price lunch"
 70,swd_percent,0.1429,Students with Disabilities
@@ -229,7 +246,8 @@ Alaska Native students"
 Pacific Islander students"
 71,multiple_percent,0.0128,Multiracial students
 71,white_percent,0.0255,White students
-71,ell_percent,0.09,English language learners
+71,ell_percent,0.09,"Students classified as
+English language learners"
 71,frpl_percent,0.859,"Students eligible for
 free/reduced-price lunch"
 71,swd_percent,0.28,Students with Disabilities
@@ -242,7 +260,8 @@ Alaska Native students"
 Pacific Islander students"
 79,multiple_percent,0.0637,Multiracial students
 79,white_percent,0.3491,White students
-79,ell_percent,0.04,English language learners
+79,ell_percent,0.04,"Students classified as
+English language learners"
 79,frpl_percent,0.4491,"Students eligible for
 free/reduced-price lunch"
 79,swd_percent,0.23,Students with Disabilities
@@ -255,7 +274,8 @@ Alaska Native students"
 Pacific Islander students"
 81,multiple_percent,0.0461,Multiracial students
 81,white_percent,0.6776,White students
-81,ell_percent,0.18,English language learners
+81,ell_percent,0.18,"Students classified as
+English language learners"
 81,frpl_percent,0.4583,"Students eligible for
 free/reduced-price lunch"
 81,swd_percent,0.2,Students with Disabilities
@@ -268,7 +288,8 @@ Alaska Native students"
 Pacific Islander students"
 83,multiple_percent,0.0502,Multiracial students
 83,white_percent,0.6411,White students
-83,ell_percent,0.1074,English language learners
+83,ell_percent,0.1074,"Students classified as
+English language learners"
 83,frpl_percent,0.6401,"Students eligible for
 free/reduced-price lunch"
 83,swd_percent,0,Students with Disabilities
@@ -281,7 +302,8 @@ Alaska Native students"
 Pacific Islander students"
 84,multiple_percent,0.0529,Multiracial students
 84,white_percent,0.7118,White students
-84,ell_percent,0,English language learners
+84,ell_percent,0,"Students classified as
+English language learners"
 84,frpl_percent,0.0598,"Students eligible for
 free/reduced-price lunch"
 84,swd_percent,0.2053,Students with Disabilities
@@ -294,7 +316,8 @@ Alaska Native students"
 Pacific Islander students"
 85,multiple_percent,0.0517,Multiracial students
 85,white_percent,0.4834,White students
-85,ell_percent,0.1407,English language learners
+85,ell_percent,0.1407,"Students classified as
+English language learners"
 85,frpl_percent,0.3266,"Students eligible for
 free/reduced-price lunch"
 85,swd_percent,0.1009,Students with Disabilities
@@ -307,7 +330,8 @@ Alaska Native students"
 Pacific Islander students"
 91,multiple_percent,0.0128,Multiracial students
 91,white_percent,0.0043,White students
-91,ell_percent,0.1759,English language learners
+91,ell_percent,0.1759,"Students classified as
+English language learners"
 91,frpl_percent,0.9657,"Students eligible for
 free/reduced-price lunch"
 91,swd_percent,0.2337,Students with Disabilities
@@ -320,7 +344,8 @@ Alaska Native students"
 Pacific Islander students"
 94,multiple_percent,0.1157,Multiracial students
 94,white_percent,0.412,White students
-94,ell_percent,0.0158,English language learners
+94,ell_percent,0.0158,"Students classified as
+English language learners"
 94,frpl_percent,0.5415,"Students eligible for
 free/reduced-price lunch"
 94,swd_percent,0.2421,Students with Disabilities
@@ -333,7 +358,8 @@ Alaska Native students"
 Pacific Islander students"
 97,multiple_percent,0.0588,Multiracial students
 97,white_percent,0.9265,White students
-97,ell_percent,0,English language learners
+97,ell_percent,0,"Students classified as
+English language learners"
 97,frpl_percent,0.7808,"Students eligible for
 free/reduced-price lunch"
 97,swd_percent,0.2424,Students with Disabilities
@@ -346,7 +372,8 @@ Alaska Native students"
 Pacific Islander students"
 98,multiple_percent,0.0034,Multiracial students
 98,white_percent,0,White students
-98,ell_percent,0.0139,English language learners
+98,ell_percent,0.0139,"Students classified as
+English language learners"
 98,frpl_percent,0.5258,"Students eligible for
 free/reduced-price lunch"
 98,swd_percent,0.108,Students with Disabilities
@@ -359,7 +386,8 @@ Alaska Native students"
 Pacific Islander students"
 100,multiple_percent,0.0772,Multiracial students
 100,white_percent,0.2521,White students
-100,ell_percent,0.23,English language learners
+100,ell_percent,0.23,"Students classified as
+English language learners"
 100,frpl_percent,0.4639,"Students eligible for
 free/reduced-price lunch"
 100,swd_percent,0.21,Students with Disabilities
@@ -372,7 +400,8 @@ Alaska Native students"
 Pacific Islander students"
 101,multiple_percent,0.051,Multiracial students
 101,white_percent,0.2075,White students
-101,ell_percent,0.25,English language learners
+101,ell_percent,0.25,"Students classified as
+English language learners"
 101,frpl_percent,0.6479,"Students eligible for
 free/reduced-price lunch"
 101,swd_percent,0.05,Students with Disabilities
@@ -385,7 +414,8 @@ Alaska Native students"
 Pacific Islander students"
 105,multiple_percent,0,Multiracial students
 105,white_percent,0,White students
-105,ell_percent,0,English language learners
+105,ell_percent,0,"Students classified as
+English language learners"
 105,frpl_percent,0.2974,"Students eligible for
 free/reduced-price lunch"
 105,swd_percent,0.1198,Students with Disabilities
@@ -398,7 +428,8 @@ Alaska Native students"
 Pacific Islander students"
 119,multiple_percent,0,Multiracial students
 119,white_percent,0.015,White students
-119,ell_percent,0,English language learners
+119,ell_percent,0,"Students classified as
+English language learners"
 119,frpl_percent,1,"Students eligible for
 free/reduced-price lunch"
 119,swd_percent,0.0092,Students with Disabilities
@@ -411,7 +442,8 @@ Alaska Native students"
 Pacific Islander students"
 120,multiple_percent,0.0496,Multiracial students
 120,white_percent,0.3264,White students
-120,ell_percent,0.2073,English language learners
+120,ell_percent,0.2073,"Students classified as
+English language learners"
 120,frpl_percent,0.5084,"Students eligible for
 free/reduced-price lunch"
 120,swd_percent,0.0642,Students with Disabilities
@@ -424,7 +456,8 @@ Alaska Native students"
 Pacific Islander students"
 122,multiple_percent,0.0609,Multiracial students
 122,white_percent,0.7208,White students
-122,ell_percent,0,English language learners
+122,ell_percent,0,"Students classified as
+English language learners"
 122,frpl_percent,0.8,"Students eligible for
 free/reduced-price lunch"
 122,swd_percent,0.55,Students with Disabilities
@@ -437,7 +470,8 @@ Alaska Native students"
 Pacific Islander students"
 132,multiple_percent,0.0793,Multiracial students
 132,white_percent,0.45,White students
-132,ell_percent,0.0042,English language learners
+132,ell_percent,0.0042,"Students classified as
+English language learners"
 132,frpl_percent,0.2692,"Students eligible for
 free/reduced-price lunch"
 132,swd_percent,0.0515,Students with Disabilities
@@ -450,7 +484,8 @@ Alaska Native students"
 Pacific Islander students"
 138,multiple_percent,0.0102,Multiracial students
 138,white_percent,0.1017,White students
-138,ell_percent,0.0071,English language learners
+138,ell_percent,0.0071,"Students classified as
+English language learners"
 138,frpl_percent,0.4831,"Students eligible for
 free/reduced-price lunch"
 138,swd_percent,0.1879,Students with Disabilities
@@ -463,7 +498,8 @@ Alaska Native students"
 Pacific Islander students"
 139,multiple_percent,0,Multiracial students
 139,white_percent,0.0606,White students
-139,ell_percent,0.4421,English language learners
+139,ell_percent,0.4421,"Students classified as
+English language learners"
 139,frpl_percent,1,"Students eligible for
 free/reduced-price lunch"
 139,swd_percent,0.1474,Students with Disabilities
@@ -476,7 +512,8 @@ Alaska Native students"
 Pacific Islander students"
 140,multiple_percent,0.0378,Multiracial students
 140,white_percent,0.9245,White students
-140,ell_percent,0.006,English language learners
+140,ell_percent,0.006,"Students classified as
+English language learners"
 140,frpl_percent,0.3019,"Students eligible for
 free/reduced-price lunch"
 140,swd_percent,0.185,Students with Disabilities
@@ -489,7 +526,8 @@ Alaska Native students"
 Pacific Islander students"
 141,multiple_percent,0,Multiracial students
 141,white_percent,0.5,White students
-141,ell_percent,0,English language learners
+141,ell_percent,0,"Students classified as
+English language learners"
 141,frpl_percent,0.7,"Students eligible for
 free/reduced-price lunch"
 141,swd_percent,0,Students with Disabilities
@@ -502,7 +540,8 @@ Alaska Native students"
 Pacific Islander students"
 144,multiple_percent,0.032,Multiracial students
 144,white_percent,0.524,White students
-144,ell_percent,0.305,English language learners
+144,ell_percent,0.305,"Students classified as
+English language learners"
 144,frpl_percent,0.6013,"Students eligible for
 free/reduced-price lunch"
 144,swd_percent,0.139,Students with Disabilities
@@ -515,7 +554,8 @@ Alaska Native students"
 Pacific Islander students"
 146,multiple_percent,0.0772,Multiracial students
 146,white_percent,0.4572,White students
-146,ell_percent,0.03,English language learners
+146,ell_percent,0.03,"Students classified as
+English language learners"
 146,frpl_percent,0.3978,"Students eligible for
 free/reduced-price lunch"
 146,swd_percent,0.22,Students with Disabilities
@@ -528,7 +568,8 @@ Alaska Native students"
 Pacific Islander students"
 150,multiple_percent,0.1,Multiracial students
 150,white_percent,0.75,White students
-150,ell_percent,0.02,English language learners
+150,ell_percent,0.02,"Students classified as
+English language learners"
 150,frpl_percent,0.2,"Students eligible for
 free/reduced-price lunch"
 150,swd_percent,0.05,Students with Disabilities
@@ -541,7 +582,8 @@ Alaska Native students"
 Pacific Islander students"
 157,multiple_percent,0.0435,Multiracial students
 157,white_percent,0.6798,White students
-157,ell_percent,0.0086,English language learners
+157,ell_percent,0.0086,"Students classified as
+English language learners"
 157,frpl_percent,0.1894,"Students eligible for
 free/reduced-price lunch"
 157,swd_percent,0.0942,Students with Disabilities
@@ -554,7 +596,8 @@ Alaska Native students"
 Pacific Islander students"
 165,multiple_percent,0.0778,Multiracial students
 165,white_percent,0.3797,White students
-165,ell_percent,0.1712,English language learners
+165,ell_percent,0.1712,"Students classified as
+English language learners"
 165,frpl_percent,0.5414,"Students eligible for
 free/reduced-price lunch"
 165,swd_percent,0.1712,Students with Disabilities
@@ -567,7 +610,8 @@ Alaska Native students"
 Pacific Islander students"
 172,multiple_percent,0,Multiracial students
 172,white_percent,0.0637,White students
-172,ell_percent,0.025,English language learners
+172,ell_percent,0.025,"Students classified as
+English language learners"
 172,frpl_percent,0.4936,"Students eligible for
 free/reduced-price lunch"
 172,swd_percent,0.075,Students with Disabilities
@@ -580,7 +624,8 @@ Alaska Native students"
 Pacific Islander students"
 180,multiple_percent,0.2703,Multiracial students
 180,white_percent,0.2703,White students
-180,ell_percent,0.1751,English language learners
+180,ell_percent,0.1751,"Students classified as
+English language learners"
 180,frpl_percent,0.2487,"Students eligible for
 free/reduced-price lunch"
 180,swd_percent,0.1243,Students with Disabilities
@@ -593,7 +638,8 @@ Alaska Native students"
 Pacific Islander students"
 189,multiple_percent,0.0019,Multiracial students
 189,white_percent,0.0135,White students
-189,ell_percent,0.0894,English language learners
+189,ell_percent,0.0894,"Students classified as
+English language learners"
 189,frpl_percent,0.8921,"Students eligible for
 free/reduced-price lunch"
 189,swd_percent,0.0912,Students with Disabilities
@@ -606,7 +652,8 @@ Alaska Native students"
 Pacific Islander students"
 197,multiple_percent,0.0213,Multiracial students
 197,white_percent,0.0619,White students
-197,ell_percent,0.4626,English language learners
+197,ell_percent,0.4626,"Students classified as
+English language learners"
 197,frpl_percent,0.8168,"Students eligible for
 free/reduced-price lunch"
 197,swd_percent,0.1032,Students with Disabilities
@@ -619,7 +666,8 @@ Alaska Native students"
 Pacific Islander students"
 204,multiple_percent,0.0159,Multiracial students
 204,white_percent,0.2235,White students
-204,ell_percent,0.0821,English language learners
+204,ell_percent,0.0821,"Students classified as
+English language learners"
 204,frpl_percent,0.7708,"Students eligible for
 free/reduced-price lunch"
 204,swd_percent,0.1013,Students with Disabilities
@@ -632,7 +680,8 @@ Alaska Native students"
 Pacific Islander students"
 209,multiple_percent,0.0714,Multiracial students
 209,white_percent,0.235,White students
-209,ell_percent,0.0379,English language learners
+209,ell_percent,0.0379,"Students classified as
+English language learners"
 209,frpl_percent,0.1536,"Students eligible for
 free/reduced-price lunch"
 209,swd_percent,0.1742,Students with Disabilities
@@ -645,7 +694,8 @@ Alaska Native students"
 Pacific Islander students"
 225,multiple_percent,0.0173,Multiracial students
 225,white_percent,0.2629,White students
-225,ell_percent,0.1356,English language learners
+225,ell_percent,0.1356,"Students classified as
+English language learners"
 225,frpl_percent,0.3834,"Students eligible for
 free/reduced-price lunch"
 225,swd_percent,0.1153,Students with Disabilities
@@ -658,7 +708,8 @@ Alaska Native students"
 Pacific Islander students"
 228,multiple_percent,0.0224,Multiracial students
 228,white_percent,0.1429,White students
-228,ell_percent,0.2861,English language learners
+228,ell_percent,0.2861,"Students classified as
+English language learners"
 228,frpl_percent,0.7097,"Students eligible for
 free/reduced-price lunch"
 228,swd_percent,0.0649,Students with Disabilities
@@ -671,7 +722,8 @@ Alaska Native students"
 Pacific Islander students"
 234,multiple_percent,0.0275,Multiracial students
 234,white_percent,0.9366,White students
-234,ell_percent,0,English language learners
+234,ell_percent,0,"Students classified as
+English language learners"
 234,frpl_percent,0.1007,"Students eligible for
 free/reduced-price lunch"
 234,swd_percent,0.0514,Students with Disabilities
@@ -684,7 +736,8 @@ Alaska Native students"
 Pacific Islander students"
 235,multiple_percent,0.0229,Multiracial students
 235,white_percent,0.3119,White students
-235,ell_percent,0.0061,English language learners
+235,ell_percent,0.0061,"Students classified as
+English language learners"
 235,frpl_percent,0.2231,"Students eligible for
 free/reduced-price lunch"
 235,swd_percent,0.0328,Students with Disabilities
@@ -697,7 +750,8 @@ Alaska Native students"
 Pacific Islander students"
 236,multiple_percent,0.087,Multiracial students
 236,white_percent,0.3652,White students
-236,ell_percent,0.03,English language learners
+236,ell_percent,0.03,"Students classified as
+English language learners"
 236,frpl_percent,0.6421,"Students eligible for
 free/reduced-price lunch"
 236,swd_percent,0.23,Students with Disabilities
@@ -710,7 +764,8 @@ Alaska Native students"
 Pacific Islander students"
 237,multiple_percent,0.0039,Multiracial students
 237,white_percent,0.0734,White students
-237,ell_percent,0.12,English language learners
+237,ell_percent,0.12,"Students classified as
+English language learners"
 237,frpl_percent,1,"Students eligible for
 free/reduced-price lunch"
 237,swd_percent,0.3,Students with Disabilities
@@ -723,7 +778,8 @@ Alaska Native students"
 Pacific Islander students"
 241,multiple_percent,0.0095,Multiracial students
 241,white_percent,0.9093,White students
-241,ell_percent,0.0043,English language learners
+241,ell_percent,0.0043,"Students classified as
+English language learners"
 241,frpl_percent,0.142,"Students eligible for
 free/reduced-price lunch"
 241,swd_percent,0.1484,Students with Disabilities
@@ -736,7 +792,8 @@ Alaska Native students"
 Pacific Islander students"
 246,multiple_percent,0,Multiracial students
 246,white_percent,0.0783,White students
-246,ell_percent,0.96,English language learners
+246,ell_percent,0.96,"Students classified as
+English language learners"
 246,frpl_percent,0.99,"Students eligible for
 free/reduced-price lunch"
 246,swd_percent,0.09,Students with Disabilities
@@ -749,7 +806,8 @@ Alaska Native students"
 Pacific Islander students"
 247,multiple_percent,0.05,Multiracial students
 247,white_percent,0.68,White students
-247,ell_percent,0.02,English language learners
+247,ell_percent,0.02,"Students classified as
+English language learners"
 247,frpl_percent,0.06,"Students eligible for
 free/reduced-price lunch"
 247,swd_percent,0.13,Students with Disabilities
@@ -762,7 +820,8 @@ Alaska Native students"
 Pacific Islander students"
 251,multiple_percent,0.08,Multiracial students
 251,white_percent,0.8,White students
-251,ell_percent,0,English language learners
+251,ell_percent,0,"Students classified as
+English language learners"
 251,frpl_percent,0.45,"Students eligible for
 free/reduced-price lunch"
 251,swd_percent,0.2,Students with Disabilities
@@ -775,7 +834,8 @@ Alaska Native students"
 Pacific Islander students"
 266,multiple_percent,0.05,Multiracial students
 266,white_percent,0.55,White students
-266,ell_percent,0,English language learners
+266,ell_percent,0,"Students classified as
+English language learners"
 266,frpl_percent,0,"Students eligible for
 free/reduced-price lunch"
 266,swd_percent,0,Students with Disabilities
@@ -788,7 +848,8 @@ Alaska Native students"
 Pacific Islander students"
 275,multiple_percent,0.0091,Multiracial students
 275,white_percent,0.9682,White students
-275,ell_percent,0,English language learners
+275,ell_percent,0,"Students classified as
+English language learners"
 275,frpl_percent,0.5566,"Students eligible for
 free/reduced-price lunch"
 275,swd_percent,0.1297,Students with Disabilities
@@ -801,7 +862,8 @@ Alaska Native students"
 Pacific Islander students"
 276,multiple_percent,0.06,Multiracial students
 276,white_percent,0.49,White students
-276,ell_percent,0.13,English language learners
+276,ell_percent,0.13,"Students classified as
+English language learners"
 276,frpl_percent,0.7,"Students eligible for
 free/reduced-price lunch"
 276,swd_percent,0.09,Students with Disabilities
@@ -814,7 +876,8 @@ Alaska Native students"
 Pacific Islander students"
 281,multiple_percent,0,Multiracial students
 281,white_percent,0.0875,White students
-281,ell_percent,0.4,English language learners
+281,ell_percent,0.4,"Students classified as
+English language learners"
 281,frpl_percent,0.9625,"Students eligible for
 free/reduced-price lunch"
 281,swd_percent,0.05,Students with Disabilities
@@ -827,7 +890,8 @@ Alaska Native students"
 Pacific Islander students"
 292,multiple_percent,0.001,Multiracial students
 292,white_percent,0.0276,White students
-292,ell_percent,0.1225,English language learners
+292,ell_percent,0.1225,"Students classified as
+English language learners"
 292,frpl_percent,0.8688,"Students eligible for
 free/reduced-price lunch"
 292,swd_percent,0.1769,Students with Disabilities
@@ -840,7 +904,8 @@ Alaska Native students"
 Pacific Islander students"
 293,multiple_percent,0,Multiracial students
 293,white_percent,0.72,White students
-293,ell_percent,0,English language learners
+293,ell_percent,0,"Students classified as
+English language learners"
 293,frpl_percent,0.5,"Students eligible for
 free/reduced-price lunch"
 293,swd_percent,0.05,Students with Disabilities
@@ -853,7 +918,8 @@ Alaska Native students"
 Pacific Islander students"
 296,multiple_percent,0.0608,Multiracial students
 296,white_percent,0.7162,White students
-296,ell_percent,0.0161,English language learners
+296,ell_percent,0.0161,"Students classified as
+English language learners"
 296,frpl_percent,0.8261,"Students eligible for
 free/reduced-price lunch"
 296,swd_percent,0.3387,Students with Disabilities
@@ -866,7 +932,8 @@ Alaska Native students"
 Pacific Islander students"
 299,multiple_percent,NA,Multiracial students
 299,white_percent,NA,White students
-299,ell_percent,0.0429,English language learners
+299,ell_percent,0.0429,"Students classified as
+English language learners"
 299,frpl_percent,0.3,"Students eligible for
 free/reduced-price lunch"
 299,swd_percent,0.1286,Students with Disabilities
@@ -879,7 +946,8 @@ Alaska Native students"
 Pacific Islander students"
 302,multiple_percent,0.0419,Multiracial students
 302,white_percent,0.7696,White students
-302,ell_percent,0.1018,English language learners
+302,ell_percent,0.1018,"Students classified as
+English language learners"
 302,frpl_percent,0.7096,"Students eligible for
 free/reduced-price lunch"
 302,swd_percent,0.188,Students with Disabilities
@@ -892,7 +960,8 @@ Alaska Native students"
 Pacific Islander students"
 303,multiple_percent,0.0182,Multiracial students
 303,white_percent,0,White students
-303,ell_percent,0.23,English language learners
+303,ell_percent,0.23,"Students classified as
+English language learners"
 303,frpl_percent,0.2909,"Students eligible for
 free/reduced-price lunch"
 303,swd_percent,0.24,Students with Disabilities
@@ -905,7 +974,8 @@ Alaska Native students"
 Pacific Islander students"
 306,multiple_percent,0,Multiracial students
 306,white_percent,0.0096,White students
-306,ell_percent,0,English language learners
+306,ell_percent,0,"Students classified as
+English language learners"
 306,frpl_percent,0.4603,"Students eligible for
 free/reduced-price lunch"
 306,swd_percent,0,Students with Disabilities
@@ -918,7 +988,8 @@ Alaska Native students"
 Pacific Islander students"
 312,multiple_percent,0.0069,Multiracial students
 312,white_percent,0.1862,White students
-312,ell_percent,0.0072,English language learners
+312,ell_percent,0.0072,"Students classified as
+English language learners"
 312,frpl_percent,0.3,"Students eligible for
 free/reduced-price lunch"
 312,swd_percent,0.1304,Students with Disabilities
@@ -931,7 +1002,8 @@ Alaska Native students"
 Pacific Islander students"
 319,multiple_percent,0.0252,Multiracial students
 319,white_percent,0.8929,White students
-319,ell_percent,0.0016,English language learners
+319,ell_percent,0.0016,"Students classified as
+English language learners"
 319,frpl_percent,0.13,"Students eligible for
 free/reduced-price lunch"
 319,swd_percent,0.205,Students with Disabilities
@@ -944,7 +1016,8 @@ Alaska Native students"
 Pacific Islander students"
 323,multiple_percent,0.0673,Multiracial students
 323,white_percent,0.7321,White students
-323,ell_percent,0,English language learners
+323,ell_percent,0,"Students classified as
+English language learners"
 323,frpl_percent,0.42,"Students eligible for
 free/reduced-price lunch"
 323,swd_percent,0.0751,Students with Disabilities
@@ -957,7 +1030,8 @@ Alaska Native students"
 Pacific Islander students"
 333,multiple_percent,0.0128,Multiracial students
 333,white_percent,0.5,White students
-333,ell_percent,0,English language learners
+333,ell_percent,0,"Students classified as
+English language learners"
 333,frpl_percent,0.4359,"Students eligible for
 free/reduced-price lunch"
 333,swd_percent,0.1233,Students with Disabilities
@@ -970,7 +1044,8 @@ Alaska Native students"
 Pacific Islander students"
 345,multiple_percent,0.1008,Multiracial students
 345,white_percent,0.1933,White students
-345,ell_percent,0.67,English language learners
+345,ell_percent,0.67,"Students classified as
+English language learners"
 345,frpl_percent,0.76,"Students eligible for
 free/reduced-price lunch"
 345,swd_percent,0.05,Students with Disabilities
@@ -983,7 +1058,8 @@ Alaska Native students"
 Pacific Islander students"
 348,multiple_percent,0.0667,Multiracial students
 348,white_percent,0.349,White students
-348,ell_percent,0.0279,English language learners
+348,ell_percent,0.0279,"Students classified as
+English language learners"
 348,frpl_percent,1,"Students eligible for
 free/reduced-price lunch"
 348,swd_percent,0.1218,Students with Disabilities
@@ -996,7 +1072,8 @@ Alaska Native students"
 Pacific Islander students"
 353,multiple_percent,0,Multiracial students
 353,white_percent,0.0061,White students
-353,ell_percent,0.0892,English language learners
+353,ell_percent,0.0892,"Students classified as
+English language learners"
 353,frpl_percent,0.8343,"Students eligible for
 free/reduced-price lunch"
 353,swd_percent,0.169,Students with Disabilities
@@ -1009,7 +1086,8 @@ Alaska Native students"
 Pacific Islander students"
 356,multiple_percent,0.0417,Multiracial students
 356,white_percent,0.9074,White students
-356,ell_percent,0.0079,English language learners
+356,ell_percent,0.0079,"Students classified as
+English language learners"
 356,frpl_percent,0.5689,"Students eligible for
 free/reduced-price lunch"
 356,swd_percent,0.2134,Students with Disabilities
@@ -1022,7 +1100,8 @@ Alaska Native students"
 Pacific Islander students"
 358,multiple_percent,0,Multiracial students
 358,white_percent,1,White students
-358,ell_percent,0,English language learners
+358,ell_percent,0,"Students classified as
+English language learners"
 358,frpl_percent,0,"Students eligible for
 free/reduced-price lunch"
 358,swd_percent,0.03,Students with Disabilities
@@ -1035,7 +1114,8 @@ Alaska Native students"
 Pacific Islander students"
 360,multiple_percent,0.04,Multiracial students
 360,white_percent,0.27,White students
-360,ell_percent,0,English language learners
+360,ell_percent,0,"Students classified as
+English language learners"
 360,frpl_percent,0,"Students eligible for
 free/reduced-price lunch"
 360,swd_percent,0,Students with Disabilities
@@ -1048,7 +1128,8 @@ Alaska Native students"
 Pacific Islander students"
 364,multiple_percent,0,Multiracial students
 364,white_percent,0.039,White students
-364,ell_percent,0.0084,English language learners
+364,ell_percent,0.0084,"Students classified as
+English language learners"
 364,frpl_percent,0.4893,"Students eligible for
 free/reduced-price lunch"
 364,swd_percent,0.0422,Students with Disabilities
@@ -1061,7 +1142,8 @@ Alaska Native students"
 Pacific Islander students"
 368,multiple_percent,0.15,Multiracial students
 368,white_percent,0.59,White students
-368,ell_percent,0.01,English language learners
+368,ell_percent,0.01,"Students classified as
+English language learners"
 368,frpl_percent,0.5,"Students eligible for
 free/reduced-price lunch"
 368,swd_percent,0.4,Students with Disabilities
@@ -1074,7 +1156,8 @@ Alaska Native students"
 Pacific Islander students"
 371,multiple_percent,0.084,Multiracial students
 371,white_percent,0.572,White students
-371,ell_percent,0.0069,English language learners
+371,ell_percent,0.0069,"Students classified as
+English language learners"
 371,frpl_percent,0.5571,"Students eligible for
 free/reduced-price lunch"
 371,swd_percent,0.2724,Students with Disabilities
@@ -1087,7 +1170,8 @@ Alaska Native students"
 Pacific Islander students"
 380,multiple_percent,0.0347,Multiracial students
 380,white_percent,0.659,White students
-380,ell_percent,0,English language learners
+380,ell_percent,0,"Students classified as
+English language learners"
 380,frpl_percent,0.9784,"Students eligible for
 free/reduced-price lunch"
 380,swd_percent,0.0227,Students with Disabilities
@@ -1100,7 +1184,8 @@ Alaska Native students"
 Pacific Islander students"
 382,multiple_percent,0.11,Multiracial students
 382,white_percent,0.39,White students
-382,ell_percent,0.27,English language learners
+382,ell_percent,0.27,"Students classified as
+English language learners"
 382,frpl_percent,0.84,"Students eligible for
 free/reduced-price lunch"
 382,swd_percent,0.39,Students with Disabilities
@@ -1113,7 +1198,8 @@ Alaska Native students"
 Pacific Islander students"
 383,multiple_percent,0.056,Multiracial students
 383,white_percent,0.8941,White students
-383,ell_percent,0,English language learners
+383,ell_percent,0,"Students classified as
+English language learners"
 383,frpl_percent,0.2164,"Students eligible for
 free/reduced-price lunch"
 383,swd_percent,0.0772,Students with Disabilities
@@ -1126,7 +1212,8 @@ Alaska Native students"
 Pacific Islander students"
 384,multiple_percent,0.0661,Multiracial students
 384,white_percent,0.9031,White students
-384,ell_percent,0,English language learners
+384,ell_percent,0,"Students classified as
+English language learners"
 384,frpl_percent,0.14,"Students eligible for
 free/reduced-price lunch"
 384,swd_percent,0,Students with Disabilities
@@ -1139,7 +1226,8 @@ Alaska Native students"
 Pacific Islander students"
 394,multiple_percent,0.0401,Multiracial students
 394,white_percent,0.913,White students
-394,ell_percent,0.0066,English language learners
+394,ell_percent,0.0066,"Students classified as
+English language learners"
 394,frpl_percent,0.4552,"Students eligible for
 free/reduced-price lunch"
 394,swd_percent,0.141,Students with Disabilities
@@ -1152,7 +1240,8 @@ Alaska Native students"
 Pacific Islander students"
 411,multiple_percent,0.0965,Multiracial students
 411,white_percent,0.193,White students
-411,ell_percent,0.36,English language learners
+411,ell_percent,0.36,"Students classified as
+English language learners"
 411,frpl_percent,0.6333,"Students eligible for
 free/reduced-price lunch"
 411,swd_percent,0.18,Students with Disabilities
@@ -1165,7 +1254,8 @@ Alaska Native students"
 Pacific Islander students"
 417,multiple_percent,0.0345,Multiracial students
 417,white_percent,0.2596,White students
-417,ell_percent,0.3712,English language learners
+417,ell_percent,0.3712,"Students classified as
+English language learners"
 417,frpl_percent,0.6754,"Students eligible for
 free/reduced-price lunch"
 417,swd_percent,0.1466,Students with Disabilities
@@ -1178,7 +1268,8 @@ Alaska Native students"
 Pacific Islander students"
 418,multiple_percent,0.0051,Multiracial students
 418,white_percent,0.0431,White students
-418,ell_percent,0.663,English language learners
+418,ell_percent,0.663,"Students classified as
+English language learners"
 418,frpl_percent,0.9497,"Students eligible for
 free/reduced-price lunch"
 418,swd_percent,0.2161,Students with Disabilities
@@ -1191,7 +1282,8 @@ Alaska Native students"
 Pacific Islander students"
 421,multiple_percent,0,Multiracial students
 421,white_percent,0.0615,White students
-421,ell_percent,0.15,English language learners
+421,ell_percent,0.15,"Students classified as
+English language learners"
 421,frpl_percent,0.7514,"Students eligible for
 free/reduced-price lunch"
 421,swd_percent,0.165,Students with Disabilities
@@ -1204,7 +1296,8 @@ Alaska Native students"
 Pacific Islander students"
 429,multiple_percent,0.0362,Multiracial students
 429,white_percent,0.0045,White students
-429,ell_percent,0.042,English language learners
+429,ell_percent,0.042,"Students classified as
+English language learners"
 429,frpl_percent,1,"Students eligible for
 free/reduced-price lunch"
 429,swd_percent,0.1849,Students with Disabilities
@@ -1217,7 +1310,8 @@ Alaska Native students"
 Pacific Islander students"
 440,multiple_percent,0.0547,Multiracial students
 440,white_percent,0.545,White students
-440,ell_percent,0.0106,English language learners
+440,ell_percent,0.0106,"Students classified as
+English language learners"
 440,frpl_percent,0.235,"Students eligible for
 free/reduced-price lunch"
 440,swd_percent,0.106,Students with Disabilities
@@ -1230,7 +1324,8 @@ Alaska Native students"
 Pacific Islander students"
 445,multiple_percent,0.0224,Multiracial students
 445,white_percent,0.9327,White students
-445,ell_percent,0.0019,English language learners
+445,ell_percent,0.0019,"Students classified as
+English language learners"
 445,frpl_percent,0.5686,"Students eligible for
 free/reduced-price lunch"
 445,swd_percent,0.1834,Students with Disabilities
@@ -1243,7 +1338,8 @@ Alaska Native students"
 Pacific Islander students"
 452,multiple_percent,0.0458,Multiracial students
 452,white_percent,0.9236,White students
-452,ell_percent,0.0017,English language learners
+452,ell_percent,0.0017,"Students classified as
+English language learners"
 452,frpl_percent,0.5576,"Students eligible for
 free/reduced-price lunch"
 452,swd_percent,0.2024,Students with Disabilities
@@ -1256,7 +1352,8 @@ Alaska Native students"
 Pacific Islander students"
 455,multiple_percent,0.0236,Multiracial students
 455,white_percent,0.8885,White students
-455,ell_percent,0.0187,English language learners
+455,ell_percent,0.0187,"Students classified as
+English language learners"
 455,frpl_percent,0.27,"Students eligible for
 free/reduced-price lunch"
 455,swd_percent,0.1411,Students with Disabilities
@@ -1269,7 +1366,8 @@ Alaska Native students"
 Pacific Islander students"
 458,multiple_percent,0,Multiracial students
 458,white_percent,0.2727,White students
-458,ell_percent,0.2632,English language learners
+458,ell_percent,0.2632,"Students classified as
+English language learners"
 458,frpl_percent,0.5728,"Students eligible for
 free/reduced-price lunch"
 458,swd_percent,0.5474,Students with Disabilities
@@ -1282,7 +1380,8 @@ Alaska Native students"
 Pacific Islander students"
 462,multiple_percent,0.02,Multiracial students
 462,white_percent,0.93,White students
-462,ell_percent,0,English language learners
+462,ell_percent,0,"Students classified as
+English language learners"
 462,frpl_percent,0.22,"Students eligible for
 free/reduced-price lunch"
 462,swd_percent,0.14,Students with Disabilities
@@ -1295,7 +1394,8 @@ Alaska Native students"
 Pacific Islander students"
 465,multiple_percent,0.1033,Multiracial students
 465,white_percent,0.3207,White students
-465,ell_percent,0,English language learners
+465,ell_percent,0,"Students classified as
+English language learners"
 465,frpl_percent,0.8066,"Students eligible for
 free/reduced-price lunch"
 465,swd_percent,0.0457,Students with Disabilities
@@ -1308,7 +1408,8 @@ Alaska Native students"
 Pacific Islander students"
 466,multiple_percent,0.05,Multiracial students
 466,white_percent,0.4,White students
-466,ell_percent,0.02,English language learners
+466,ell_percent,0.02,"Students classified as
+English language learners"
 466,frpl_percent,0.2,"Students eligible for
 free/reduced-price lunch"
 466,swd_percent,0.3,Students with Disabilities
@@ -1321,7 +1422,8 @@ Alaska Native students"
 Pacific Islander students"
 475,multiple_percent,0,Multiracial students
 475,white_percent,0.62,White students
-475,ell_percent,0.07,English language learners
+475,ell_percent,0.07,"Students classified as
+English language learners"
 475,frpl_percent,0.67,"Students eligible for
 free/reduced-price lunch"
 475,swd_percent,0.05,Students with Disabilities
@@ -1334,7 +1436,8 @@ Alaska Native students"
 Pacific Islander students"
 477,multiple_percent,0.1089,Multiracial students
 477,white_percent,0.2339,White students
-477,ell_percent,0.0722,English language learners
+477,ell_percent,0.0722,"Students classified as
+English language learners"
 477,frpl_percent,0.7841,"Students eligible for
 free/reduced-price lunch"
 477,swd_percent,0.1551,Students with Disabilities
@@ -1347,7 +1450,8 @@ Alaska Native students"
 Pacific Islander students"
 480,multiple_percent,0.0116,Multiracial students
 480,white_percent,0.2428,White students
-480,ell_percent,0.442,English language learners
+480,ell_percent,0.442,"Students classified as
+English language learners"
 480,frpl_percent,0.6105,"Students eligible for
 free/reduced-price lunch"
 480,swd_percent,0.0663,Students with Disabilities
@@ -1360,7 +1464,8 @@ Alaska Native students"
 Pacific Islander students"
 483,multiple_percent,0.0696,Multiracial students
 483,white_percent,0.3217,White students
-483,ell_percent,0,English language learners
+483,ell_percent,0,"Students classified as
+English language learners"
 483,frpl_percent,0.6244,"Students eligible for
 free/reduced-price lunch"
 483,swd_percent,0.0476,Students with Disabilities
@@ -1373,7 +1478,8 @@ Alaska Native students"
 Pacific Islander students"
 493,multiple_percent,0,Multiracial students
 493,white_percent,0.38,White students
-493,ell_percent,0,English language learners
+493,ell_percent,0,"Students classified as
+English language learners"
 493,frpl_percent,0.65,"Students eligible for
 free/reduced-price lunch"
 493,swd_percent,0.2,Students with Disabilities
@@ -1386,7 +1492,8 @@ Alaska Native students"
 Pacific Islander students"
 499,multiple_percent,0.0444,Multiracial students
 499,white_percent,0.8601,White students
-499,ell_percent,0.0081,English language learners
+499,ell_percent,0.0081,"Students classified as
+English language learners"
 499,frpl_percent,0.0421,"Students eligible for
 free/reduced-price lunch"
 499,swd_percent,0.0726,Students with Disabilities
@@ -1399,7 +1506,8 @@ Alaska Native students"
 Pacific Islander students"
 501,multiple_percent,0,Multiracial students
 501,white_percent,1,White students
-501,ell_percent,0.05,English language learners
+501,ell_percent,0.05,"Students classified as
+English language learners"
 501,frpl_percent,0.39,"Students eligible for
 free/reduced-price lunch"
 501,swd_percent,0.1,Students with Disabilities
@@ -1412,7 +1520,8 @@ Alaska Native students"
 Pacific Islander students"
 502,multiple_percent,NA,Multiracial students
 502,white_percent,NA,White students
-502,ell_percent,0.0213,English language learners
+502,ell_percent,0.0213,"Students classified as
+English language learners"
 502,frpl_percent,0.5,"Students eligible for
 free/reduced-price lunch"
 502,swd_percent,0.0213,Students with Disabilities
@@ -1425,7 +1534,8 @@ Alaska Native students"
 Pacific Islander students"
 505,multiple_percent,0.1515,Multiracial students
 505,white_percent,0.5,White students
-505,ell_percent,0,English language learners
+505,ell_percent,0,"Students classified as
+English language learners"
 505,frpl_percent,0.9,"Students eligible for
 free/reduced-price lunch"
 505,swd_percent,0.3,Students with Disabilities
@@ -1438,7 +1548,8 @@ Alaska Native students"
 Pacific Islander students"
 506,multiple_percent,0.2,Multiracial students
 506,white_percent,0.4,White students
-506,ell_percent,0.15,English language learners
+506,ell_percent,0.15,"Students classified as
+English language learners"
 506,frpl_percent,0.2,"Students eligible for
 free/reduced-price lunch"
 506,swd_percent,0.1,Students with Disabilities
@@ -1451,7 +1562,8 @@ Alaska Native students"
 Pacific Islander students"
 512,multiple_percent,0.25,Multiracial students
 512,white_percent,0.55,White students
-512,ell_percent,0,English language learners
+512,ell_percent,0,"Students classified as
+English language learners"
 512,frpl_percent,0,"Students eligible for
 free/reduced-price lunch"
 512,swd_percent,0.15,Students with Disabilities
@@ -1464,7 +1576,8 @@ Alaska Native students"
 Pacific Islander students"
 515,multiple_percent,0.0923,Multiracial students
 515,white_percent,0.8205,White students
-515,ell_percent,0.01,English language learners
+515,ell_percent,0.01,"Students classified as
+English language learners"
 515,frpl_percent,0.2121,"Students eligible for
 free/reduced-price lunch"
 515,swd_percent,0.28,Students with Disabilities
@@ -1477,7 +1590,8 @@ Alaska Native students"
 Pacific Islander students"
 518,multiple_percent,0.0429,Multiracial students
 518,white_percent,0.0714,White students
-518,ell_percent,0.0625,English language learners
+518,ell_percent,0.0625,"Students classified as
+English language learners"
 518,frpl_percent,0.5,"Students eligible for
 free/reduced-price lunch"
 518,swd_percent,0.1964,Students with Disabilities
@@ -1490,7 +1604,8 @@ Alaska Native students"
 Pacific Islander students"
 520,multiple_percent,0.0362,Multiracial students
 520,white_percent,0.8322,White students
-520,ell_percent,0.0155,English language learners
+520,ell_percent,0.0155,"Students classified as
+English language learners"
 520,frpl_percent,0.5405,"Students eligible for
 free/reduced-price lunch"
 520,swd_percent,0.1667,Students with Disabilities
@@ -1503,7 +1618,8 @@ Alaska Native students"
 Pacific Islander students"
 521,multiple_percent,0.0175,Multiracial students
 521,white_percent,0.8045,White students
-521,ell_percent,0.0427,English language learners
+521,ell_percent,0.0427,"Students classified as
+English language learners"
 521,frpl_percent,0.2183,"Students eligible for
 free/reduced-price lunch"
 521,swd_percent,0.08,Students with Disabilities
@@ -1516,7 +1632,8 @@ Alaska Native students"
 Pacific Islander students"
 522,multiple_percent,0.04,Multiracial students
 522,white_percent,0.76,White students
-522,ell_percent,0.0263,English language learners
+522,ell_percent,0.0263,"Students classified as
+English language learners"
 522,frpl_percent,0.2593,"Students eligible for
 free/reduced-price lunch"
 522,swd_percent,0.1053,Students with Disabilities
@@ -1529,7 +1646,8 @@ Alaska Native students"
 Pacific Islander students"
 523,multiple_percent,0.0246,Multiracial students
 523,white_percent,0.3525,White students
-523,ell_percent,0.17,English language learners
+523,ell_percent,0.17,"Students classified as
+English language learners"
 523,frpl_percent,0.7038,"Students eligible for
 free/reduced-price lunch"
 523,swd_percent,0.23,Students with Disabilities
@@ -1542,7 +1660,8 @@ Alaska Native students"
 Pacific Islander students"
 526,multiple_percent,0.0197,Multiracial students
 526,white_percent,0.7961,White students
-526,ell_percent,0,English language learners
+526,ell_percent,0,"Students classified as
+English language learners"
 526,frpl_percent,0.02,"Students eligible for
 free/reduced-price lunch"
 526,swd_percent,0.0297,Students with Disabilities
@@ -1555,7 +1674,8 @@ Alaska Native students"
 Pacific Islander students"
 527,multiple_percent,0.0929,Multiracial students
 527,white_percent,0.7279,White students
-527,ell_percent,0,English language learners
+527,ell_percent,0,"Students classified as
+English language learners"
 527,frpl_percent,0.1219,"Students eligible for
 free/reduced-price lunch"
 527,swd_percent,0.0956,Students with Disabilities
@@ -1568,7 +1688,8 @@ Alaska Native students"
 Pacific Islander students"
 528,multiple_percent,0.0106,Multiracial students
 528,white_percent,0.0047,White students
-528,ell_percent,0.0012,English language learners
+528,ell_percent,0.0012,"Students classified as
+English language learners"
 528,frpl_percent,0.96,"Students eligible for
 free/reduced-price lunch"
 528,swd_percent,0.2328,Students with Disabilities
@@ -1581,7 +1702,8 @@ Alaska Native students"
 Pacific Islander students"
 530,multiple_percent,0.0138,Multiracial students
 530,white_percent,0.9448,White students
-530,ell_percent,0,English language learners
+530,ell_percent,0,"Students classified as
+English language learners"
 530,frpl_percent,0.7075,"Students eligible for
 free/reduced-price lunch"
 530,swd_percent,0.2483,Students with Disabilities
@@ -1594,7 +1716,8 @@ Alaska Native students"
 Pacific Islander students"
 532,multiple_percent,0,Multiracial students
 532,white_percent,0.9935,White students
-532,ell_percent,0,English language learners
+532,ell_percent,0,"Students classified as
+English language learners"
 532,frpl_percent,0.529,"Students eligible for
 free/reduced-price lunch"
 532,swd_percent,0.1609,Students with Disabilities
@@ -1607,7 +1730,8 @@ Alaska Native students"
 Pacific Islander students"
 535,multiple_percent,NA,Multiracial students
 535,white_percent,NA,White students
-535,ell_percent,NA,English language learners
+535,ell_percent,NA,"Students classified as
+English language learners"
 535,frpl_percent,NA,"Students eligible for
 free/reduced-price lunch"
 535,swd_percent,NA,Students with Disabilities
@@ -1620,7 +1744,8 @@ Alaska Native students"
 Pacific Islander students"
 537,multiple_percent,0.0163,Multiracial students
 537,white_percent,0.9728,White students
-537,ell_percent,0,English language learners
+537,ell_percent,0,"Students classified as
+English language learners"
 537,frpl_percent,0.1314,"Students eligible for
 free/reduced-price lunch"
 537,swd_percent,0.1314,Students with Disabilities
@@ -1633,7 +1758,8 @@ Alaska Native students"
 Pacific Islander students"
 539,multiple_percent,0.0051,Multiracial students
 539,white_percent,0.9512,White students
-539,ell_percent,0.01,English language learners
+539,ell_percent,0.01,"Students classified as
+English language learners"
 539,frpl_percent,0.467,"Students eligible for
 free/reduced-price lunch"
 539,swd_percent,0.13,Students with Disabilities
@@ -1646,7 +1772,8 @@ Alaska Native students"
 Pacific Islander students"
 540,multiple_percent,0.03,Multiracial students
 540,white_percent,0.85,White students
-540,ell_percent,0,English language learners
+540,ell_percent,0,"Students classified as
+English language learners"
 540,frpl_percent,0.43,"Students eligible for
 free/reduced-price lunch"
 540,swd_percent,0.33,Students with Disabilities
@@ -1659,7 +1786,8 @@ Alaska Native students"
 Pacific Islander students"
 541,multiple_percent,0.0865,Multiracial students
 541,white_percent,0.7596,White students
-541,ell_percent,0.0313,English language learners
+541,ell_percent,0.0313,"Students classified as
+English language learners"
 541,frpl_percent,0.3069,"Students eligible for
 free/reduced-price lunch"
 541,swd_percent,0.3125,Students with Disabilities
@@ -1672,7 +1800,8 @@ Alaska Native students"
 Pacific Islander students"
 542,multiple_percent,0.0335,Multiracial students
 542,white_percent,0.8771,White students
-542,ell_percent,0,English language learners
+542,ell_percent,0,"Students classified as
+English language learners"
 542,frpl_percent,0.1412,"Students eligible for
 free/reduced-price lunch"
 542,swd_percent,0.241,Students with Disabilities
@@ -1685,7 +1814,8 @@ Alaska Native students"
 Pacific Islander students"
 543,multiple_percent,0.0188,Multiracial students
 543,white_percent,0.9229,White students
-543,ell_percent,0,English language learners
+543,ell_percent,0,"Students classified as
+English language learners"
 543,frpl_percent,0.3166,"Students eligible for
 free/reduced-price lunch"
 543,swd_percent,0.1232,Students with Disabilities
@@ -1698,7 +1828,8 @@ Alaska Native students"
 Pacific Islander students"
 545,multiple_percent,0.3077,Multiracial students
 545,white_percent,0.6923,White students
-545,ell_percent,0,English language learners
+545,ell_percent,0,"Students classified as
+English language learners"
 545,frpl_percent,0,"Students eligible for
 free/reduced-price lunch"
 545,swd_percent,0,Students with Disabilities
@@ -1711,7 +1842,8 @@ Alaska Native students"
 Pacific Islander students"
 549,multiple_percent,0.1222,Multiracial students
 549,white_percent,0.5556,White students
-549,ell_percent,0,English language learners
+549,ell_percent,0,"Students classified as
+English language learners"
 549,frpl_percent,0.24,"Students eligible for
 free/reduced-price lunch"
 549,swd_percent,0.17,Students with Disabilities
@@ -1724,7 +1856,8 @@ Alaska Native students"
 Pacific Islander students"
 559,multiple_percent,0.0472,Multiracial students
 559,white_percent,0.066,White students
-559,ell_percent,0.1905,English language learners
+559,ell_percent,0.1905,"Students classified as
+English language learners"
 559,frpl_percent,0.7751,"Students eligible for
 free/reduced-price lunch"
 559,swd_percent,0.1429,Students with Disabilities
@@ -1737,7 +1870,8 @@ Alaska Native students"
 Pacific Islander students"
 565,multiple_percent,0,Multiracial students
 565,white_percent,0.7949,White students
-565,ell_percent,0.0435,English language learners
+565,ell_percent,0.0435,"Students classified as
+English language learners"
 565,frpl_percent,0.8214,"Students eligible for
 free/reduced-price lunch"
 565,swd_percent,0.087,Students with Disabilities
@@ -1750,7 +1884,8 @@ Alaska Native students"
 Pacific Islander students"
 566,multiple_percent,0.2708,Multiracial students
 566,white_percent,0.3854,White students
-566,ell_percent,0.11,English language learners
+566,ell_percent,0.11,"Students classified as
+English language learners"
 566,frpl_percent,0.11,"Students eligible for
 free/reduced-price lunch"
 566,swd_percent,0.22,Students with Disabilities
@@ -1763,7 +1898,8 @@ Alaska Native students"
 Pacific Islander students"
 567,multiple_percent,0.06,Multiracial students
 567,white_percent,0.82,White students
-567,ell_percent,0,English language learners
+567,ell_percent,0,"Students classified as
+English language learners"
 567,frpl_percent,0.74,"Students eligible for
 free/reduced-price lunch"
 567,swd_percent,0.03,Students with Disabilities
@@ -1776,7 +1912,8 @@ Alaska Native students"
 Pacific Islander students"
 569,multiple_percent,0.1,Multiracial students
 569,white_percent,0.75,White students
-569,ell_percent,0.02,English language learners
+569,ell_percent,0.02,"Students classified as
+English language learners"
 569,frpl_percent,0.1,"Students eligible for
 free/reduced-price lunch"
 569,swd_percent,0.5,Students with Disabilities
@@ -1789,7 +1926,8 @@ Alaska Native students"
 Pacific Islander students"
 571,multiple_percent,0.01,Multiracial students
 571,white_percent,0.79,White students
-571,ell_percent,0.15,English language learners
+571,ell_percent,0.15,"Students classified as
+English language learners"
 571,frpl_percent,0.4,"Students eligible for
 free/reduced-price lunch"
 571,swd_percent,1,Students with Disabilities
@@ -1802,7 +1940,8 @@ Alaska Native students"
 Pacific Islander students"
 572,multiple_percent,0,Multiracial students
 572,white_percent,0.01,White students
-572,ell_percent,0,English language learners
+572,ell_percent,0,"Students classified as
+English language learners"
 572,frpl_percent,0.6,"Students eligible for
 free/reduced-price lunch"
 572,swd_percent,0.4,Students with Disabilities
@@ -1815,7 +1954,8 @@ Alaska Native students"
 Pacific Islander students"
 573,multiple_percent,0,Multiracial students
 573,white_percent,0.31,White students
-573,ell_percent,0.05,English language learners
+573,ell_percent,0.05,"Students classified as
+English language learners"
 573,frpl_percent,0.8,"Students eligible for
 free/reduced-price lunch"
 573,swd_percent,0.15,Students with Disabilities
@@ -1828,7 +1968,8 @@ Alaska Native students"
 Pacific Islander students"
 575,multiple_percent,0.0425,Multiracial students
 575,white_percent,0.7397,White students
-575,ell_percent,0.0147,English language learners
+575,ell_percent,0.0147,"Students classified as
+English language learners"
 575,frpl_percent,0.4773,"Students eligible for
 free/reduced-price lunch"
 575,swd_percent,0.0724,Students with Disabilities
@@ -1841,7 +1982,8 @@ Alaska Native students"
 Pacific Islander students"
 579,multiple_percent,0.087,Multiracial students
 579,white_percent,0.587,White students
-579,ell_percent,0,English language learners
+579,ell_percent,0,"Students classified as
+English language learners"
 579,frpl_percent,0.8542,"Students eligible for
 free/reduced-price lunch"
 579,swd_percent,0.9375,Students with Disabilities
@@ -1854,7 +1996,8 @@ Alaska Native students"
 Pacific Islander students"
 581,multiple_percent,0,Multiracial students
 581,white_percent,0,White students
-581,ell_percent,1,English language learners
+581,ell_percent,1,"Students classified as
+English language learners"
 581,frpl_percent,0.9111,"Students eligible for
 free/reduced-price lunch"
 581,swd_percent,0.38,Students with Disabilities
@@ -1867,7 +2010,8 @@ Alaska Native students"
 Pacific Islander students"
 586,multiple_percent,0.0303,Multiracial students
 586,white_percent,0.1212,White students
-586,ell_percent,0.09,English language learners
+586,ell_percent,0.09,"Students classified as
+English language learners"
 586,frpl_percent,0.3429,"Students eligible for
 free/reduced-price lunch"
 586,swd_percent,1,Students with Disabilities
@@ -1880,7 +2024,8 @@ Alaska Native students"
 Pacific Islander students"
 587,multiple_percent,0.0662,Multiracial students
 587,white_percent,0.8665,White students
-587,ell_percent,0,English language learners
+587,ell_percent,0,"Students classified as
+English language learners"
 587,frpl_percent,0.16,"Students eligible for
 free/reduced-price lunch"
 587,swd_percent,0,Students with Disabilities
@@ -1893,7 +2038,8 @@ Alaska Native students"
 Pacific Islander students"
 588,multiple_percent,0.07,Multiracial students
 588,white_percent,0.55,White students
-588,ell_percent,0.02,English language learners
+588,ell_percent,0.02,"Students classified as
+English language learners"
 588,frpl_percent,0.19,"Students eligible for
 free/reduced-price lunch"
 588,swd_percent,0.04,Students with Disabilities
@@ -1906,7 +2052,8 @@ Alaska Native students"
 Pacific Islander students"
 594,multiple_percent,0.0449,Multiracial students
 594,white_percent,0.2272,White students
-594,ell_percent,0.0583,English language learners
+594,ell_percent,0.0583,"Students classified as
+English language learners"
 594,frpl_percent,0.6121,"Students eligible for
 free/reduced-price lunch"
 594,swd_percent,0.1253,Students with Disabilities
@@ -1919,7 +2066,8 @@ Alaska Native students"
 Pacific Islander students"
 601,multiple_percent,0.0301,Multiracial students
 601,white_percent,0.4211,White students
-601,ell_percent,0.1,English language learners
+601,ell_percent,0.1,"Students classified as
+English language learners"
 601,frpl_percent,0.5,"Students eligible for
 free/reduced-price lunch"
 601,swd_percent,0.2,Students with Disabilities
@@ -1932,7 +2080,8 @@ Alaska Native students"
 Pacific Islander students"
 604,multiple_percent,0,Multiracial students
 604,white_percent,0,White students
-604,ell_percent,0,English language learners
+604,ell_percent,0,"Students classified as
+English language learners"
 604,frpl_percent,1,"Students eligible for
 free/reduced-price lunch"
 604,swd_percent,0.3,Students with Disabilities
@@ -1945,7 +2094,8 @@ Alaska Native students"
 Pacific Islander students"
 608,multiple_percent,0.0759,Multiracial students
 608,white_percent,0.7848,White students
-608,ell_percent,0.01,English language learners
+608,ell_percent,0.01,"Students classified as
+English language learners"
 608,frpl_percent,0.1,"Students eligible for
 free/reduced-price lunch"
 608,swd_percent,0,Students with Disabilities
@@ -1958,7 +2108,8 @@ Alaska Native students"
 Pacific Islander students"
 610,multiple_percent,0.17,Multiracial students
 610,white_percent,0.32,White students
-610,ell_percent,0,English language learners
+610,ell_percent,0,"Students classified as
+English language learners"
 610,frpl_percent,0.45,"Students eligible for
 free/reduced-price lunch"
 610,swd_percent,0,Students with Disabilities
@@ -1971,7 +2122,8 @@ Alaska Native students"
 Pacific Islander students"
 612,multiple_percent,0.75,Multiracial students
 612,white_percent,0.03,White students
-612,ell_percent,0.9,English language learners
+612,ell_percent,0.9,"Students classified as
+English language learners"
 612,frpl_percent,0.75,"Students eligible for
 free/reduced-price lunch"
 612,swd_percent,0.3,Students with Disabilities
@@ -1984,7 +2136,8 @@ Alaska Native students"
 Pacific Islander students"
 615,multiple_percent,0,Multiracial students
 615,white_percent,0,White students
-615,ell_percent,0,English language learners
+615,ell_percent,0,"Students classified as
+English language learners"
 615,frpl_percent,1,"Students eligible for
 free/reduced-price lunch"
 615,swd_percent,0.3,Students with Disabilities
@@ -1997,7 +2150,8 @@ Alaska Native students"
 Pacific Islander students"
 620,multiple_percent,0.05,Multiracial students
 620,white_percent,0.24,White students
-620,ell_percent,0.01,English language learners
+620,ell_percent,0.01,"Students classified as
+English language learners"
 620,frpl_percent,0.7,"Students eligible for
 free/reduced-price lunch"
 620,swd_percent,0.1,Students with Disabilities
@@ -2010,7 +2164,8 @@ Alaska Native students"
 Pacific Islander students"
 622,multiple_percent,0.0909,Multiracial students
 622,white_percent,0.9091,White students
-622,ell_percent,1,English language learners
+622,ell_percent,1,"Students classified as
+English language learners"
 622,frpl_percent,1,"Students eligible for
 free/reduced-price lunch"
 622,swd_percent,0.12,Students with Disabilities
@@ -2023,7 +2178,8 @@ Alaska Native students"
 Pacific Islander students"
 623,multiple_percent,0.1,Multiracial students
 623,white_percent,0.1,White students
-623,ell_percent,0.4,English language learners
+623,ell_percent,0.4,"Students classified as
+English language learners"
 623,frpl_percent,0.6,"Students eligible for
 free/reduced-price lunch"
 623,swd_percent,0.1,Students with Disabilities
@@ -2036,7 +2192,8 @@ Alaska Native students"
 Pacific Islander students"
 625,multiple_percent,0.15,Multiracial students
 625,white_percent,0.45,White students
-625,ell_percent,0.05,English language learners
+625,ell_percent,0.05,"Students classified as
+English language learners"
 625,frpl_percent,0.95,"Students eligible for
 free/reduced-price lunch"
 625,swd_percent,0.22,Students with Disabilities
@@ -2049,7 +2206,8 @@ Alaska Native students"
 Pacific Islander students"
 627,multiple_percent,0.011,Multiracial students
 627,white_percent,0.0659,White students
-627,ell_percent,0.1,English language learners
+627,ell_percent,0.1,"Students classified as
+English language learners"
 627,frpl_percent,0.8485,"Students eligible for
 free/reduced-price lunch"
 627,swd_percent,0.21,Students with Disabilities
@@ -2062,7 +2220,8 @@ Alaska Native students"
 Pacific Islander students"
 628,multiple_percent,0.0487,Multiracial students
 628,white_percent,0.013,White students
-628,ell_percent,0.2636,English language learners
+628,ell_percent,0.2636,"Students classified as
+English language learners"
 628,frpl_percent,0.7531,"Students eligible for
 free/reduced-price lunch"
 628,swd_percent,0.2091,Students with Disabilities
@@ -2075,7 +2234,8 @@ Alaska Native students"
 Pacific Islander students"
 630,multiple_percent,0,Multiracial students
 630,white_percent,0,White students
-630,ell_percent,0.99,English language learners
+630,ell_percent,0.99,"Students classified as
+English language learners"
 630,frpl_percent,0.8457,"Students eligible for
 free/reduced-price lunch"
 630,swd_percent,0.01,Students with Disabilities
@@ -2088,7 +2248,8 @@ Alaska Native students"
 Pacific Islander students"
 633,multiple_percent,0.0169,Multiracial students
 633,white_percent,0.0508,White students
-633,ell_percent,0.17,English language learners
+633,ell_percent,0.17,"Students classified as
+English language learners"
 633,frpl_percent,0.8802,"Students eligible for
 free/reduced-price lunch"
 633,swd_percent,0.35,Students with Disabilities
