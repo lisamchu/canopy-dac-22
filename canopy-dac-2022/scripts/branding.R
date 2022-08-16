@@ -130,7 +130,7 @@ clust_labels = c(
 )
 
 label_clust = function(x) {
-  if(x %in% names(clust_details)) {
+  if(all(x %in% names(clust_details))) {
     x = clust_details[x]
   }
   clust_labels[x]

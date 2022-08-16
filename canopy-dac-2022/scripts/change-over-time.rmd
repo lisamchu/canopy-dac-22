@@ -227,6 +227,8 @@ ggsave_transcend(
 )
 
 ```
+
+
 ```{r, fig.width = 9, fig.height = 8}
 coefs_rpt %>% 
     slice_max(estimate, n = 20) %>%
@@ -356,6 +358,197 @@ rpt_hilights
 ```
 
 It would be easy to make versions of this graph with other selected practices.
+
+```{r hilight_variants}
+ggplot(hilight_data, 
+       aes(x = sy, y = pct_practicing, color = tag, group = tag)) +
+  geom_point(size = 3, alpha = 0.8) +
+  geom_line(
+    #stat = "smooth", 
+    #method = "lm", 
+    #se = FALSE, 
+    #formula = y ~ x,
+    size = 1,
+    alpha = 0.7
+  ) +
+  # geom_text_repel(
+  #   data = hilight_labs, 
+  #   aes(
+  #     label = paste0(
+  #       label_tags(tag),
+  #       "\n+", 
+  #       scales::percent_format(accuracy = 0.1)(estimate),
+  #       " points per year"
+  #     )
+  #   ),
+  #   hjust = 0,
+  #   nudge_x = 0.11,
+  #   size = 3.5,
+  #   direction = "y",
+  #   xlim = c(-100, 100)
+  # ) + 
+  #coord_cartesian(clip = "off") + 
+  scale_color_manual(
+    labels = label_tags, 
+    values = c(transcend_cols[1:3] |> unname(), transcend_cols2[c(1, 2, 4)])
+  ) +
+  scale_y_continuous(
+    labels = scales::label_percent(accuracy = 1),
+    limits = c(0, 1), expand = expansion()
+  ) +
+  scale_x_discrete(
+    expand = expansion(add = c(0.05)),
+    drop = FALSE
+  ) +
+  guides(color = "none") +
+  labs(
+    x = "School year",
+    y = "Percentage of schools",
+    color = "",
+    title = "Increasing adoption of selected practices over time",
+    subtitle = "For schools in Canopy 2022 as well as a previous year"
+  ) +
+  theme(
+   # axis.text.y = element_text(size = rel(0.7))
+    panel.grid.major.x = element_blank()#,
+    #plot.margin = margin(.35, 8, .35, .35, "cm")
+  ) -> rpt_hilights_notrend
+rpt_hilights_notrend
+ggsave_transcend(
+  rpt_hilights_notrend,
+  file = "fig-8 no-trend",
+  fig_height = 6.5,
+  fig_width = 9
+)
+
+# trend only
+ggplot(hilight_data, 
+       aes(x = sy, y = pct_practicing, color = tag, group = tag)) +
+  #geom_point(size = 3, alpha = 0.8) +
+  geom_line(
+    stat = "smooth",
+    method = "lm",
+    se = FALSE,
+    formula = y ~ x,
+    size = 1,
+    alpha = 0.7
+  ) +
+  geom_text_repel(
+    data = hilight_labs,
+    aes(
+      label = paste0(
+        label_tags(tag),
+        "\n+",
+        scales::percent_format(accuracy = 0.1)(estimate),
+        " points per year"
+      )
+    ),
+    hjust = 0,
+    nudge_x = 0.11,
+    size = 3.5,
+    direction = "y",
+    xlim = c(-100, 100)
+  ) +
+  coord_cartesian(clip = "off") +
+  scale_color_manual(
+    labels = label_tags, 
+    values = c(transcend_cols[1:3] |> unname(), transcend_cols2[c(1, 2, 4)])
+  ) +
+  scale_y_continuous(
+    labels = scales::label_percent(accuracy = 1),
+    limits = c(0, 1), expand = expansion()
+  ) +
+  scale_x_discrete(
+    expand = expansion(add = c(0.05)),
+    drop = FALSE
+  ) +
+  guides(color = "none") +
+  labs(
+    x = "School year",
+    y = "Percentage of schools",
+    color = "",
+    title = "Increasing adoption of selected practices over time",
+    subtitle = "For schools in Canopy 2022 as well as a previous year"
+  ) +
+  theme(
+   axis.text.y = element_text(size = rel(0.7)),
+    panel.grid.major.x = element_blank(),
+    plot.margin = margin(.35, 8, .35, .35, "cm")
+  ) -> rpt_hilights_trend_only
+rpt_hilights_trend_only
+ggsave_transcend(
+  rpt_hilights_trend_only,
+  file = "fig-8 no trend",
+  fig_height = 6.5,
+  fig_width = 10
+)
+
+# soft trend
+ggplot(hilight_data, 
+       aes(x = sy, y = pct_practicing, color = tag, group = tag)) +
+  geom_line(
+    stat = "smooth",
+    method = "lm",
+    se = FALSE,
+    formula = y ~ x,
+    size = 0.5,
+    alpha = 0.6
+  ) +
+  geom_point(size = 3, alpha = 1, position = position_jitter(height = 0, width = 0.05)) +
+  geom_text_repel(
+    data = hilight_labs,
+    aes(
+      label = paste0(
+        label_tags(tag),
+        "\n+",
+        scales::percent_format(accuracy = 0.1)(estimate),
+        " points per year"
+      )
+    ),
+    hjust = 0,
+    nudge_x = 0.11,
+    segment.size = .5,
+    segmnet.alpha = 0.6,
+    size = 3.5,
+    direction = "y",
+    xlim = c(-100, 100)
+  ) +
+  coord_cartesian(clip = "off") +
+  scale_color_manual(
+    labels = label_tags, 
+    values = c(transcend_cols[1:3] |> unname(), transcend_cols2[c(1, 2, 4)])
+  ) +
+  scale_y_continuous(
+    labels = scales::label_percent(accuracy = 1),
+    limits = c(0, 1), expand = expansion(add = 0.1)
+  ) +
+  scale_x_discrete(
+    expand = expansion(add = c(0.05)),
+    drop = FALSE
+  ) +
+  guides(color = "none") +
+  labs(
+    x = "School year",
+    y = "Percentage of schools",
+    color = "",
+    title = "Increasing adoption of selected practices over time",
+    subtitle = "For schools in Canopy 2022 as well as a previous year"
+  ) +
+  theme(
+   axis.text.y = element_text(size = rel(0.7)),
+    panel.grid.major.x = element_blank(),
+    plot.margin = margin(.35, 8, .35, .35, "cm")
+  ) -> rpt_hilights_soft_trend
+#rpt_hilights_soft_trend
+ggsave_transcend(
+  rpt_hilights_soft_trend,
+  file = "fig-8 soft trend",
+  fig_height = 6.5,
+  fig_width = 10
+)
+
+```
+
 
 ## Tags added and subtracted by schools over time
 
