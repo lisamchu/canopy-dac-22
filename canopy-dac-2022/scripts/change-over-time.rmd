@@ -305,11 +305,11 @@ ggplot(hilight_data,
   geom_text_repel(
     data = hilight_labs, 
     aes(
-      label = paste(
+      label = paste0(
         label_tags(tag),
-        "\nslope =", 
+        "\n+", 
         scales::percent_format(accuracy = 0.1)(estimate),
-        "points per year"
+        " points per year"
       )
     ),
     hjust = 0,
@@ -334,9 +334,9 @@ ggplot(hilight_data,
   guides(color = "none") +
   labs(
     x = "School year",
-    y = "Schools indicating practice",
+    y = "Percentage of schools",
     color = "",
-    title = "Increasing adoption of selected practices",
+    title = "Increasing adoption of selected practices over time",
     subtitle = "For schools in Canopy 2022 as well as a previous year"
   ) +
   theme(
@@ -347,10 +347,12 @@ ggplot(hilight_data,
 
 ggsave_transcend(
   rpt_hilights,
-  file = "over-time-repeat-schools-highlights",
+  file = "fig-8 over-time-repeat-schools-highlights",
   fig_height = 6.5,
   fig_width = 10
 )
+
+rpt_hilights
 ```
 
 It would be easy to make versions of this graph with other selected practices.
