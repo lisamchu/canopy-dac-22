@@ -22,6 +22,7 @@ library(broom.mixed)
 library(tibble)
 library(forcats)
 
+
 update = FALSE # set to TRUE to write out data
 
 source(here("scripts/branding.R"))
@@ -317,7 +318,110 @@ datatable(
   coef_wide,
   caption = "Model coefficients for cluster score") %>%
   formatRound(digits = 2, columns = 2:ncol(coef_wide))
-
 ```
 
+## More on staff/leadership demographics
+
+
+```{r prep_models_leadership}
+formulas_lead = sprintf("%s ~ %s + diversity_staff:diversity_leads", clust_labs, paste(feature_names, collapse = " + "))
+```
+
+```{r fit_models_leadership, message = FALSE, cache = TRUE, include = FALSE}
+mods_lead = list()
+
+for(i in seq_along(formulas_lead)) {
+  message("\n\n\nSTARTING MODEL ", i, " OF ", length(formulas_lead), "\n\n\n")
+  mods_lead[[clust_labs[i]]] = stan_lm(
+    formulas_lead[i],
+    data = model_data,
+    prior = R2(location = 0.3)
+  )
+}
+```
+
+```{r report_models, fig.width = 15, fig.height = 10}
+mods_lead %>% map_df(tidy, .id = "response") %>% 
+    filter(!term %in% c("(Intercept)")) ->
+  coef_df_lead
+    
+coef_labeler = function(x) {
+  x %>% 
+    str_replace(pattern = "diversity_staff:diversity_leads", "Staff:Leadership") %>%
+    str_replace(pattern = "diversity_staff", "Staff: ") %>%
+    str_replace(pattern = "diversity_leads", "Leadership: ") %>%
+    str_replace("_scaled", "") %>%
+    str_replace("grades_", "Level: ") %>%
+    str_replace("schooL_descriptor_", "Type: ") %>%
+    str_replace("locale", "Locale: ") %>%
+    str_replace("n_students", "Number of students") %>%
+    label_dems
+}
+
+
+ggplot(
+  coef_df_lead, 
+  aes(x = estimate, y = fct_reorder(term, estimate, .fun = mean))
+) + 
+  geom_col(fill = transcend_cols[2]) + 
+  geom_errorbarh(aes(xmin = estimate - std.error, xmax = estimate + std.error), height = 0.2) +
+  labs(y = "",
+       x = "Average change in cluster score (in standard deviations)", 
+       title = "Association between school characteristics and practice clusters",
+       subtitle = "Compared to urban schools with white staff/leadership sorted by average effect across all clusters.\nError bars show +/- 1 std deviation, about a 65% confidence interval--there's a lot of variability here!") +
+  guides(fill = FALSE) +
+  facet_grid(~ response) + 
+  scale_y_discrete(labels = coef_labeler) + 
+  theme(#axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank()#,
+        #axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0)
+      ) 
+```
+```{r, eval = FALSE}
+## not evaluating this chunk until errors are fixed
+coef_df_lead %>%
+  filter(grepl("diversity", term)) %>%
+  View
+
+dd = coef_df_lead %>%
+  filter(grepl("diversity", term), response == "blended_learning") %>%
+  fill(response) %>%
+  mutate(
+    diversity_staff = str_extract(term, pattern = "diversity_staff[^%]*%"),
+    diversity_leads = str_extract(term, pattern = "diversity_leads[^%]*%"),
+    diversity_staff = coalesce(diversity_staff, "diversity_staff<25%"),
+    diversity_leads = coalesce(diversity_leads, "diversity_leads<25%"),
+    diversity_staff = paste(str_remove(diversity_staff, "diversity_staff"), "POC"),
+    diversity_leads = paste(str_remove(diversity_leads, "diversity_leads"), "POC")
+  ) %>%
+  select(term, diversity_staff, diversity_leads, everything())
+
+dd = dd %>% 
+  expand(diversity_staff, diversity_leads) %>%
+  left_join(dd)
+
+diverse_sch_n = model_data %>% count(diversity_staff, diversity_leads)
+
+dd %>% left_join(diverse_sch_n) %>%
+  fill(response, .direction = "downup") %>%
+  View
+
+## having trouble getting net effects this way--will try predict instead:
+
+newd = expand.grid(
+    diversity_staff = levels(model_data$diversity_staff),
+    diversity_leads = levels(model_data$diversity_leads)
+  ) %>%
+  full_join(  ## cross join to first row of model data
+              ## just need values for other predictors--don't care what they are
+              ## will calculate effects relative to baseline
+    model_data %>% slice(1) %>% select(-starts_with("diversity")),
+    by = character(0)
+  )
+newd = newd[names(model_data)] # put columns in original order?
+## not sure why this prediction isn't working
+## seems related to this: https://github.com/stan-dev/rstanarm/issues/425
+## but even installing the dev version of rstanarm from github I still get errors
+#posterior_predict(mods_lead[[1]], newdata = newd[6, ])
+```
 
