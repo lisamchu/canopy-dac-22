@@ -91,10 +91,10 @@ fig3 <- demo_long %>%
                     "% Native Hawaiian and\nPacific Islander students" = "Native Hawaiian and\nPacific Islander students",
                     "% Multiracial students" = "Multiracial students",
                     "% White students" = "White students",
-                    "% English Language Learners" = "English language learners",
+                    "% English Language Learners" = "Students classified as\nEnglish language learners",
                     "% FRPL eligible" = "Students eligible for\nfree/reduced-price lunch",
                     "% Students with Disabilities" = "Students with Disabilities"),
-         labels = replace_na(labels, "English language learners"))
+         labels = replace_na(labels, "Students classified as\nEnglish learners"))
 
 fig3_plot <-
 ggplot(fig3, aes(x = value, y = labels)) +

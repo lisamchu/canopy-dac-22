@@ -1,0 +1,600 @@
+---
+title: "Level Analysis"
+author: "Janette Avelar"
+date: "5/23/2022"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: tango
+    code_folding: hide
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r library}
+library(here)
+library(rio)
+library(psych)
+library(tidyverse)
+library(ggplot2)
+library(DT)
+library(scales)
+library(rstanarm)
+library(broom.mixed)
+library(gmodels)
+library(lemon)
+library(stringr)
+noms_messy <- import(here("data", "noms_messy.csv")) %>% 
+  janitor::clean_names()
+source(here("scripts", "branding.R")) #, local = knitr::knit_global()
+load(here("data", "complete_canopy_2022.RData"))
+```
+
+Tasks:  
+* create survey year  
+* randomized IDs for nominator orgs *before* uploading to GK + *after* bringing in race/ethnicity data  
+
+```{r}
+noms_clean <- noms_messy %>% 
+  select(nominator_org, survey_name, nominator_name, disclosure_preference, official_school_name, sl_full_name, canopy_school_id) %>% 
+  # mutate(year1 = str_remove_all(survey_name, "Nominator[:punct:]"),
+  #        year = str_remove_all(year1, "[:punct:][:digit:][:digit:]")) %>% 
+  mutate(year = case_when(survey_name == "Nominator_2019-03" ~ 2019,
+                          survey_name == "Nominator_2020-08" ~ 2020,
+                          survey_name == "Nominator_2020-11" ~ 2020,
+                          survey_name == "Nominator_2021-12" ~ 2021)) %>% 
+  select(-survey_name) %>% 
+  group_by(nominator_org) %>% 
+  mutate(org_id = cur_group_id())
+```
+
+* bring in nom data with racial/ethnic info  
+* match to IDs  
+* remove cols with identifying info  
+
+```{r}
+noms_race <- import(here("data", "nominator_race_messy.csv")) %>% 
+  janitor::clean_names() %>% 
+  select(nominator_org, led_by_poc, primary_nominator_names_from_nominator_contacts, poc, sent_2019_03_survey, nom_ct_2019_03, sent_2020_08_survey, nom_ct_2020_08, sent_2020_11_survey, nom_ct_2020_11, sent_2021_12_survey, nom_ct_2021_12, total_nominations) %>% 
+  filter(!nominator_org == "") %>% 
+rename("poc_leadership" = led_by_poc,
+       "noms" = primary_nominator_names_from_nominator_contacts,
+       "survey_2019" = sent_2019_03_survey,
+       "noms_2019" = nom_ct_2019_03,
+       "survey_2020_1" = sent_2020_08_survey,
+       "noms_2020_1" = nom_ct_2020_08,
+       "survey_2020_2" = sent_2020_11_survey,
+       "noms_2020_2" = nom_ct_2020_11,
+       "survey_2021" = sent_2021_12_survey,
+       "noms_2021" = nom_ct_2021_12) %>% 
+  mutate(nominator = str_split_fixed(noms, ",[:blank:]", n = 4),
+         poc_individual = str_split_fixed(poc, ",[:blank:]", n = 4),
+         nominator_1 = nominator[,1],
+         nominator_2 = nominator[,2],
+         nominator_3 = nominator[,3],
+         nominator_4 = nominator[,4],
+         poc_individual_1 = poc_individual[,1],
+         poc_individual_2 = poc_individual[,2],
+         poc_individual_3 = poc_individual[,3],
+         poc_individual_4 = poc_individual[,4]) %>% 
+  select(-nominator, -noms, -poc, -poc_individual) %>% 
+  mutate(survey_2020 = ifelse(survey_2020_1 == "Yes" | survey_2020_2 == "Yes", "Yes", "No"),
+         noms_2020 = noms_2020_1 + noms_2020_2) %>% 
+  select(-c(survey_2020_1, survey_2020_2, noms_2020_1, noms_2020_2)) %>% 
+  mutate_at(vars(starts_with("survey_")), str_replace, "^$", "No")
+
+# collapse cols and pivot after to create 2 cols
+noms_race_pivot <- noms_race %>% 
+  unite("nominator_individual_1", nominator_1, poc_individual_1, sep = "_", remove = TRUE) %>% 
+  unite("nominator_individual_2", nominator_2, poc_individual_2, sep = "_", remove = TRUE) %>% 
+  unite("nominator_individual_3", nominator_3, poc_individual_3, sep = "_", remove = TRUE) %>% 
+  unite("nominator_individual_4", nominator_4, poc_individual_4, sep = "_", remove = TRUE) %>% 
+  pivot_longer(cols = c(nominator_individual_1, nominator_individual_2, nominator_individual_3, nominator_individual_4),
+               names_to = "org_nominator",
+               names_prefix = "nominator_individual_",
+               values_to = c("individual_race")) %>% 
+  filter(!individual_race == "_") %>% 
+  separate(individual_race, into = c("nominator", "bipoc_nominator"), sep = "_")
+#46 missing values
+noms_race_pivot[10, 12] <- "Yes (Unclear)"
+noms_race_pivot[67, 12] <- "No"
+noms_race_pivot[76, 12] <- "No"
+noms_race_pivot[80, 12] <- "No"
+noms_race_pivot[83, 12] <- "No"
+noms_race_pivot[88, 12] <- "No"
+noms_race_pivot[89, 12] <- "No"
+noms_race_pivot[99, 12] <- "No"
+noms_race_pivot[102, 12] <- "No"
+noms_race_pivot[110, 12] <- "No"
+noms_race_pivot[123, 12] <- "No"
+noms_race_pivot[140, 12] <- "No"
+noms_race_pivot[141, 12] <- "No"
+noms_race_pivot[147, 12] <- "No"
+noms_race_pivot[151, 12] <- "No"
+noms_race_pivot[160, 12] <- "No"
+noms_race_pivot[186, 12] <- "No"
+noms_race_pivot[192, 12] <- "No"
+noms_race_pivot[193, 12] <- "No"
+noms_race_pivot[199, 12] <- "No"
+noms_race_pivot[211, 12] <- "No"
+noms_race_pivot[214, 12] <- "No"
+noms_race_pivot[221, 12] <- "No"
+noms_race_pivot[224, 12] <- "No"
+noms_race_pivot[232, 12] <- "No"
+noms_race_pivot[236, 12] <- "No"
+noms_race_pivot[240, 12] <- "No"
+noms_race_pivot[242, 12] <- "No"
+noms_race_pivot[252, 12] <- "No"
+noms_race_pivot[272, 12] <- "No"
+noms_race_pivot[291, 12] <- "No"
+noms_race_pivot[303, 12] <- "No"
+noms_race_pivot[304, 12] <- "No"
+noms_race_pivot[310, 12] <- "No"
+noms_race_pivot[316, 12] <- "No"
+noms_race_pivot[342, 12] <- "No"
+noms_race_pivot[343, 12] <- "No"
+noms_race_pivot[379, 12] <- "Yes"
+noms_race_pivot[386, 12] <- "Yes"
+noms_race_pivot[391, 12] <- "Yes"
+noms_race_pivot[417, 12] <- "Yes"
+noms_race_pivot[440, 12] <- "No"
+noms_race_pivot[452, 12] <- "No"
+noms_race_pivot[461, 12] <- "No"
+noms_race_pivot[462, 12] <- "No"
+noms_race_pivot[465, 12] <- "No"
+```
+
+* create separate dfs for year  
+* participation rates for each year disaggregated by race (after joining with nominated school dem)  
+* run models determining likelihood for each year by race (factor dems & year or independent models per year?)
+
+# Visualizations
+
+This first barchart depicts the racial distribution of targeted organization's leadership team for all participating organizations from 2019-2021. The term *targeted* is indicating that we sent the organization a nomination survey.
+
+```{r nominating organization bipoc-led, fig.dim = c(9, 9)}
+bipoc_led_org <- noms_race %>% 
+  mutate(poc_leadership = str_replace_all(poc_leadership, "Yes [:punct:]Unclear[:punct:]", "Unknown"),
+         poc_leadership = str_replace_all(poc_leadership, "No [:punct:]Unclear[:punct:]", "Unknown"),
+         poc_leadership = str_replace_all(poc_leadership, "Not sure", "Unknown"),
+         poc_leadership = str_replace_all(poc_leadership, "^$", "Unknown")) %>% 
+ggplot(., aes(poc_leadership)) +
+  geom_bar(aes(fill = poc_leadership)) +
+  scale_fill_manual(values=c("#1A4C81", "#EF464B", "#59C3B4")) +
+  theme_transcend_sparse +
+  theme(legend.position = "none") +
+  labs(x = "",
+       y = "Nominating Organizations",
+       title = "Are Canopy's nominating organizations BIPOC-led?",
+       subtitle = "Numbers represented show all organizations that received the survey from 2019-2021.")
+# want to add labels with percents
+# no = 318/437 = 73%
+# yes = 102/437 = 23%
+# unsure = 17/437 = 4%
+
+#add percentage labels after exporting into Google
+```
+
+The second barchart depicts the racial distribution of nominating organizations's leadership team, this time divided by year of participation.
+
+Very interesting to note here that although the number of nominating organizations participating in the survey has grown, the demographics have remained steady across years. Our percentage of organizations not led by BIPOC leaders is at a steady 73% each year, with a 1% increase in BIPOC-led organizations per year and a 1% decrease in the organizations with unknown leadership demographics.
+
+```{r nominating organization bipoc-led by year, fig.dim = c(9, 9)}
+bipoc_led_org_year <- bipoc_led_org$data %>% 
+  pivot_longer(cols = c(survey_2019, survey_2020, survey_2021),
+               names_to = c("survey", "year"),
+               names_sep = "_",
+               values_to = "survey_participation") %>% 
+  filter(!survey_participation == "No") %>% 
+  select(-c(survey, survey_participation)) %>% 
+  ggplot(., aes(poc_leadership)) +
+  geom_bar(aes(fill = poc_leadership)) +
+  scale_fill_manual(values=c("#1A4C81", "#EF464B", "#59C3B4")) +
+  facet_wrap(~year) +
+  theme_transcend_sparse +
+  theme(legend.position = "none") +
+  labs(x = "",
+       y = "Nominating Organizations",
+       title = "Are Canopy's targeted organizations BIPOC-led across time?")
+
+#labels with percents - 2019
+# no = 215/294 = 73%
+# yes = 65/294 = 22%
+# unknown = 14/294 = 5%
+
+# labels with percents - 2020
+# no = 267/365 = 73%
+# yes = 85/365 = 23%
+# unknown = 13/365 = 4%
+
+#labels with percents = 2021
+# no = 292/401 = 73%
+# yes = 96/401 = 24%
+# unknown = 13/401 = 3%
+
+ggsave("bipoc-orgs-yearly.png", plot = bipoc_led_org_year, path = here("outputs", "equity analysis"),
+       width = 8, height = 5, units = "in")
+```
+
+Below I'll include the same breakdown for the individual nominators, but it's important to keep in mind that this data may not be necessarily relevant for a variety of factors. For example, and perhaps most importantly, we don't know how decisions about individual nominators were made within these organizations. Is someone asked to fill out on behalf of the organization? Are the nominations reflective of choices made by the nominator? Has a group convened to select schools to nominate? It may be too "noisy" to make meaning of, but we could consider if this is something to dig into for future surveys.
+
+```{r individual nominators racial diversity, fig.dim = c(9, 9)}
+bipoc_ind <- noms_race_pivot %>% 
+  mutate(bipoc_nominator = str_replace_all(bipoc_nominator, "Yes [:punct:]Unclear[:punct:]", "Unknown"),
+         bipoc_nominator = str_replace_all(bipoc_nominator, "No [:punct:]Unclear[:punct:]", "Unknown"),
+         bipoc_nominator = str_replace_all(bipoc_nominator, "Not sure", "Unknown"),
+         bipoc_nominator = str_replace_all(bipoc_nominator, "^$", "Unknown")) %>% 
+ggplot(., aes(bipoc_nominator)) +
+  geom_bar(aes(fill = bipoc_nominator)) +
+  scale_fill_manual(values=c("#1A4C81", "#EF464B", "#59C3B4")) +
+  theme_transcend_sparse +
+  theme(legend.position = "none") +
+  labs(x = "",
+       y = "Nominating Individuals",
+       title = "Are the individuals within Canopy's targeted nominating organizations racially diverse?",
+       subtitle = "Numbers represented show all individual nominators from 2019-2021 who received the nomination survey.")
+# Labels
+# no = 349/476 = 73%
+# yes = 110/476 = 23%
+# unknown = 17/476 = 4%
+```
+
+Racial diversity for individual nominators across the years:
+
+```{r individual nominators racial diversity by year, fig.dim = c(9, 9)}
+bipoc_ind_year <- bipoc_ind$data %>% 
+  pivot_longer(cols = c(survey_2019, survey_2020, survey_2021),
+               names_to = c("survey", "year"),
+               names_sep = "_",
+               values_to = "survey_participation") %>% 
+  filter(!survey_participation == "No") %>% 
+  select(-c(survey, survey_participation)) %>% 
+  ggplot(., aes(bipoc_nominator)) +
+  geom_bar(aes(fill = bipoc_nominator)) +
+  scale_fill_manual(values=c("#1A4C81", "#EF464B", "#59C3B4")) +
+  facet_wrap(~year) +
+  theme_transcend_sparse +
+  theme(legend.position = "none") +
+  labs(x = "",
+       y = "Nominating Individuals",
+       title = "How has racial diversity changed for individual nominators within targeted organizations?")
+
+#labels with percents - 2019
+# no = 240/328 = 73%
+# yes = 73/328 = 22%
+# unknown = 15/328 = 5%
+
+# labels with percents - 2020
+# no = 318/430 = 74%
+# yes = 96/430 = 22%
+# unknown = 16/430 = 4%
+
+#labels with percents = 2021
+# no = 347/473 = 73%
+# yes = 109/473 = 23%
+# unknown = 17/473 = 4%
+sum(bipoc_ind_year$data$bipoc_nominator == "Unknown" & bipoc_ind_year$data$year == "2021")
+```
+
+Participation rates
+
+For organizations split up by whether or not they are BIPOC-led:
+
+```{r participation rates by bipoc-led, fig.dim = c(9, 9)}
+org_par_rates <- bipoc_led_org_year$data %>% 
+  mutate(noms = case_when(year == 2019 & noms_2019 >= 0 ~ .$noms_2019,
+                          year == 2020 & noms_2020 >= 0 ~ .$noms_2020,
+                          year == 2021 & noms_2021 >= 0 ~ .$noms_2021),
+         participation = case_when(year == 2019 & noms_2019 > 0 ~ 1,
+                                   year == 2019 & noms_2019 == 0 ~ 0,
+                                   year == 2020 & noms_2020 > 0 ~ 1,
+                                   year == 2020 & noms_2020 == 0 ~ 0,
+                                   year == 2021 & noms_2021 > 0 ~ 1,
+                                   year == 2021 & noms_2021 == 0 ~ 0),
+         poc_leadership = case_when(poc_leadership == "No" ~ "Not\nBIPOC-led",
+                                    poc_leadership == "Unknown" ~ poc_leadership,
+                                    poc_leadership == "Yes" ~ "BIPOC-led")) %>% 
+  select(-c(noms_2019, noms_2020, noms_2021)) %>% 
+  ggplot(., aes(poc_leadership, participation)) +
+  geom_bar(stat = "identity", aes(fill = poc_leadership)) +
+  scale_fill_manual(values=c("#1A4C81", "#EF464B", "#59C3B4")) +
+  facet_wrap(~year) +
+  theme_transcend_sparse +
+  theme(legend.position = "none") +
+  labs(x = "",
+       y = "Participating Organizations",
+       title = "Are the organizations participating in Canopy's nomination survey BIPOC-led across time?")
+# some checks to make sure the viz is right:
+# participating orgs
+# 2019 = 74
+# 2020 = 75
+# 2021 = 38 ???
+
+# percentages 2019
+# Not BIPOC - 54/74 = 73%
+# BIPOC - 16/74 = 22%
+# Unknown - 4/74 = 5%
+
+# percentages 2020
+# Not BIPOC - 52/75 = 70%
+# BIPOC - 19/75 = 25%
+# Unknown - 4/75 = 5%
+
+# percentages 2021
+# Not BIPOC - 30/38 = 79%
+# BIPOC - 7/38 = 18%
+# Unknown - 1/38 = 3%
+
+sum(org_par_rates$data$poc_leadership == "Unknown" & org_par_rates$data$participation == 1)
+
+ggsave("bipoc-orgs-participation-yearly.png", plot = org_par_rates, path = here("outputs", "equity analysis"),
+       width = 8, height = 5, units = "in")
+```
+
+For individual nominators' racial identity:
+
+```{r participation rates by individuals, fig.dim = c(9, 9)}
+ind_par_rates <- bipoc_ind_year$data %>% 
+  mutate(noms = case_when(year == 2019 & noms_2019 >= 0 ~ .$noms_2019,
+                          year == 2020 & noms_2020 >= 0 ~ .$noms_2020,
+                          year == 2021 & noms_2021 >= 0 ~ .$noms_2021),
+         participation = case_when(year == 2019 & noms_2019 > 0 ~ 1,
+                                   year == 2019 & noms_2019 == 0 ~ 0,
+                                   year == 2020 & noms_2020 > 0 ~ 1,
+                                   year == 2020 & noms_2020 == 0 ~ 0,
+                                   year == 2021 & noms_2021 > 0 ~ 1,
+                                   year == 2021 & noms_2021 == 0 ~ 0),
+         ind_identity = case_when(bipoc_nominator == "No" ~ "Not BIPOC",
+                                    bipoc_nominator == "Unknown" ~ bipoc_nominator,
+                                    bipoc_nominator == "Yes" ~ "BIPOC")) %>% 
+  select(-c(noms_2019, noms_2020, noms_2021)) %>% 
+  ggplot(., aes(ind_identity, participation)) +
+  geom_bar(stat = "identity", aes(fill = ind_identity)) +
+  scale_fill_manual(values=c("#1A4C81", "#EF464B", "#59C3B4")) +
+  facet_wrap(~year) +
+  theme_transcend_sparse +
+  theme(legend.position = "none") +
+  labs(x = "",
+       y = "Participating Nominators",
+       title = "Are the individuals participating in Canopy's nomination survey BIPOC-identifying across time?")
+# some checks to make sure the viz is right:
+# participating individuals
+# 2019 = 91
+# 2020 = 108
+# 2021 = 56 ???
+
+# Percentages 2019
+# BIPOC - 19/91 = 21%
+# Not BIPOC - 68/91 = 75%
+# Unknown - 4/91 = 4%
+
+# Percentages 2020
+# BIPOC - 19/108 = 18%
+# Not BIPOC - 83/108 = 77%
+# Unknown - 6/108 = 5%
+
+# Percentages 2021
+# BIPOC - 8/56 = 14%
+# Not BIPOC - 46/56 = 82%
+# Unknown - 2/56 = 4%
+
+sum(ind_par_rates$data$participation == 1) #255 individuals participated all time
+
+ggsave("bipoc-ind-participation-yearly.png", plot = ind_par_rates, path = here("outputs", "equity analysis"),
+       width = 8, height = 5, units = "in")
+```
+
+From the graphs above, one interesting thing to pull out is that we seem to have had *less* organizations and individuals participating in 2021 than in 2020 (though not to a super significant degree). This makes me wonder, have the number of nominations they make changed?
+
+```{r number of nominations by organization, fig.dim = c(9, 9)}
+org_nom_n <- org_par_rates$data %>% 
+    ggplot(., aes(poc_leadership, noms)) +
+  geom_bar(stat = "identity", aes(fill = poc_leadership)) +
+  scale_fill_manual(values=c("#1A4C81", "#EF464B", "#59C3B4")) +
+  facet_wrap(~year) +
+  theme_transcend_sparse +
+  theme(legend.position = "none") +
+  labs(x = "",
+       y = "Number of nominations",
+       title = "Are the number of nominations made by participating organizations changing over time\nbased on racial diversity of their leadership staff?")
+# some checks to make sure the viz is right:
+# participating orgs total
+# 2019 = 74
+# 2020 = 75
+# 2021 = 38 ???
+
+# proportions for each group
+# all time
+# BIPOC - 246/1060 = 23%
+# not BIPOC - 774/1060 = 73%
+# unkown - 40/1060 = 4%
+
+#summary by year
+count <- org_nom_n$data %>% 
+  group_by(year) %>% 
+  summarize(n_nominations = sum(noms))
+#2019
+# BIPOC - 52/278 = 19%
+# not BIPOC - 207/278 = 74%
+# unkown - 19/278 = 7%
+
+#2020
+# BIPOC - 71/316 = 22%
+# not BIPOC - 220/316 = 70%
+# unkown - 25/316 = 8%
+
+#2021
+# BIPOC - 52/174 = 30%
+# not BIPOC - 121/174 = 70%
+# unkown - 1/174 = <1%
+
+ggsave("bipoc-org-noms-yearly.png", plot = org_nom_n, path = here("outputs", "equity analysis"),
+       width = 8, height = 5, units = "in")
+```
+
+One clear thing we can pull out all of these graphs is that White-led organizations and White leaders are by far participating at much higher rates. On the other hand, this isn't entirely surprising and matches fairly evenly with the rates of organizations we're targeting. This makes me think that one potential first avenue to talk about lies in intentionally focusing on the racial demographics of the organizations who receive the nomination survey in the first place, and to make a plan at a future equity meeting after the upcoming year's survey to determine if, and in which direction, the rates of participation change in relation to recruitment efforts.
+
+Another thing to notice (once you add percentage information to the plot representing the number of nominations made) is that the proportion of nominations made by BIPOC-led nominating organizations has increased somewhat since 2019, from 19% to 30%. This may be promising and supportive of suggestion above, though should be looked at alongside the racial demographic disaggregated data for school leaders and leadership groups for participating schools.
+
+Join 2021 nominator data with school survey data to compare nominations.
+
+```{r prep noms_clean, fig.dim = c(9, 9)}
+# this data frame should represent the number of total nominated schools that participated
+# in the 2021 survey and are thus in the 2021 dataset
+# I believe this was 174, but can double check
+# noms_join <- noms_clean %>% 
+#   filter(year == 2021) %>% 
+#   group_by(nominator_name) %>% 
+#   mutate(nominator_name = str_replace(nominator_name, "Gwen Smith, Superintendent and Building Administrator", "Gwen Smith")) ###### DOES NOT MATCH UP!!!!!!!
+
+# this data frame will not match that number - it represents all of the nominations made
+# but not all of the nominators responded to the survey
+# those that did not we will not have information on racial demographics of leader & school
+# leadership team because those questions were part of the survey
+# 476 schools were nominated
+noms_race_join <- org_par_rates$data %>% 
+  filter(participation == 1) %>% # noms match in number but not name when year addded
+  select(nominator_org, poc_leadership)
+# we want to left_join from this df to noms_join to ensure the schools that did not participate are dropped
+
+noms_race_comparison <- left_join(noms_race_join, noms_clean, by = "nominator_org") %>% 
+  ungroup() %>% 
+  select(poc_leadership, canopy_school_id) %>% #nominator org, org id, and year, official school name, sl full name
+  rename(school_id = canopy_school_id)
+
+#how many individual nominators in 2021?
+unique(noms_race_comparison$nominator_org) #38 organizations
+ind_count <- noms_race_pivot %>% 
+  select(noms_2021, nominator, bipoc_nominator) %>% 
+  filter(noms_2021 > 0)
+unique(ind_count$nominator)
+
+year_check <- demographic_data %>% 
+  left_join(noms_race_comparison, by = "school_id") %>%
+  unique()
+```
+
+What does school leadership look like in nominated schools?
+
+```{r school leadership demographics}
+schl_lead <- year_check %>% 
+  select(school_id, confidential_leader_race, confidential_leader_gender, confidential_leadership_team_diversity, confidential_teaching_staff_diversity, poc_leadership) %>% 
+  filter(confidential_leadership_team_diversity != 0,
+         confidential_leadership_team_diversity != "Not sure",
+         confidential_leadership_team_diversity != "Prefer not to say") %>% 
+  mutate(confidential_leadership_team_diversity = 
+           case_when(confidential_leadership_team_diversity == "0 - 24% people of color" ~ "0 - 24%\nBIPOC",
+                     confidential_leadership_team_diversity == "25 - 49% people of color" ~ "25 - 49%\nBIPOC",
+                     confidential_leadership_team_diversity == "50 - 74% people of color" ~ "50 - 74%\nBIPOC",
+                     confidential_leadership_team_diversity == "75 - 100% people of color" ~ "75 - 100%\nBIPOC"),
+         poc_leadership = 
+           case_when(poc_leadership == "BIPOC-led" ~ "BIPOC-led\nNominator",
+                     poc_leadership == "Not\nBIPOC-led" ~ "Not BIPOC-led\nNominator",
+                     poc_leadership == "Unknown" ~ "Unknown\nLeadership")) %>% 
+  ggplot(., aes(confidential_leadership_team_diversity)) +
+  geom_bar(aes(fill = confidential_leadership_team_diversity)) +
+  facet_wrap(~poc_leadership) +
+  scale_fill_manual(values=c("#1A4C81", "#EF464B", "#59C3B4", "#ADE0EE")) +
+  theme_transcend_sparse +
+  theme(legend.position = "none") +
+  labs(x = "",
+       y = "Number of Schools",
+       title = "School Leadership in Nominated Learning Environments")
+
+# percentages by org type
+# may be more useful to calculate percent within groups of leadership diversity rather than whole
+# in which case, BIPOC led would actually be 56% for 75-100% which feels more accurate.
+# BIPOC-led 
+# 0-24% - 15/165 = 9% OR 15/84 = 18%
+# 25-49% - 9/165 = 5% OR 9/30 = 30%
+# 50-74% - 7/165 = 4% = 7/26 = 27%
+# 75-100% - 14/165 = 8% OR 14/25 = 56%
+
+# not BIPOC-led 
+# 0-24% - 64/165 = 64/84 = 76%
+# 25-49% - 20/165 = 20/30 = 66%
+# 50-74% - 17/165 = 17/26 = 65%
+# 75-100% - 10/165 = 10/25 = 40%
+
+# unknown - 
+# 0-24% 5/165 = 5/84 = 6%
+# 25-49% - 1/165 = 1/30 = 1%
+# 50-74% - 2/165 = 2/26 8%
+# 75-100% - 1/165 = 1/25 = 4%
+sum(schl_lead$data$confidential_leadership_team_diversity == "75 - 100%\nBIPOC" & schl_lead$data$poc_leadership == "Unknown")
+
+ggsave("schl-leadxnom-org.png", plot = schl_lead, path = here("outputs", "equity analysis"),
+       width = 8, height = 5, units = "in")
+```
+
+What does teaching staff look like in nominated schools?
+
+```{r}
+schl_staff <- year_check %>% 
+  select(school_id, confidential_leader_race, confidential_leader_gender, confidential_leadership_team_diversity, confidential_teaching_staff_diversity, poc_leadership) %>% 
+  filter(confidential_teaching_staff_diversity != 0,
+         confidential_teaching_staff_diversity != "Prefer not to say") %>% 
+  mutate(confidential_teaching_staff_diversity = 
+           case_when(confidential_teaching_staff_diversity == "0 - 24% people of color" ~ "0 - 24%\nBIPOC",
+                     confidential_teaching_staff_diversity == "25 - 49% people of color" ~ "25 - 49%\nBIPOC",
+                     confidential_teaching_staff_diversity == "50 - 74% people of color" ~ "50 - 74%\nBIPOC",
+                     confidential_teaching_staff_diversity == "75 - 100% people of color" ~ "75 - 100%\nBIPOC"),
+         poc_leadership = 
+           case_when(poc_leadership == "BIPOC-led" ~ "BIPOC-led\nNominator",
+                     poc_leadership == "Not\nBIPOC-led" ~ "Not BIPOC-led\nNominator",
+                     poc_leadership == "Unknown" ~ "Unknown\nLeadership")) %>% 
+  ggplot(., aes(confidential_teaching_staff_diversity)) +
+  geom_bar(aes(fill = confidential_teaching_staff_diversity)) +
+  facet_wrap(~poc_leadership) +
+  scale_fill_manual(values=c("#1A4C81", "#EF464B", "#59C3B4", "#ADE0EE")) +
+  theme_transcend_sparse +
+  theme(legend.position = "none") +
+  labs(x = "",
+       y = "Number of Schools",
+       title = "School teaching staff in nominated learning environments")
+
+ggsave("teach-staffxnom-org.png", plot = schl_staff, path = here("outputs", "equity analysis"),
+       width = 8, height = 5, units = "in")
+```
+
+What does the school leader look like in nominated schools?
+
+```{r}
+schl_leader <- year_check %>% 
+  select(school_id, confidential_leader_race, confidential_leader_gender, confidential_leadership_team_diversity, confidential_teaching_staff_diversity, poc_leadership) %>% 
+  filter(confidential_leader_race != "No Response",
+         confidential_leader_race != "Xicana Indigena", 
+         confidential_leader_race != "Middle Eastern",
+         !is.na(confidential_leader_race)) %>% 
+  mutate(confidential_leader_race = 
+           case_when(confidential_leader_race == "AIAN" ~ "American Indian\nAlaska Native",
+                     confidential_leader_race == "White" ~ .$confidential_leader_race,
+                     confidential_leader_race == "Biracial" ~ .$confidential_leader_race,
+                     confidential_leader_race == "Asian" ~ .$confidential_leader_race,
+                     confidential_leader_race == "Hispanic" ~ .$confidential_leader_race,
+                     confidential_leader_race == "Black" ~ .$confidential_leader_race),
+         poc_leadership = 
+           case_when(poc_leadership == "BIPOC-led" ~ "BIPOC-led\nNominator",
+                     poc_leadership == "Not\nBIPOC-led" ~ "Not BIPOC-led\nNominator",
+                     poc_leadership == "Unknown" ~ "Unknown\nLeadership")) %>% 
+  ggplot(., aes(confidential_leader_race)) +
+  geom_bar(aes(fill = confidential_leader_race)) +
+  scale_fill_manual(values=transcend_cols2) +
+  facet_wrap(~poc_leadership) +
+  coord_flip() +
+  theme_transcend_sparse +
+  theme(legend.position = "none") +
+  labs(x = "",
+       y = "Number of Schools",
+       title = "School Leader Racial Identity")
+```
+
+
+Create plots, paste together at the end
+Some kind of correlation or odds ratio plot.
