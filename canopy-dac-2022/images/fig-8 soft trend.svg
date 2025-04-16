@@ -27,47 +27,47 @@
 <polyline points='57.95,238.34 493.23,238.34 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
 <polyline points='57.95,161.98 493.23,161.98 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
 <polyline points='57.95,85.62 493.23,85.62 ' style='stroke-width: 1.36; stroke: #CCCCCC; stroke-linecap: butt;' />
-<polyline points='64.97,197.17 345.79,176.10 486.21,165.56 ' style='stroke-width: 1.07; stroke: #EF464B; stroke-opacity: 0.60; stroke-linecap: butt;' />
-<polyline points='64.97,240.78 345.79,214.84 486.21,201.86 ' style='stroke-width: 1.07; stroke: #1A4C81; stroke-opacity: 0.60; stroke-linecap: butt;' />
-<polyline points='64.97,215.77 345.79,166.79 486.21,142.30 ' style='stroke-width: 1.07; stroke: #59C3B4; stroke-opacity: 0.60; stroke-linecap: butt;' />
-<polyline points='64.97,339.08 345.79,285.34 486.21,258.47 ' style='stroke-width: 1.07; stroke: #BC2582; stroke-opacity: 0.60; stroke-linecap: butt;' />
-<polyline points='64.97,239.86 345.79,170.88 486.21,136.39 ' style='stroke-width: 1.07; stroke: #FFA630; stroke-opacity: 0.60; stroke-linecap: butt;' />
-<polyline points='345.79,243.73 486.21,177.89 ' style='stroke-width: 1.07; stroke: #99C24D; stroke-opacity: 0.60; stroke-linecap: butt;' />
-<circle cx='341.68' cy='243.73' r='3.56' style='stroke-width: 0.71; stroke: #99C24D; fill: #99C24D;' />
-<circle cx='485.14' cy='177.89' r='3.56' style='stroke-width: 0.71; stroke: #99C24D; fill: #99C24D;' />
-<circle cx='66.01' cy='238.34' r='3.56' style='stroke-width: 0.71; stroke: #FFA630; fill: #FFA630;' />
-<circle cx='347.83' cy='175.45' r='3.56' style='stroke-width: 0.71; stroke: #FFA630; fill: #FFA630;' />
-<circle cx='482.63' cy='133.34' r='3.56' style='stroke-width: 0.71; stroke: #FFA630; fill: #FFA630;' />
-<circle cx='60.63' cy='333.79' r='3.56' style='stroke-width: 0.71; stroke: #BC2582; fill: #BC2582;' />
-<circle cx='343.21' cy='301.22' r='3.56' style='stroke-width: 0.71; stroke: #BC2582; fill: #BC2582;' />
-<circle cx='486.13' cy='247.88' r='3.56' style='stroke-width: 0.71; stroke: #BC2582; fill: #BC2582;' />
-<circle cx='71.23' cy='212.89' r='3.56' style='stroke-width: 0.71; stroke: #59C3B4; fill: #59C3B4;' />
-<circle cx='342.60' cy='175.45' r='3.56' style='stroke-width: 0.71; stroke: #59C3B4; fill: #59C3B4;' />
-<circle cx='486.37' cy='136.52' r='3.56' style='stroke-width: 0.71; stroke: #59C3B4; fill: #59C3B4;' />
-<circle cx='66.13' cy='238.34' r='3.56' style='stroke-width: 0.71; stroke: #1A4C81; fill: #1A4C81;' />
-<circle cx='342.98' cy='222.17' r='3.56' style='stroke-width: 0.71; stroke: #1A4C81; fill: #1A4C81;' />
-<circle cx='486.60' cy='196.98' r='3.56' style='stroke-width: 0.71; stroke: #1A4C81; fill: #1A4C81;' />
-<circle cx='67.56' cy='193.80' r='3.56' style='stroke-width: 0.71; stroke: #EF464B; fill: #EF464B;' />
-<circle cx='343.90' cy='186.23' r='3.56' style='stroke-width: 0.71; stroke: #EF464B; fill: #EF464B;' />
-<circle cx='486.54' cy='158.80' r='3.56' style='stroke-width: 0.71; stroke: #EF464B; fill: #EF464B;' />
-<line x1='496.25' y1='184.78' x2='487.18' y2='178.55' style='stroke-width: 1.07; stroke: #99C24D;' />
-<line x1='496.25' y1='108.41' x2='486.61' y2='132.34' style='stroke-width: 1.07; stroke: #FFA630;' />
-<line x1='496.25' y1='248.69' x2='487.46' y2='247.98' style='stroke-width: 1.07; stroke: #BC2582;' />
-<line x1='496.25' y1='132.80' x2='487.36' y2='136.10' style='stroke-width: 1.07; stroke: #59C3B4;' />
-<line x1='496.25' y1='212.60' x2='486.81' y2='197.91' style='stroke-width: 1.07; stroke: #1A4C81;' />
-<line x1='496.25' y1='160.98' x2='487.42' y2='159.06' style='stroke-width: 1.07; stroke: #EF464B;' />
-<text x='498.05' y='186.16' style='font-size: 9.96px;fill: #99C24D; font-family: "Arial";' textLength='115.61px' lengthAdjust='spacingAndGlyphs'>trauma-informed practices</text>
-<text x='498.05' y='200.51' style='font-size: 9.96px;fill: #99C24D; font-family: "Arial";' textLength='102.64px' lengthAdjust='spacingAndGlyphs'>+21.6% points per year</text>
-<text x='498.05' y='100.04' style='font-size: 9.96px;fill: #FFA630; font-family: "Arial";' textLength='132.75px' lengthAdjust='spacingAndGlyphs'>culturally responsive practices</text>
-<text x='498.05' y='114.38' style='font-size: 9.96px;fill: #FFA630; font-family: "Arial";' textLength='102.64px' lengthAdjust='spacingAndGlyphs'>+11.5% points per year</text>
-<text x='498.05' y='245.09' style='font-size: 9.96px;fill: #BC2582; font-family: "Arial";' textLength='158.77px' lengthAdjust='spacingAndGlyphs'>social-emotional learning curriculum</text>
-<text x='498.05' y='259.43' style='font-size: 9.96px;fill: #BC2582; font-family: "Arial";' textLength='97.10px' lengthAdjust='spacingAndGlyphs'>+9.4% points per year</text>
-<text x='498.05' y='128.78' style='font-size: 9.96px;fill: #59C3B4; font-family: "Arial";' textLength='211.36px' lengthAdjust='spacingAndGlyphs'>schoolwide social-emotional learning integration</text>
-<text x='498.05' y='143.12' style='font-size: 9.96px;fill: #59C3B4; font-family: "Arial";' textLength='97.10px' lengthAdjust='spacingAndGlyphs'>+8.3% points per year</text>
-<text x='498.05' y='214.86' style='font-size: 9.96px;fill: #1A4C81; font-family: "Arial";' textLength='102.89px' lengthAdjust='spacingAndGlyphs'>competency framework</text>
-<text x='498.05' y='229.20' style='font-size: 9.96px;fill: #1A4C81; font-family: "Arial";' textLength='97.10px' lengthAdjust='spacingAndGlyphs'>+4.5% points per year</text>
-<text x='498.05' y='157.46' style='font-size: 9.96px;fill: #EF464B; font-family: "Arial";' textLength='130.04px' lengthAdjust='spacingAndGlyphs'>competency-based education</text>
-<text x='498.05' y='171.80' style='font-size: 9.96px;fill: #EF464B; font-family: "Arial";' textLength='97.10px' lengthAdjust='spacingAndGlyphs'>+3.8% points per year</text>
+<polyline points='64.83,197.17 70.06,196.77 75.29,196.37 80.53,195.97 85.76,195.57 90.99,195.17 96.22,194.77 101.45,194.37 106.68,193.97 111.91,193.57 117.14,193.17 122.37,192.77 127.60,192.37 132.83,191.97 138.07,191.57 143.30,191.17 148.53,190.77 153.76,190.37 158.99,189.97 164.22,189.57 169.45,189.17 174.68,188.77 179.91,188.37 185.14,187.97 190.38,187.57 195.61,187.17 200.84,186.77 206.07,186.37 211.30,185.97 216.53,185.57 221.76,185.17 226.99,184.77 232.22,184.37 237.45,183.97 242.68,183.57 247.92,183.17 253.15,182.77 258.38,182.37 263.61,181.97 268.84,181.57 274.07,181.16 279.30,180.76 284.53,180.36 289.76,179.96 294.99,179.56 300.22,179.16 305.46,178.76 310.69,178.36 315.92,177.96 321.15,177.56 326.38,177.16 331.61,176.76 336.84,176.36 342.07,175.96 347.30,175.56 352.53,175.16 357.76,174.76 363.00,174.36 368.23,173.96 373.46,173.56 378.69,173.16 383.92,172.76 389.15,172.36 394.38,171.96 399.61,171.56 404.84,171.16 410.07,170.76 415.30,170.36 420.54,169.96 425.77,169.56 431.00,169.16 436.23,168.76 441.46,168.36 446.69,167.96 451.92,167.56 457.15,167.16 462.38,166.76 467.61,166.36 472.85,165.96 478.08,165.56 ' style='stroke-width: 1.07; stroke: #EF464B; stroke-opacity: 0.60; stroke-linecap: butt;' />
+<polyline points='64.83,240.78 70.06,240.29 75.29,239.80 80.53,239.30 85.76,238.81 90.99,238.32 96.22,237.83 101.45,237.33 106.68,236.84 111.91,236.35 117.14,235.86 122.37,235.36 127.60,234.87 132.83,234.38 138.07,233.89 143.30,233.39 148.53,232.90 153.76,232.41 158.99,231.91 164.22,231.42 169.45,230.93 174.68,230.44 179.91,229.94 185.14,229.45 190.38,228.96 195.61,228.47 200.84,227.97 206.07,227.48 211.30,226.99 216.53,226.50 221.76,226.00 226.99,225.51 232.22,225.02 237.45,224.53 242.68,224.03 247.92,223.54 253.15,223.05 258.38,222.55 263.61,222.06 268.84,221.57 274.07,221.08 279.30,220.58 284.53,220.09 289.76,219.60 294.99,219.11 300.22,218.61 305.46,218.12 310.69,217.63 315.92,217.14 321.15,216.64 326.38,216.15 331.61,215.66 336.84,215.17 342.07,214.67 347.30,214.18 352.53,213.69 357.76,213.19 363.00,212.70 368.23,212.21 373.46,211.72 378.69,211.22 383.92,210.73 389.15,210.24 394.38,209.75 399.61,209.25 404.84,208.76 410.07,208.27 415.30,207.78 420.54,207.28 425.77,206.79 431.00,206.30 436.23,205.81 441.46,205.31 446.69,204.82 451.92,204.33 457.15,203.83 462.38,203.34 467.61,202.85 472.85,202.36 478.08,201.86 ' style='stroke-width: 1.07; stroke: #1A4C81; stroke-opacity: 0.60; stroke-linecap: butt;' />
+<polyline points='64.83,215.77 70.06,214.84 75.29,213.91 80.53,212.98 85.76,212.05 90.99,211.12 96.22,210.19 101.45,209.26 106.68,208.33 111.91,207.40 117.14,206.47 122.37,205.54 127.60,204.61 132.83,203.68 138.07,202.75 143.30,201.82 148.53,200.89 153.76,199.96 158.99,199.03 164.22,198.10 169.45,197.17 174.68,196.24 179.91,195.31 185.14,194.38 190.38,193.45 195.61,192.52 200.84,191.59 206.07,190.66 211.30,189.73 216.53,188.80 221.76,187.87 226.99,186.94 232.22,186.01 237.45,185.08 242.68,184.15 247.92,183.22 253.15,182.29 258.38,181.36 263.61,180.43 268.84,179.50 274.07,178.57 279.30,177.64 284.53,176.71 289.76,175.78 294.99,174.85 300.22,173.92 305.46,172.99 310.69,172.06 315.92,171.13 321.15,170.20 326.38,169.27 331.61,168.34 336.84,167.41 342.07,166.48 347.30,165.55 352.53,164.62 357.76,163.69 363.00,162.76 368.23,161.83 373.46,160.90 378.69,159.97 383.92,159.04 389.15,158.11 394.38,157.18 399.61,156.25 404.84,155.32 410.07,154.39 415.30,153.46 420.54,152.53 425.77,151.60 431.00,150.67 436.23,149.74 441.46,148.81 446.69,147.88 451.92,146.95 457.15,146.02 462.38,145.09 467.61,144.16 472.85,143.23 478.08,142.30 ' style='stroke-width: 1.07; stroke: #59C3B4; stroke-opacity: 0.60; stroke-linecap: butt;' />
+<polyline points='64.83,339.08 70.06,338.06 75.29,337.04 80.53,336.02 85.76,335.00 90.99,333.98 96.22,332.96 101.45,331.94 106.68,330.92 111.91,329.90 117.14,328.88 122.37,327.86 127.60,326.84 132.83,325.82 138.07,324.80 143.30,323.78 148.53,322.76 153.76,321.74 158.99,320.72 164.22,319.70 169.45,318.67 174.68,317.65 179.91,316.63 185.14,315.61 190.38,314.59 195.61,313.57 200.84,312.55 206.07,311.53 211.30,310.51 216.53,309.49 221.76,308.47 226.99,307.45 232.22,306.43 237.45,305.41 242.68,304.39 247.92,303.37 253.15,302.35 258.38,301.33 263.61,300.31 268.84,299.29 274.07,298.27 279.30,297.25 284.53,296.23 289.76,295.21 294.99,294.19 300.22,293.16 305.46,292.14 310.69,291.12 315.92,290.10 321.15,289.08 326.38,288.06 331.61,287.04 336.84,286.02 342.07,285.00 347.30,283.98 352.53,282.96 357.76,281.94 363.00,280.92 368.23,279.90 373.46,278.88 378.69,277.86 383.92,276.84 389.15,275.82 394.38,274.80 399.61,273.78 404.84,272.76 410.07,271.74 415.30,270.72 420.54,269.70 425.77,268.68 431.00,267.65 436.23,266.63 441.46,265.61 446.69,264.59 451.92,263.57 457.15,262.55 462.38,261.53 467.61,260.51 472.85,259.49 478.08,258.47 ' style='stroke-width: 1.07; stroke: #BC2582; stroke-opacity: 0.60; stroke-linecap: butt;' />
+<polyline points='64.83,239.86 70.06,238.55 75.29,237.24 80.53,235.93 85.76,234.62 90.99,233.31 96.22,232.00 101.45,230.69 106.68,229.38 111.91,228.07 117.14,226.76 122.37,225.46 127.60,224.15 132.83,222.84 138.07,221.53 143.30,220.22 148.53,218.91 153.76,217.60 158.99,216.29 164.22,214.98 169.45,213.67 174.68,212.36 179.91,211.05 185.14,209.74 190.38,208.43 195.61,207.12 200.84,205.81 206.07,204.50 211.30,203.19 216.53,201.88 221.76,200.57 226.99,199.26 232.22,197.95 237.45,196.64 242.68,195.33 247.92,194.02 253.15,192.71 258.38,191.40 263.61,190.09 268.84,188.78 274.07,187.47 279.30,186.16 284.53,184.85 289.76,183.54 294.99,182.23 300.22,180.92 305.46,179.61 310.69,178.30 315.92,176.99 321.15,175.68 326.38,174.37 331.61,173.06 336.84,171.75 342.07,170.44 347.30,169.14 352.53,167.83 357.76,166.52 363.00,165.21 368.23,163.90 373.46,162.59 378.69,161.28 383.92,159.97 389.15,158.66 394.38,157.35 399.61,156.04 404.84,154.73 410.07,153.42 415.30,152.11 420.54,150.80 425.77,149.49 431.00,148.18 436.23,146.87 441.46,145.56 446.69,144.25 451.92,142.94 457.15,141.63 462.38,140.32 467.61,139.01 472.85,137.70 478.08,136.39 ' style='stroke-width: 1.07; stroke: #FFA630; stroke-opacity: 0.60; stroke-linecap: butt;' />
+<polyline points='340.33,243.73 342.07,242.90 343.82,242.06 345.56,241.23 347.30,240.39 349.05,239.56 350.79,238.73 352.53,237.89 354.28,237.06 356.02,236.23 357.76,235.39 359.51,234.56 361.25,233.73 363.00,232.89 364.74,232.06 366.48,231.23 368.23,230.39 369.97,229.56 371.71,228.73 373.46,227.89 375.20,227.06 376.94,226.23 378.69,225.39 380.43,224.56 382.18,223.73 383.92,222.89 385.66,222.06 387.41,221.23 389.15,220.39 390.89,219.56 392.64,218.73 394.38,217.89 396.12,217.06 397.87,216.23 399.61,215.39 401.36,214.56 403.10,213.72 404.84,212.89 406.59,212.06 408.33,211.22 410.07,210.39 411.82,209.56 413.56,208.72 415.30,207.89 417.05,207.06 418.79,206.22 420.54,205.39 422.28,204.56 424.02,203.72 425.77,202.89 427.51,202.06 429.25,201.22 431.00,200.39 432.74,199.56 434.49,198.72 436.23,197.89 437.97,197.06 439.72,196.22 441.46,195.39 443.20,194.56 444.95,193.72 446.69,192.89 448.43,192.06 450.18,191.22 451.92,190.39 453.67,189.55 455.41,188.72 457.15,187.89 458.90,187.05 460.64,186.22 462.38,185.39 464.13,184.55 465.87,183.72 467.61,182.89 469.36,182.05 471.10,181.22 472.85,180.39 474.59,179.55 476.33,178.72 478.08,177.89 ' style='stroke-width: 1.07; stroke: #99C24D; stroke-opacity: 0.60; stroke-linecap: butt;' />
+<circle cx='334.91' cy='243.73' r='3.56' style='stroke-width: 0.71; stroke: #99C24D; fill: #99C24D;' />
+<circle cx='481.78' cy='177.89' r='3.56' style='stroke-width: 0.71; stroke: #99C24D; fill: #99C24D;' />
+<circle cx='62.45' cy='238.34' r='3.56' style='stroke-width: 0.71; stroke: #FFA630; fill: #FFA630;' />
+<circle cx='345.50' cy='175.45' r='3.56' style='stroke-width: 0.71; stroke: #FFA630; fill: #FFA630;' />
+<circle cx='480.69' cy='133.34' r='3.56' style='stroke-width: 0.71; stroke: #FFA630; fill: #FFA630;' />
+<circle cx='65.00' cy='333.79' r='3.56' style='stroke-width: 0.71; stroke: #BC2582; fill: #BC2582;' />
+<circle cx='336.07' cy='301.22' r='3.56' style='stroke-width: 0.71; stroke: #BC2582; fill: #BC2582;' />
+<circle cx='478.94' cy='247.88' r='3.56' style='stroke-width: 0.71; stroke: #BC2582; fill: #BC2582;' />
+<circle cx='61.79' cy='212.89' r='3.56' style='stroke-width: 0.71; stroke: #59C3B4; fill: #59C3B4;' />
+<circle cx='342.80' cy='175.45' r='3.56' style='stroke-width: 0.71; stroke: #59C3B4; fill: #59C3B4;' />
+<circle cx='479.70' cy='136.52' r='3.56' style='stroke-width: 0.71; stroke: #59C3B4; fill: #59C3B4;' />
+<circle cx='66.46' cy='238.34' r='3.56' style='stroke-width: 0.71; stroke: #1A4C81; fill: #1A4C81;' />
+<circle cx='343.70' cy='222.17' r='3.56' style='stroke-width: 0.71; stroke: #1A4C81; fill: #1A4C81;' />
+<circle cx='478.62' cy='196.98' r='3.56' style='stroke-width: 0.71; stroke: #1A4C81; fill: #1A4C81;' />
+<circle cx='63.56' cy='193.80' r='3.56' style='stroke-width: 0.71; stroke: #EF464B; fill: #EF464B;' />
+<circle cx='336.30' cy='186.23' r='3.56' style='stroke-width: 0.71; stroke: #EF464B; fill: #EF464B;' />
+<circle cx='475.12' cy='158.80' r='3.56' style='stroke-width: 0.71; stroke: #EF464B; fill: #EF464B;' />
+<line x1='491.40' y1='188.47' x2='478.99' y2='178.61' style='stroke-width: 1.07; stroke: #99C24D;' />
+<line x1='491.40' y1='112.03' x2='478.66' y2='132.41' style='stroke-width: 1.07; stroke: #FFA630;' />
+<line x1='491.40' y1='250.98' x2='479.29' y2='248.16' style='stroke-width: 1.07; stroke: #BC2582;' />
+<line x1='491.38' y1='135.95' x2='479.33' y2='136.47' style='stroke-width: 1.07; stroke: #59C3B4;' />
+<line x1='491.41' y1='217.28' x2='478.68' y2='197.90' style='stroke-width: 1.07; stroke: #1A4C81;' />
+<line x1='491.40' y1='164.01' x2='479.22' y2='159.24' style='stroke-width: 1.07; stroke: #EF464B;' />
+<text x='493.20' y='189.81' style='font-size: 9.96px;fill: #99C24D; font-family: "Arial";' textLength='115.61px' lengthAdjust='spacingAndGlyphs'>trauma-informed practices</text>
+<text x='493.20' y='204.15' style='font-size: 9.96px;fill: #99C24D; font-family: "Arial";' textLength='102.64px' lengthAdjust='spacingAndGlyphs'>+21.6% points per year</text>
+<text x='493.20' y='103.65' style='font-size: 9.96px;fill: #FFA630; font-family: "Arial";' textLength='132.75px' lengthAdjust='spacingAndGlyphs'>culturally responsive practices</text>
+<text x='493.20' y='117.99' style='font-size: 9.96px;fill: #FFA630; font-family: "Arial";' textLength='102.64px' lengthAdjust='spacingAndGlyphs'>+11.5% points per year</text>
+<text x='493.20' y='247.50' style='font-size: 9.96px;fill: #BC2582; font-family: "Arial";' textLength='158.77px' lengthAdjust='spacingAndGlyphs'>social-emotional learning curriculum</text>
+<text x='493.20' y='261.84' style='font-size: 9.96px;fill: #BC2582; font-family: "Arial";' textLength='97.10px' lengthAdjust='spacingAndGlyphs'>+9.4% points per year</text>
+<text x='493.18' y='132.35' style='font-size: 9.96px;fill: #59C3B4; font-family: "Arial";' textLength='211.36px' lengthAdjust='spacingAndGlyphs'>schoolwide social-emotional learning integration</text>
+<text x='493.18' y='146.69' style='font-size: 9.96px;fill: #59C3B4; font-family: "Arial";' textLength='97.10px' lengthAdjust='spacingAndGlyphs'>+8.3% points per year</text>
+<text x='493.21' y='218.54' style='font-size: 9.96px;fill: #1A4C81; font-family: "Arial";' textLength='102.89px' lengthAdjust='spacingAndGlyphs'>competency framework</text>
+<text x='493.21' y='232.88' style='font-size: 9.96px;fill: #1A4C81; font-family: "Arial";' textLength='97.10px' lengthAdjust='spacingAndGlyphs'>+4.5% points per year</text>
+<text x='493.20' y='161.09' style='font-size: 9.96px;fill: #EF464B; font-family: "Arial";' textLength='130.04px' lengthAdjust='spacingAndGlyphs'>competency-based education</text>
+<text x='493.20' y='175.43' style='font-size: 9.96px;fill: #EF464B; font-family: "Arial";' textLength='97.10px' lengthAdjust='spacingAndGlyphs'>+3.8% points per year</text>
 <rect x='57.95' y='55.07' width='435.28' height='366.53' style='stroke-width: 1.36; stroke: #4D4D4F;' />
 <text x='51.67' y='394.56' text-anchor='end' style='font-size: 9.80px; font-family: "Open Sans";' textLength='13.70px' lengthAdjust='spacingAndGlyphs'>0%</text>
 <text x='51.67' y='318.20' text-anchor='end' style='font-size: 9.80px; font-family: "Open Sans";' textLength='19.30px' lengthAdjust='spacingAndGlyphs'>25%</text>
@@ -75,10 +75,10 @@
 <text x='51.67' y='165.48' text-anchor='end' style='font-size: 9.80px; font-family: "Open Sans";' textLength='19.30px' lengthAdjust='spacingAndGlyphs'>75%</text>
 <text x='51.67' y='89.12' text-anchor='end' style='font-size: 9.80px; font-family: "Open Sans";' textLength='24.90px' lengthAdjust='spacingAndGlyphs'>100%</text>
 <polyline points='57.95,421.60 493.23,421.60 ' style='stroke-width: 1.36; stroke-linecap: butt;' />
-<text x='64.97' y='437.87' text-anchor='middle' style='font-size: 14.00px; font-family: "Open Sans";' textLength='36.53px' lengthAdjust='spacingAndGlyphs'>18-19</text>
-<text x='205.38' y='437.87' text-anchor='middle' style='font-size: 14.00px; font-family: "Open Sans";' textLength='36.53px' lengthAdjust='spacingAndGlyphs'>19-20</text>
-<text x='345.79' y='437.87' text-anchor='middle' style='font-size: 14.00px; font-family: "Open Sans";' textLength='36.53px' lengthAdjust='spacingAndGlyphs'>20-21</text>
-<text x='486.21' y='437.87' text-anchor='middle' style='font-size: 14.00px; font-family: "Open Sans";' textLength='36.53px' lengthAdjust='spacingAndGlyphs'>21-22</text>
+<text x='64.83' y='437.87' text-anchor='middle' style='font-size: 14.00px; font-family: "Open Sans";' textLength='36.53px' lengthAdjust='spacingAndGlyphs'>18-19</text>
+<text x='202.58' y='437.87' text-anchor='middle' style='font-size: 14.00px; font-family: "Open Sans";' textLength='36.53px' lengthAdjust='spacingAndGlyphs'>19-20</text>
+<text x='340.33' y='437.87' text-anchor='middle' style='font-size: 14.00px; font-family: "Open Sans";' textLength='36.53px' lengthAdjust='spacingAndGlyphs'>20-21</text>
+<text x='478.08' y='437.87' text-anchor='middle' style='font-size: 14.00px; font-family: "Open Sans";' textLength='36.53px' lengthAdjust='spacingAndGlyphs'>21-22</text>
 <text x='275.59' y='454.72' text-anchor='middle' style='font-size: 14.00px; font-family: "Open Sans";' textLength='75.34px' lengthAdjust='spacingAndGlyphs'>School year</text>
 <text transform='translate(19.91,238.34) rotate(-90)' text-anchor='middle' style='font-size: 14.00px; font-family: "Open Sans";' textLength='142.77px' lengthAdjust='spacingAndGlyphs'>Percentage of schools</text>
 <text x='57.95' y='44.74' style='font-size: 14.00px;fill: #757575; font-family: "Open Sans";' textLength='347.18px' lengthAdjust='spacingAndGlyphs'>For schools in Canopy 2022 as well as a previous year</text>

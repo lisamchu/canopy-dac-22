@@ -1,5 +1,5 @@
 ---
-title: "Level Analysis"
+title: "Nominator Racial Equity Analysis"
 author: "Janette Avelar"
 date: "5/23/2022"
 output: 
@@ -173,6 +173,7 @@ ggplot(., aes(poc_leadership)) +
        y = "Nominating Organizations",
        title = "Are Canopy's nominating organizations BIPOC-led?",
        subtitle = "Numbers represented show all organizations that received the survey from 2019-2021.")
+bipoc_led_org
 # want to add labels with percents
 # no = 318/437 = 73%
 # yes = 102/437 = 23%
@@ -203,6 +204,7 @@ bipoc_led_org_year <- bipoc_led_org$data %>%
        y = "Nominating Organizations",
        title = "Are Canopy's targeted organizations BIPOC-led across time?")
 
+bipoc_led_org_year
 #labels with percents - 2019
 # no = 215/294 = 73%
 # yes = 65/294 = 22%
@@ -239,6 +241,7 @@ ggplot(., aes(bipoc_nominator)) +
        y = "Nominating Individuals",
        title = "Are the individuals within Canopy's targeted nominating organizations racially diverse?",
        subtitle = "Numbers represented show all individual nominators from 2019-2021 who received the nomination survey.")
+bipoc_ind
 # Labels
 # no = 349/476 = 73%
 # yes = 110/476 = 23%
@@ -265,6 +268,7 @@ bipoc_ind_year <- bipoc_ind$data %>%
        y = "Nominating Individuals",
        title = "How has racial diversity changed for individual nominators within targeted organizations?")
 
+bipoc_ind_year
 #labels with percents - 2019
 # no = 240/328 = 73%
 # yes = 73/328 = 22%
@@ -310,6 +314,7 @@ org_par_rates <- bipoc_led_org_year$data %>%
   labs(x = "",
        y = "Participating Organizations",
        title = "Are the organizations participating in Canopy's nomination survey BIPOC-led across time?")
+org_par_rates
 # some checks to make sure the viz is right:
 # participating orgs
 # 2019 = 74
@@ -363,6 +368,7 @@ ind_par_rates <- bipoc_ind_year$data %>%
   labs(x = "",
        y = "Participating Nominators",
        title = "Are the individuals participating in Canopy's nomination survey BIPOC-identifying across time?")
+ind_par_rates
 # some checks to make sure the viz is right:
 # participating individuals
 # 2019 = 91
@@ -403,6 +409,7 @@ org_nom_n <- org_par_rates$data %>%
   labs(x = "",
        y = "Number of nominations",
        title = "Are the number of nominations made by participating organizations changing over time\nbased on racial diversity of their leadership staff?")
+org_nom_n
 # some checks to make sure the viz is right:
 # participating orgs total
 # 2019 = 74
@@ -598,3 +605,37 @@ schl_leader <- year_check %>%
 
 Create plots, paste together at the end
 Some kind of correlation or odds ratio plot.
+
+List for 2021-22 orgs
+
+```{r 21-22 orgs}
+update_org <- noms_clean %>% 
+  select(nominator_org, year) %>% 
+  unique()
+
+#ever nominated list
+update_org <- update_org %>% 
+  select(!year) %>% 
+  unique() #This seems wrong - too low
+```
+
+# School leadership in 2021-22 to compare for next year
+
+```{r}
+lead_race <- demographic_data %>% 
+  select(school_id, confidential_leadership_team_diversity) %>% 
+  #drop 3 0s
+  filter(!(confidential_leadership_team_diversity == 0)) %>% 
+  #drop 5 not sure
+  filter(!(confidential_leadership_team_diversity == "Not sure")) %>% 
+  #drop 4 prefer not to says
+  filter(!(confidential_leadership_team_diversity == "Prefer not to say")) %>% 
+  mutate(rate = rep(1, 149))
+
+lead_race_tbl <- lead_race %>% 
+  group_by(confidential_leadership_team_diversity) %>% 
+  summarize(N = sum(rate),
+            Pct = round(N/161, 2))
+datatable(lead_race_tbl)
+```
+

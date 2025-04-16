@@ -25,35 +25,563 @@ library(scales)
 library(rstanarm)
 library(broom.mixed)
 library(gmodels)
+library(owmr) # remove_prefix() 
 source(here("scripts", "branding.R")) #, local = knitr::knit_global()
 load(here("data", "complete_canopy_2022.RData"))
 ```
 
 # Simple Descriptives  
+To create table showcasing summary and frequency counts across demographic groups.
 
 ```{r desc}
 leaps_desc <- clean_data_full %>% 
-  select(starts_with("leaps_"), school_name, confidential_leader_race, confidential_leader_gender, confidential_leadership_team_diversity, confidential_teaching_staff_diversity, ends_with("_percent"), -starts_with("leaps_rank_")) %>% 
-  mutate_at(vars(starts_with("leaps")), str_replace, case_when, "0" ~ "no",
-            TRUE ~ "yes")
+  select(school_name, starts_with("leaps_"), confidential_leader_race, confidential_leader_gender, confidential_leadership_team_diversity, confidential_teaching_staff_diversity, ends_with("_percent"), locale, -starts_with("leaps_rank_")) %>% 
+  mutate_at(vars(starts_with("leaps")), funs(case_when(. != 0 ~ 1, . == 0 ~ 0)))
 
-#create vector of leaps labels
-leaps_labs <- 
+#NAs introduced in locale var
+
+leaps_desc[1,26] <- "Rural" #American Academy of Innovation
+leaps_desc[12,26] <- "Rural" #Community Lab
+leaps_desc[41,26] <- "Urban" #One Stone
+#row 65 is Iowa Big - NA accurate
+leaps_desc[82,26] <- "Suburban" #Verdi Ecoschool
+#row 101 is The Forest Schools - NA accurate
+#row 102 is LInk Learning - NA accurate
+leaps_desc[121,26] <- "Urban" #KIPP Philadelphia
+leaps_desc[123,26] <- "Rural" #Cabot schools
+#row 124 is CLK Engage - NA in all datasets
+leaps_desc[138,26] <- "Urban" #Utah Schools for the Deaf
+leaps_desc[140,26] <- "Urban" #Southern Nevada Urban Micro
+leaps_desc[145,26] <- "Urban" #Foundation School of Autism
+leaps_desc[151,26] <- "Suburban" #Portal Schools
+leaps_desc[152,26] <- "Urban" #Unidos Homeschool Coop
+
+###### Leaps names ######
+# "Unequal Expectations & Opportunities → High Expectations with Unlimited Opportunities"
+# "Narrow Focus → Whole-Child Focus"
+# "Rote Activities →  Rigorous Learning"
+# "Irrelevance → Relevance"
+# "Assimilation & Marginalization → Affirmation of Self & Others"
+# "Reinforcement of the Status Quo → Social Consciousness & Action"
+# "Isolation → Connection & Community"
+# "Inflexible Systems → Customization"
+# "Passive Compliance → Active Self-Direction"
+# "Siloed Schooling → Anytime, Anywhere Learning"
+
+#summary stats - pivoted
+sum_leaps <- leaps_desc %>% 
+  select(-school_name) %>% 
+  pivot_longer(cols = starts_with("leaps"),
+               names_to = "leaps",
+               values_to = "count") %>% 
+  mutate(leaps = case_when(
+           leaps == "leaps_affirmation" ~ "Assimilation & Marginalization → Affirmation of Self & Others",
+           leaps == "leaps_anytime_anywhere" ~ "Siloed Schooling → Anytime, Anywhere Learning",
+           leaps == "leaps_connection" ~ "Isolation → Connection & Community",
+           leaps == "leaps_customization" ~ "Inflexible Systems → Customization",
+           leaps == "leaps_high_expectations" ~ "Unequal Expectations & Opportunities → High Expectations with Unlimited Opportunities",
+           leaps == "leaps_relevance" ~ "Irrelevance → Relevance",
+           leaps == "leaps_rigorous_learning" ~ "Rote Activities → Rigorous Learning",
+           leaps == "leaps_self_direction" ~ "Passive Compliance → Active Self-Direction",
+           leaps == "leaps_social_consciousness" ~ "Reinforcement of the Status Quo → Social Consciousness & Action",
+           leaps == "leaps_whole_child" ~ "Narrow Focus → Whole-Child Focus"))
+# locale
+locale_sum <- sum_leaps %>% 
+  select(leaps, locale, count) %>% 
+  group_by(leaps, locale) %>% 
+  summarize(N = sum(count)) %>% 
+  ungroup() %>% 
+  group_by(leaps) %>% 
+  mutate(Freq = round(N/sum(N), 2)*100,
+         Freq = paste0(Freq, "%")) %>% 
+  rename(`Leaps` = leaps,
+         `Geographic Locale Type` = locale,
+         `Count` = N,
+         `Frequency` = Freq)
+
+# staff diversity
+stf_diversity_sum <- sum_leaps %>% 
+  select(leaps, confidential_teaching_staff_diversity, count) %>% 
+  group_by(leaps, confidential_teaching_staff_diversity) %>% 
+  summarize(N = sum(count)) %>% 
+  ungroup() %>% 
+  group_by(leaps) %>% 
+  mutate(Freq = round(N/sum(N), 2)*100,
+         Freq = paste0(Freq, "%")) %>% 
+  rename(`Leaps` = leaps,
+         `Staff Diversity` = confidential_teaching_staff_diversity,
+         `Count` = N,
+         `Frequency` = Freq)
+stf_diversity_sum$`Staff Diversity`[stf_diversity_sum$`Staff Diversity`==0] <- "No response"
+
+# leadership team diversity
+leader_diversity_sum <- sum_leaps %>% 
+  select(leaps, confidential_leadership_team_diversity, count) %>% 
+  group_by(leaps, confidential_leadership_team_diversity) %>% 
+  summarize(N = sum(count)) %>% 
+  ungroup() %>% 
+  group_by(leaps) %>% 
+  mutate(Freq = round(N/sum(N), 2)*100,
+         Freq = paste0(Freq, "%")) %>% 
+  rename(`Leaps` = leaps,
+         `Leadership Team Diversity` = confidential_leadership_team_diversity,
+         `Count` = N,
+         `Frequency` = Freq)
+leader_diversity_sum$`Leadership Team Diversity`[leader_diversity_sum$`Leadership Team Diversity`==0] <- "No response"
+
+# leader gender
+gender_sum <- sum_leaps %>% 
+  select(leaps, confidential_leader_gender, count) %>% 
+  group_by(leaps, confidential_leader_gender) %>% 
+  summarize(N = sum(count)) %>% 
+  ungroup() %>% 
+  group_by(leaps) %>% 
+  mutate(Freq = round(N/sum(N), 2)*100,
+         Freq = paste0(Freq, "%"),
+         confidential_leader_gender = case_when(
+           confidential_leader_gender == 0 ~ "No response",
+           confidential_leader_gender == "Man" ~ "Man",
+           confidential_leader_gender == "Woman" ~ "Woman",
+           confidential_leader_gender == "Prefer not to say" ~ "Prefer not to say")) %>% 
+  rename(`Leaps` = leaps,
+         `School Leader Gender` = confidential_leader_gender,
+         `Count` = N,
+         `Frequency` = Freq)
+
+# leader race
+race_sum <- sum_leaps %>% 
+  select(leaps, confidential_leader_race, count) %>% 
+  group_by(leaps, confidential_leader_race) %>% 
+  summarize(N = sum(count)) %>% 
+  ungroup() %>% 
+  group_by(leaps) %>% 
+  mutate(Freq = round(N/sum(N), 2)*100,
+         Freq = paste0(Freq, "%")) %>% 
+  rename(`Leaps` = leaps,
+         `School Leader Race/Ethnicity` = confidential_leader_race,
+         `Count` = N,
+         `Frequency` = Freq)
+
+# #student body composition by race
+# stu_race_sum <- sum_leaps %>% 
+#   select(leaps, count, ends_with("percent")) %>% 
+#   mutate_at(vars(ends_with("percent")), funs(case_when(. > 0 & . < 0.24 ~ "0 - 24% of student body",
+#                                                        . > 0.24 & . < 0.49 ~ "25-49% of student body",
+#                                                        . > 0.49 & . < 0.74 ~ "50-74% of student body",
+#                                                        . > 0.74 & . < 1 ~ "75-100% of student body")))
+```
+
+## How many leaps did leaders choose to describe their school?
+
+```{r average leaps}
+avg_leaps <- leaps_desc %>% 
+  select(school_name, starts_with("leaps")) %>% 
+  group_by(school_name) %>% 
+  mutate(total = sum(leaps_high_expectations + leaps_whole_child + leaps_rigorous_learning + leaps_relevance + leaps_affirmation + leaps_social_consciousness + leaps_connection + leaps_customization + leaps_self_direction + leaps_anytime_anywhere)) %>% 
+  ungroup() %>% 
+  select(-starts_with("leaps")) %>% 
+  group_by(total) %>% 
+  mutate(school_n = n(school_name)) ####left off here
+
+##alternate
+sum(avg_leaps$total==0) #0
+sum(avg_leaps$total==1) #1
+sum(avg_leaps$total==2) #2
+sum(avg_leaps$total==3) #3
+sum(avg_leaps$total==4) #4
+sum(avg_leaps$total==5) #5
+sum(avg_leaps$total==6) #6
+sum(avg_leaps$total==7) #7
+sum(avg_leaps$total==8) #8
+sum(avg_leaps$total==9) #9
+sum(avg_leaps$total==10) #10
+
+which(avg_leaps$total==0)
+View(sum_leaps[149,])
+18  51  65  66  82  86  90  91 108 121 133 140 160 161
+View(avg_leaps %>% 
+  filter(total == 10))
 ```
 
 
-## Demographic distribution of Leaps  
+## Leap associations by school leader's race
+
+```{r race table}
+datatable(race_sum)
+```
+
+## Leap associations by school leader's gender
+
+```{r gender table}
+datatable(gender_sum)
+```
+
+## Leap associations by school leadership team diversity
+
+```{r leadership diversity table}
+datatable(leader_diversity_sum)
+
+ggplot(leader_diversity_sum, aes(`Leadership Team Diversity`, Count)) +
+  geom_col() +
+  facet_wrap(~Leaps) +
+    theme(panel.grid.major.y = element_blank(),
+        text = element_text(size = 10),
+        axis.text.x = element_text(angle = 90)) 
+```
+
+## Leap associations by staff diversity
+
+```{r staff diversity table}
+datatable(stf_diversity_sum)
+```
+
+## Leap associations by locale
+[Missing row = missing locale data]
+
+```{r locale table}
+datatable(locale_sum)
+```
+
+## Leap associations by the racial demographics of the student body
+
+```{r, include=FALSE}
+demo = demographic_data %>%
+  mutate(across(contains("percent"), \(x) {
+    x = suppressWarnings(as.numeric(x))
+    if(max(x, na.rm = TRUE) > 1) {x = x / 100}
+    return(x)
+  }))
+
+demo_long = demo %>%
+  pivot_longer(contains("percent"), names_to = "dem", values_to = "value") %>%
+  select(school_id, dem, value) %>%
+  mutate(labels = label_dems(dem)) %>%
+  mutate(    labels = factor(labels, levels = c(
+      "% Native American and\nAlaskan Native students", 
+      "% Asian students", 
+      "% Black students",
+      "% Hispanic students", 
+      "% Native Hawaiian and\nPacific Islander students", 
+      "% Multiracial students", 
+      "% White students",
+      "% English Language Learners", 
+      "% FRPL eligible",
+      "% Students with Disabilities"
+    ))
+  )
+
+#violin plot
+ggplot(demo_long, aes(y = value, x = factor(1))) +
+  geom_violin(
+    fill = transcend_cols["teal"],
+    scale = "area",
+    adjust = 0.8
+  ) +
+  geom_point(
+    color = transcend_cols["red"],
+    position = position_jitter(width = 0.2),
+    size = 0.2
+  ) +
+  facet_wrap(vars(labels), nrow = 2) +
+  bar_y_scale_percent +
+  labs(
+    x = "", y = "", 
+    title = "Student diversity in Canopy schools",
+    subtitle = "Width indicates the number of Canopy schools\nwith demographics of a certain percentage"
+  ) +
+  theme(
+    axis.text.x = element_blank(),
+    strip.text = element_text(size = rel(0.5)),
+    plot.subtitle = element_text(size = rel(0.7))
+  )
+```
+
+
+# Leap Associations with Demographics  
+
+## Model 1
+The first model uses centered leap variable to show association between school characteristics and leap variables. This plot is useful for considering what information each leap variable revealed about schools with respect to some of the characteristics of the school, and perhaps, in which places it offered us very little information.
+
+```{r model 1, include = FALSE}
+# data prep
+leaps_dat_wide <- clean_data_full %>% 
+  select(school_id, starts_with("leaps"), -starts_with("leaps_rank")) %>% 
+  mutate_at(vars(starts_with("leaps")), funs(case_when(. != 0 ~ 1, . == 0 ~ 0))) %>% 
+  remove_prefix(., c("leaps"))
+
+# model prep
+features_df = read_rds(here("data/features_for_models.rds"))
+
+# editing down to the features to use right now
+# trying bipoc_percent rather than Black and Hispanic for students
+# leaving independent schools in, at least for now
+feature_names = c("grades_elementary", "grades_middle", "grades_high", 
+"locale", "school_descriptor_district", "school_descriptor_charter", 
+"school_descriptor_independent", "diversity_staff", "diversity_leads", 
+"ell_percent_scaled", "frpl_percent_scaled", "swd_percent_scaled", 
+"bipoc_percent_scaled", "n_students_scaled")
+
+response_names = c(
+  "High Expectations with Unlimited Opportunities",
+  "Whole-Child Focus",
+  "Rigorous Learning",
+  "Relevance",
+  "Affirmation of Self & Others",
+  "Social Consciousness & Action",
+  "Connection & Community",
+  "Customization",
+  "Active Self-Direction",
+  "Anytime, Anywhere Learning"
+  
+)
+
+leaps_labs = c("high_expectations", "whole_child", "rigorous_learning", "relevance", "affirmation", "social_consciousness", "connection", "customization", "self_direction", "anytime_anywhere")
+
+model_data =
+  inner_join(leaps_dat_wide, features_df, by = "school_id") %>%
+  mutate(across(all_of(leaps_labs), scale)) #%>%
+  #rename(set_names(leaps_labs, response_names))
+
+formulas = sprintf("%s ~ %s", leaps_labs, paste(feature_names, collapse = " + "))
+
+# model fit
+mods = list()
+
+for(i in seq_along(formulas)) {
+  message("\n\n\nSTARTING MODEL ", i, " OF ", length(formulas), "\n\n\n")
+  mods[[leaps_labs[i]]] = stan_lm(
+    formulas[i],
+    data = model_data,
+    prior = R2(location = 0.3)
+  )
+}
+
+# viz the models
+mods %>% map_df(tidy, .id = "response") %>% 
+    filter(!term %in% c("(Intercept)")) ->
+  coef_df
+    
+coef_labeler = function(x) {
+  x %>% 
+    str_replace(pattern = "diversity_staff", "Staff: ") %>%
+    str_replace(pattern = "diversity_leads", "Leadership: ") %>%
+    str_replace("_scaled", "") %>%
+    str_replace("grades_", "Level: ") %>%
+    str_replace("schooL_descriptor_", "Type: ") %>%
+    str_replace("locale", "Locale: ") %>%
+    str_replace("n_students", "Number of students") %>%
+    label_dems
+}
+
+# labels for plot
+leaps_plot_labs = list(
+  "High Expectations/nwith Unlimited/nOpportunities" = "high_expectations",
+  "Whole-Child/nFocus" = "whole_child",
+  "Rigorous Learning" = "rigorous_learning",
+  "Relevance" = "relevance",
+  "Affirmation of/nSelf & Others" = "affirmation",
+  "Social/nConsciousness/n& Action" = "social_consciousness",
+  "Connection &/nCommunity" = "connection",
+  "Customization" = "customization",
+  "Active/nSelf-Direction" = "self_direction",
+  "Anytime Anywhere/nLearning" = "anytime_anywhere")
+
+mod_1_plot <- ggplot(
+  coef_df, 
+  aes(x = estimate, y = fct_reorder(term, estimate, .fun = mean))
+) + 
+  geom_col(fill = transcend_cols[2]) + 
+  geom_errorbarh(aes(xmin = estimate - std.error, xmax = estimate + std.error), height = 0.2) +
+  labs(y = "",
+       x = "Average change in leaps score (in standard deviations)", 
+       title = "Association between school characteristics and leap variable",
+       subtitle = "Compared to urban schools with white staff/leadership sorted by average effect across all clusters.\nError bars show +/- 1 std deviation, about a 65% confidence interval") +
+  guides(fill = "none") +
+  facet_grid(~ response) + 
+  scale_y_discrete(labels = coef_labeler) + 
+  theme(panel.grid.major.y = element_blank(),
+        text = element_text(size = 10),
+        axis.text.x = element_text(angle = 45)) 
+
+# save plot
+ggsave("leaps-school-characteristics.png", plot = mod_1_plot, path = here("outputs", "leaps analysis"), 
+       width = 20, height = 12, units = "in")
+```
+
+The plot below shows the association between school characteristics and each leap variable. In other words, it assumes change based on average statistics--average population and distribution for each variable.
+
+```{r model 1 plot}
+mod_1_plot
+```
+
+
+## Model 2 
+
+The second model uses a logistic regression model to indicate the likelihood of schools to select each given leap as a function of specific variables, e.g., student racial population and socioeconomic status. Specifically, I used the percentage of Black students, Hispanic students, locale, as well as free/reduced price lunch percent, students with disabilities percent, and percent of English learners.  
+
+Similar to the plot above, this plot details the absolute effects for each demographic variable listed above assuming average statistics--that is, an average population and distribution for each specified variable. Unlike the plot above, it shows how likely schools were to select the given leap based on this demographic rather than observing the effect as standard deviation.
+
+This might be a slightly more interpretable plot to gather information from as a result.
+
+```{r model 2, include = FALSE}
+# prep data
+# pivot locale variable for facetting
+mod2_dat <- clean_data_full %>% 
+  select(school_id, starts_with("leaps_"), -starts_with("leaps_rank"), locale, ends_with("_percent"), self_reported_total_enrollment, nces_total_enrollment) %>% 
+  mutate_at(vars(starts_with("leaps")), funs(case_when(. != 0 ~ 1, . == 0 ~ 0))) %>% 
+  pivot_longer(cols = starts_with("leaps"),
+               names_to = "leaps",
+               values_to = "value",
+               names_prefix = "leaps_") %>% 
+  mutate(locale_urban = ifelse(locale=="Urban", 1, 0),
+         locale_rural = ifelse(locale=="Rural", 1, 0),
+         locale_suburban = ifelse(locale=="Suburban", 1, 0)) %>% 
+  select(-locale) %>% 
+  mutate(total_enrollment = ifelse(is.na(self_reported_total_enrollment), nces_total_enrollment, self_reported_total_enrollment)) %>% 
+  select(-c(self_reported_total_enrollment, nces_total_enrollment))
+
+# establish variables of interest
+one_vars = c("total_enrollment", "black_percent", "hispanic_percent", "locale_urban", "locale_rural", "locale_suburban", "frpl_percent", "swd_percent", "ell_percent")
+
+logistic_one_dat = 
+  mod2_dat %>%
+  select(value, leaps, one_of(one_vars)) %>%
+  na.omit() %>%
+  group_by(leaps) %>%
+  # scaling non-binary predictors
+  mutate_at(vars(
+    c(
+      "total_enrollment",
+      "black_percent",
+      "hispanic_percent",
+      "frpl_percent",
+      "swd_percent",
+      "ell_percent"
+    )
+  ), scale)
+
+one_form = as.formula(paste("value", "~", paste(one_vars, collapse = "+")))
+#plot(xm, "areas", prob = 0.9, prob_outer = 1)
+
+bayes_mods = list()
+
+for(this_leap in unique(mod2_dat$leaps)) {
+  bayes_mods[[this_leap]] = stan_glm(
+    one_form,
+    data = filter(logistic_one_dat, leaps == this_leap),
+    family = binomial(link = "logit"),
+    prior = student_t( #I'm not familiar with the functions in this loop, does df need to change within student_t()?
+      df = 7,
+      location = 0,
+      scale = 2.5
+    )
+  )
+  
+}
+
+bayes_tidy = lapply(bayes_mods, tidy) %>%
+  bind_rows(.id = "response") %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    #nice_tag = label_tags(response),
+    nice_demog = factor(label_dems(term))
+  )
+
+## 10 absolute effects per demo:
+
+bayes_facet_dat = bayes_tidy %>% group_by(nice_demog) %>%
+  arrange(desc(abs(estimate))) %>%
+  slice(1:10)
+
+bayes_facet = 
+  ggplot(bayes_facet_dat,
+    aes(y = exp(estimate),
+        x = reorder_within(response, estimate, within = nice_demog, fun = mean),
+    )) +
+  geom_col() + 
+  labs(y = "Odds multiplier",
+       x = "", 
+       #fill = "Demographic",
+       title = "Likelihood to select Leap related to each demographic") +
+  facet_wrap(~ nice_demog, scales = "free_y") +
+  scale_y_continuous(
+    trans = "log",
+    breaks = c(.25, .5, 1, 2, 4),
+    labels = c("1/4", "1/2", "1", "2", "4"),
+    expand = expansion(0, 0)
+  ) +
+  scale_x_reordered() + 
+  coord_flip() +
+  guides(fill = "none") +
+  theme(axis.text = element_text(size = 8), strip.text = element_text(size = rel(0.6)),
+        panel.grid.major.y = element_blank(),
+        axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 0))
+
+
+#save plot
+ggsave("leaps-likelihood.png", plot = bayes_facet, path = here("outputs", "leaps analysis"), 
+       width = 20, height = 12, units = "in")
+```
+
+```{r model 2 plot}
+bayes_facet
+```
+
 
 # Correlations  
+see `cluster_correlations.html` under Leaps variables.
 
-## Correlation with Type  
+![Correlations](outputs/leaps analysis/leaps-correlations.png)
 
-## Correlation with Locale  
+## Correlation between Leaps
 
-# Models
+```{r leaps cor}
+#prep dat
+leaps_cor <- leaps_desc %>% 
+  select(starts_with("leaps")) %>% 
+  rename("Affirmation of Self & Others" = leaps_affirmation,
+           "Anytime, Anywhere Learning" = leaps_anytime_anywhere,
+           "Connection & Community" = leaps_connection,
+           "Customization" = leaps_customization,
+           "High Expectations with\nUnlimited Opportunities" = leaps_high_expectations,
+           "Relevance" = leaps_relevance,
+           "Rigorous Learning" = leaps_rigorous_learning,
+           "Active Self-Direction" = leaps_self_direction,
+           "Social Consciousness & Action" = leaps_social_consciousness,
+           "Whole-Child Focus" = leaps_whole_child) %>% 
+  cor(., method = "spearman")
+#plot dat
+leaps_cor_plot <- ggcorrplot(leaps_cor, 
+           lab = TRUE, 
+           lab_size = 2,
+           type = "upper", 
+           hc.order = TRUE) +
+  scale_fill_distiller(type = "div", limits = c(-1, 1), expand = c(0, 0)) +
+    labs(title = "Correlation between Leaps",
+         subtitle = "Darker shades indicate stronger correlations",
+         fill = "Correlation") +
+    # scale_x_discrete(labels = label_clust) +
+    # scale_y_discrete(labels = label_clust) +
+    labs(x = "", y = "") + 
+    theme_transcend_sparse + 
+    theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 1, size = rel(0.7)), 
+          axis.text.y = element_text(size = rel(0.7)),
+          panel.border = element_blank(),
+          axis.ticks = element_blank(),
+          plot.subtitle = element_text(size = rel(0.75)),
+          legend.position = "none")
+#save plot
+ggsave("leaps-correlations.png", plot = leaps_cor_plot, path = here("outputs", "leaps analysis"), 
+       width = 6, height = 4, units = "in")
+```
 
-## Race and SES  
 
-## Controlling for Aggregate non-White population  
+## Open Response and Leaps  
 
-## Interaction between locale and type  
+```{r open response}
+aim_vs_leaps <- clean_data_full %>% 
+  select(school_name, student_experience, starts_with("leaps")) %>% 
+  select(-starts_with("leaps_rank_")) %>% 
+  mutate_at(vars(starts_with("leaps")), funs(case_when(. != 0 ~ 1, . == 0 ~ 0)))
+```
+

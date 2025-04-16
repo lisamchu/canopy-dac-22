@@ -1,0 +1,147 @@
+---
+title: "Tagging Revisions"
+author: "Janette Avelar"
+date: '2022-12-05'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(here)
+library(rio)
+library(tidyverse)
+library(janitor)
+library(pracma)
+library(kableExtra)
+library(DT)
+library(psych)
+library(stringr)
+library(ggplot2)
+library(ggcorrplot)
+#source(here("scripts", "branding.R")) #, local = knitr::knit_global()
+load(here("data", "complete_canopy_2022.RData"))
+```
+
+CW: We've had debates about the similarity of this and performance-based assessment. Advisors have generally convinced me that performance-based assessment is the larger category, encompassing performance-based standardized exams. Janette, could you see how many schools only selected one or the other, vs. how many selected both "portfolios and exhibitions" and "performance assessment"?
+
+```{r portfolios v performance}
+# portfolios
+practices_data %>% 
+  select(practices_portfolios_exhibitions) %>% 
+  filter(practices_portfolios_exhibitions==1) %>% 
+  count() #115
+
+# performance assessment
+practices_data %>% 
+  select(practices_performance_assessment) %>% 
+  filter(practices_performance_assessment==1) %>% 
+  count() #113
+
+# both
+practices_data %>% 
+  select(practices_portfolios_exhibitions, practices_performance_assessment) %>% 
+  filter(practices_portfolios_exhibitions==1 & practices_performance_assessment==1) %>% 
+  count() #99
+```
+
+CW: Thinking about this [real world problem solving] and PBL... A) combine them and eliminate one; B) distinguish them further. Maybe same Q here about how many schools selected them both together, vs. one and not the other?
+
+```{r PBL v IRL problem solving}
+# real world problem solving
+practices_data %>% 
+  select(practices_real_world) %>% 
+  filter(practices_real_world==1) %>% 
+  count() #123
+
+# PBL
+practices_data %>% 
+  select(practices_pbl) %>% 
+  filter(practices_pbl==1) %>% 
+  count() #130
+
+# both
+practices_data %>% 
+  select(practices_real_world, practices_pbl) %>% 
+  filter(practices_real_world==1 & practices_pbl==1) %>% 
+  count() #110
+```
+
+CW: Is there any other data points that could help us make a decision about retaining vs. ditching it [multi-tiered system of support (MTSS) in academics]? It's interesting that only half of schools reported it. (If it were a vast majority or minority, I might lean toward ditching it.) I think I remember this was also much more common in district schools - definitely less so in independent learning environments (often smaller, which makes sense).
+
+Tag Correlations
+
+```{r tag corr}
+#corr dat
+tag_corr <- practices_data %>% 
+  select(starts_with("practices_")) %>% 
+  cor(., method = "spearman")
+#plot dat
+# tag_corr_plot <- ggcorrplot(tag_corr, 
+#            lab = TRUE, 
+#            lab_size = 2,
+#            type = "upper", 
+#            hc.order = TRUE) +
+#   scale_fill_distiller(type = "div", limits = c(-1, 1), expand = c(0, 0)) +
+#     labs(title = "Correlation between Tags",
+#          subtitle = "Darker shades indicate stronger correlations",
+#          fill = "Correlation") +
+#     # scale_x_discrete(labels = label_clust) +
+#     # scale_y_discrete(labels = label_clust) +
+#     labs(x = "", y = "") + 
+#     theme_transcend_sparse + 
+#     theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 1, size = rel(0.7)), 
+#           axis.text.y = element_text(size = rel(0.7)),
+#           panel.border = element_blank(),
+#           axis.ticks = element_blank(),
+#           plot.subtitle = element_text(size = rel(0.75)),
+#           legend.position = "none")
+#save plot
+# ggsave("tags-correlations.png", plot = tag_corr_plot, path = here("outputs", "misc"), 
+#        width = 6, height = 4, units = "in")
+
+#correlations above .5
+which(tag_corr[73,] > .5)
+View(tag_corr[57,58])
+```
+
+student_projects & community_partnerships = .54
+portfolios exhibitions & performance_assessment = .54
+anti_racist & hiring_equity = .6
+anti_racist & social_justice = .5
+assessments_career & career_prep = .52
+career_prep & dual_credit = .6
+
+School Survey Revisions
+
+It's worth looking at responses to the "elevator ride" Q and this Q (`In your own words, how would you describe the student experience that the learning environment is designed to create?`) side by side. Especially because open answers to the student experience Q sometimes differed from the leaps variables, it feels important to maintain an open answer option for that. But maybe we could nix the elevator Q and ask this question instead, especially if responses to the two are kind of similar?
+
+```{r elevator v student experience}
+open_q <- clean_data_full %>% 
+  select(learning_model, student_experience) #learning_model = elevator ride / student_experience = your "why"
+#write.csv(open_q, "schl-open-response.csv")
+```
+
+Scoping out the extent to which open-response answers for "describe other leaders" messed with standard options used for the primary leader.
+
+```{r co-leader desc}
+co_desc <- demographic_data %>% 
+  select(confidential_multiple_leaders) %>% 
+  filter(confidential_multiple_leaders != 0) #66 responses
+#write.csv(co_desc, file = "coleaders.csv")
+```
+
+Who were the respondents?
+```{r respondents}
+resp <- survey_data %>% 
+  select(confidential_survey_participante_role, school_id)
+#write.csv(resp, file = "respondent-role.csv")
+```
+
+
+Create a copy of data sans confidential info
+```{r public}
+pub <- clean_data_full %>% 
+  select(!c(starts_with("confidential_"), survey_recorded_date, survey_response_id))
+#write.csv(pub, file = "schools_2021-22.csv")
+```
+
